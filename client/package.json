@@ -1,5 +1,6 @@
 {
 	"name": "Dynonary",
+	"proxy": "http://localhost:5000",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {
@@ -20,6 +21,7 @@
 		"react-router-dom": "^5.2.0",
 		"react-scripts": "4.0.3",
 		"react-scroll": "^1.8.2",
+		"react-spring": "^9.2.4",
 		"yup": "^0.32.9"
 	},
 	"scripts": {

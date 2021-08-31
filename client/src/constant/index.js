@@ -24,8 +24,8 @@ export const DEFAULTS = {
 };
 
 export const LINKS = {
-  FB: 'https://fb.com/TuanNguyen250400',
-  WEBSITE: 'https://dynonguyen.com',
+  FB: 'https://www.facebook.com/profile.php?id=100009411700037',
+  WEBSITE: 'https://www.facebook.com/profile.php?id=100009411700037',
 };
 
 export const MAX = {
@@ -54,6 +54,8 @@ export const MIN = {
 
 export const ROUTES = {
   HOME: '/',
+  ACTIVE_TOKEN: '/user/activate/:activation_token',
+  RESETPASSWORD: '/user/reset/:token',
   LOGIN: '/login',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',

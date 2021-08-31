@@ -13,6 +13,7 @@ const axiosClient = axios.create({
   paramsSerializer: (params) => queryString.stringify(params),
 });
 
+// { Authorization: token}
 axiosClient.interceptors.request.use(
   (config) => {
     return config;

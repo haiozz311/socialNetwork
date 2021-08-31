@@ -3,6 +3,8 @@ import { ROUTES } from 'constant';
 import HomePage from 'pages/Home';
 import React from 'react';
 import { Route } from 'react-router';
+const ActivationEmail = React.lazy(() => import('pages/ActivationEmail'));
+const ResetPassword = React.lazy(() => import('pages/ResetPassword'));
 const RegisterPage = React.lazy(() => import('pages/Register'));
 const LoginPage = React.lazy(() => import('pages/Login'));
 const IPAPage = React.lazy(() => import('pages/IPA'));
@@ -32,6 +34,18 @@ const routes = [
     exact: true,
     isProtect: false,
     component: () => <HomePage />,
+  },
+  {
+    path: ROUTES.ACTIVE_TOKEN,
+    exact: true,
+    isProtect: false,
+    component: () => <ActivationEmail />,
+  },
+  {
+    path: ROUTES.RESETPASSWORD,
+    exact: true,
+    isProtect: false,
+    component: () => <ResetPassword />,
   },
   {
     path: ROUTES.LOGIN,
@@ -156,8 +170,8 @@ const renderRoutes = (routes, isAuth = false) => {
     const componentRender = !isProtect
       ? component
       : isAuth
-      ? component
-      : loginComponent;
+        ? component
+        : loginComponent;
 
     return (
       <Route

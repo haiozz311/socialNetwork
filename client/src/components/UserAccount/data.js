@@ -1,13 +1,14 @@
 import accountApi from 'apis/accountApi';
 import { formatDate } from 'helper';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import { setUserAvt } from 'redux/slices/userInfo.slice';
 import UserAccount from '.';
 
 function UserAccountData() {
   const [userInfo, setUserInfo] = useState({ email: null, createdDate: null });
+  const { refresh_token } = useSelector(state => state.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -15,7 +16,7 @@ function UserAccountData() {
 
     (async function () {
       try {
-        const apiRes = await accountApi.getUserProfile();
+        const apiRes = await accountApi.fetchUser(refresh_token);
 
         if (apiRes.status === 200 && isSub) {
           const { email, createdDate } = apiRes.data;
@@ -27,33 +28,9 @@ function UserAccountData() {
     return () => (isSub = false);
   }, []);
 
-  const handleUploadAvt = async (src) => {
+  const handleUpdateProfile = async (name) => {
     try {
-      const apiRes = await accountApi.putUpdateAvt(src);
-      console.log("apiRes", apiRes);
-      if (apiRes.status === 200) {
-        dispatch(
-          setMessage({
-            type: 'success',
-            message: 'Cập nhật ảnh đại diện thành công',
-          }),
-        );
-
-        // dispatch(setUserAvt(apiRes.data.newSrc));
-      }
-    } catch (error) {
-      dispatch(
-        setMessage({
-          type: 'error',
-          message: 'Cập nhật ảnh đại diện thất bại. Thử lại',
-        }),
-      );
-    }
-  };
-
-  const handleUpdateProfile = async (name, username) => {
-    try {
-      const apiRes = await accountApi.putUpdateProfile(name, username);
+      const apiRes = await accountApi.putUpdateProfile(name, refresh_token);
       if (apiRes.status === 200) {
         dispatch(
           setMessage({
@@ -79,7 +56,6 @@ function UserAccountData() {
     <UserAccount
       email={userInfo.email}
       createdDate={userInfo.createdDate}
-      onUpload={handleUploadAvt}
       onUpdateProfile={handleUpdateProfile}
     />
   );

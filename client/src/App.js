@@ -12,7 +12,10 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Element } from 'react-scroll';
-import { getUserInfo } from 'redux/slices/userInfo.slice';
+import { getUserInfo, setDataUser } from 'redux/slices/userInfo.slice';
+import { getTodos } from 'redux/slices/todo.slice';
+import { setToken } from 'redux/slices/token.slice';
+import accountApi from 'apis/accountApi';
 
 const { routes, renderRoutes } = routerConfig;
 
@@ -20,6 +23,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const dispatch = useDispatch();
   const { isAuth } = useSelector((state) => state.userInfo);
+  const { refresh_token } = useSelector(state => state.token);
 
   // get and set theme
   useTheme();
@@ -27,11 +31,35 @@ function App() {
   // get window voice and set custom voice
   useVoice();
 
+  useEffect(() => {
+    const firstLogin = localStorage.getItem('firstLogin');
+    if (firstLogin) {
+      const getToken = async () => {
+        const res = await accountApi.refresh_token();
+        dispatch(setToken(res.data.access_token));
+      };
+      getToken();
+    }
+  }, [isAuth, dispatch]);
+
+  useEffect(() => {
+    console.log("refresh_token", refresh_token)
+    if (refresh_token) {
+      const getUser = async () => {
+
+        const res = await accountApi.fetchUser(refresh_token);
+        dispatch(setDataUser(res.data));
+      };
+      getUser();
+    }
+  }, [refresh_token, dispatch]);
+
   // get user info
   useEffect(() => {
-    dispatch(getUserInfo());
+    dispatch(getTodos());
+    // dispatch(getUserInfo());
     setLoading(false);
-    return () => {};
+    return () => { };
   }, []);
 
   return (

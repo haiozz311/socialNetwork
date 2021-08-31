@@ -5,19 +5,21 @@ const cors = require('cors')
 const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
 const path = require('path')
+const corsConfig = require('./config/cors.config');
 
 
 const app = express()
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsConfig));
 app.use(cookieParser())
 app.use(fileUpload({
     useTempFiles: true
 }))
 
 // Routes
-app.use('/user', require('./routes/userRouter'))
-app.use('/api', require('./routes/upload'))
+app.use('/user', require('./routes/userRouter'));
+app.use('/api', require('./routes/upload'));
+app.use('/api', require('./routes/sentence'));
 
 
 // Connect to mongodb
@@ -28,13 +30,13 @@ mongoose.connect(URI, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }, err => {
-    if(err) throw err;
+    if (err) throw err;
     console.log("Connected to mongodb")
 })
 
-if(process.env.NODE_ENV === 'production'){
+if (process.env.NODE_ENV === 'production') {
     app.use(express.static('client/build'))
-    app.get('*', (req, res)=>{
+    app.get('*', (req, res) => {
         res.sendFile(path.join(__dirname, 'client', 'build', 'index.html'))
     })
 }

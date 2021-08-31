@@ -52,7 +52,6 @@ function LoginLocalForm(props) {
           <LockIcon className={classes.labelIcon} />
         </div>
       </div>
-
       <div className="flex-col">
         <InputCustom
           label="Email"
@@ -137,7 +136,7 @@ Login.propTypes = {
 
 Login.defaultProps = {
   loading: false,
-  onLogin: function () {},
+  onLogin: function () { },
 };
 
 export default Login;

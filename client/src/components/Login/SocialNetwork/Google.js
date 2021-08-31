@@ -1,4 +1,4 @@
-import accountApi from 'apis/accountApi';
+// import accountApi from 'apis/accountApi';
 import ggIcon from 'assets/icons/gg-icon.png';
 import { UX } from 'constant';
 import React from 'react';
@@ -6,43 +6,38 @@ import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import useStyle from './style';
+import axios from 'axios';
 
 function LoginGoogle() {
   const classes = useStyle();
   const dispatch = useDispatch();
 
-  // handle success login
-  const onLoginSuccess = async () => {
+
+  const onLoginWithGoogle = async (response) => {
     try {
+      const res = await axios.post('/user/google_login', { tokenId: response.tokenId });
+      localStorage.setItem('firstLogin', true);
+      if (res.status === 200) {
+        dispatch(
+          setMessage({
+            type: 'success',
+            message: 'Đăng nhập thành công',
+            duration: UX.DELAY_TIME,
+          }),
+        );
+
+        setTimeout(() => {
+          location.href = '/';
+        }, UX.DELAY_TIME);
+      }
+    } catch (err) {
       dispatch(
         setMessage({
-          type: 'success',
-          message: 'Đăng nhập thành công',
+          type: 'error',
+          message: err.response.data.msg,
           duration: UX.DELAY_TIME,
         }),
       );
-
-      setTimeout(() => {
-        location.href = '/';
-      }, UX.DELAY_TIME);
-    } catch (error) {}
-  };
-
-  // login
-  const onLoginWithGoogle = async (res) => {
-    try {
-      const { accessToken } = res;
-
-      const response = await accountApi.postLoginWithGoogle(accessToken);
-      const { status, data } = response;
-
-      if (status === 200) {
-        onLoginSuccess(data);
-      }
-    } catch (error) {
-      const message =
-        error.response?.data?.message || 'Đăng nhập thất bại, thử lại !';
-      dispatch(setMessage({ type: 'error', message }));
     }
   };
 

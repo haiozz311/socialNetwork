@@ -9,6 +9,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Link } from 'react-scroll';
 import SettingButton from './Settings/SettingButton';
+import SettingReset from './Settings/SettingReset';
 import useStyle from './style';
 
 function ScrollTop() {
@@ -18,6 +19,7 @@ function ScrollTop() {
     </Link>
   );
 }
+
 
 const actions = [
   { icon: <HomeIcon />, name: 'Trang chủ', to: '/', isBlank: false },
@@ -33,6 +35,12 @@ const actions = [
     name: 'Liên hệ Dyno',
     to: LINKS.WEBSITE,
     isBlank: true,
+  },
+  {
+    icon: <SettingReset />,
+    name: 'Quên mật khẩu',
+    to: null,
+    isBlank: false,
   },
 ];
 

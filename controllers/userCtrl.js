@@ -2,12 +2,13 @@ const Users = require('../models/userModel')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const sendMail = require('./sendMail')
-
+const { ACCOUNT_TYPES } = require('../constant');
 const { google } = require('googleapis')
 const { OAuth2 } = google.auth
 const fetch = require('node-fetch')
 
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
+
 
 const { CLIENT_URL } = process.env
 
@@ -34,10 +35,9 @@ const userCtrl = {
                 name, email, password: passwordHash
             }
 
-            const activation_token = createActivationToken(newUser)
-
-            const url = `${CLIENT_URL}/user/activate/${activation_token}`
-            sendMail(email, url, "Verify your email address")
+            const activation_token = createActivationToken(newUser);
+            const url = `${CLIENT_URL}/user/activate/${activation_token}`;
+            sendMail(email, url, "Verify your email address");
 
 
             res.json({ msg: "Register Success! Please activate your email to start." })
@@ -47,7 +47,7 @@ const userCtrl = {
     },
     activateEmail: async (req, res) => {
         try {
-            const { activation_token } = req.body
+            const { activation_token } = req.body;
             const user = jwt.verify(activation_token, process.env.ACTIVATION_TOKEN_SECRET)
 
             const { name, email, password } = user
@@ -109,7 +109,8 @@ const userCtrl = {
             const user = await Users.findOne({ email })
             if (!user) return res.status(400).json({ msg: "This email does not exist." })
 
-            const access_token = createAccessToken({ id: user._id })
+            const access_token = createAccessToken({ id: user._id });
+            console.log({ access_token })
             const url = `${CLIENT_URL}/user/reset/${access_token}`
 
             sendMail(email, url, "Reset your password")
@@ -161,9 +162,9 @@ const userCtrl = {
     },
     updateUser: async (req, res) => {
         try {
-            const { name, avatar } = req.body
+            const { name } = req.body
             await Users.findOneAndUpdate({ _id: req.user.id }, {
-                name, avatar
+                name
             })
 
             res.json({ msg: "Update Success!" })
@@ -196,8 +197,10 @@ const userCtrl = {
     googleLogin: async (req, res) => {
         try {
             const { tokenId } = req.body
-
+            console.log(tokenId)
+            console.log("client", client)
             const verify = await client.verifyIdToken({ idToken: tokenId, audience: process.env.MAILING_SERVICE_CLIENT_ID })
+            console.log({ verify })
 
             const { email_verified, email, name, picture } = verify.payload
 
@@ -213,7 +216,7 @@ const userCtrl = {
 
             if (user) {
                 const isMatch = await bcrypt.compare(password, user.password)
-                if (!isMatch) return res.status(400).json({ msg: "Tài khoản này đã được đăng kí từ trước !" })
+                if (!isMatch) return res.status(400).json({ msg: "Email này đã được sử dụng !" })
 
                 const refresh_token = createRefreshToken({ id: user._id })
                 res.cookie('refreshtoken', refresh_token, {
@@ -225,7 +228,7 @@ const userCtrl = {
                 res.json({ msg: "Login success!" })
             } else {
                 const newUser = new Users({
-                    name, email, password: passwordHash, avatar: picture
+                    name, email, password: passwordHash, avatar: picture, authType: ACCOUNT_TYPES.GOOGLE
                 })
 
                 await newUser.save()
@@ -275,7 +278,7 @@ const userCtrl = {
                 res.json({ msg: "Login success!" })
             } else {
                 const newUser = new Users({
-                    name, email, password: passwordHash, avatar: picture.data.url
+                    name, email, password: passwordHash, avatar: picture.data.url, authType: ACCOUNT_TYPES.FACEBOOK
                 })
 
                 await newUser.save()

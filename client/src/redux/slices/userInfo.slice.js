@@ -5,7 +5,7 @@ export const getUserInfo = createAsyncThunk(
   'userInfo/getUserInfo',
   async () => {
     try {
-      const apiRes = await accountApi.getUserInfo();
+      const apiRes = await accountApi.fetchUser();
       if (apiRes && apiRes.status === 200) {
         return apiRes.data.user;
       }
@@ -16,17 +16,37 @@ export const getUserInfo = createAsyncThunk(
   },
 );
 
+
+
 const userInfoSlice = createSlice({
   name: 'userInfo',
   initialState: {
     isAuth: false,
+    isAdmin: false,
+    authType: '',
+    role: 0,
     name: '',
-    username: '',
-    avt: '',
+    avatar: '',
     favoriteList: [],
     coin: 0,
+    user: [],
+    createdDate: '',
   },
   reducers: {
+
+    setDataUser(state, action) {
+      const { authType, name, avatar, coin, favoriteList, email, role, createdAt } = action.payload;
+      if (!name || name === '') {
+        state.isAuth = false;
+        return;
+      }
+      return { authType, isAuth: true, isAdmin: role === 1 ? true : false, name, email, coin, avatar, favoriteList, createdDate: createdAt };
+    },
+
+    setUserAvatar(state, action) {
+      state.avatar = action.payload;
+    },
+
     setAddFavorites(state, action) {
       const { word, isAdd = true } = action.payload;
 
@@ -58,5 +78,5 @@ const userInfoSlice = createSlice({
 });
 
 const { reducer, actions } = userInfoSlice;
-export const { setAddFavorites, setUserCoin, setUserAvt } = actions;
+export const { setAddFavorites, setUserCoin, setUserAvt, setDataUser, setUserAvatar } = actions;
 export default reducer;

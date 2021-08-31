@@ -100,19 +100,16 @@ export const cloudinaryImgOptimize = (
 ) => {
   if (!originSrc) return '';
 
-  const cloudinaryBaseURL = 'https://res.cloudinary.com/dynonary/image/upload';
+  const cloudinaryBaseURL = 'https://res.cloudinary.com/dsvko7lfg/image/upload';
   const index = originSrc.indexOf(cloudinaryBaseURL);
 
-  // Not cloudinary source
   if (index === -1) {
     return originSrc;
   }
 
-  let optimize = `${width > 0 ? `w_${width},` : ''}${
-    height > 0 ? `h_${height},` : ''
-  }${fAuto ? 'f_auto,' : ''}${qAuto ? 'q_auto,' : ''}${
-    others && others !== '' ? others : ''
-  }`;
+  let optimize = `${width > 0 ? `w_${width},` : ''}${height > 0 ? `h_${height},` : ''
+    }${fAuto ? 'f_auto,' : ''}${qAuto ? 'q_auto,' : ''}${others && others !== '' ? others : ''
+    }`;
 
   if (optimize[optimize.length - 1] === ',')
     optimize = optimize.slice(0, optimize.length - 1);
@@ -147,4 +144,21 @@ export const formatDate = (date = new Date()) => {
   } catch (error) {
     return date;
   }
+};
+
+export const isEmail = email => {
+  // eslint-disable-next-line
+  const re = /^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+  return re.test(email);
+};
+
+
+export const isLength = password => {
+  if (password.length < 6) return true;
+  return false;
+};
+
+export const isMatch = (password, cf_password) => {
+  if (password === cf_password) return true;
+  return false;
 };

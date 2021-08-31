@@ -86,4 +86,5 @@ export default makeStyles(() => ({
     fontWeight: 'bold',
     fontSize: '2rem',
   },
+
 }));

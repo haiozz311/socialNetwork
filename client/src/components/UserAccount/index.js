@@ -12,11 +12,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import useStyle from './style';
 
-function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
+function UserAccount({ onUpdateProfile, email, createdDate }) {
   const userInfo = useSelector((state) => state.userInfo);
-  const { username, name, avt, coin } = userInfo;
-  const avtSrc = Boolean(avt)
-    ? cloudinaryImgOptimize(avt, 150, 150)
+  const { username, name, avatar, coin } = userInfo;
+  const avtSrc = Boolean(avatar)
+    ? cloudinaryImgOptimize(avatar, 150, 150)
     : DEFAULTS.IMAGE_SRC;
   const classes = useStyle();
   const [editMode, setEditMode] = useState(false);
@@ -40,44 +40,14 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
   };
 
   const handleUpdate = () => {
-    const { name: currentName, username: currentUsername } = inputRef.current;
-    if (currentName === name.trim() && username === currentUsername.trim()) {
+    const { name: currentName } = inputRef.current;
+    if (currentName.trim() === name.trim()) {
       return;
     }
 
     if (currentName.trim() === '') {
       setErrors({ ...errors, name: true });
       dispatch(setMessage({ type: 'error', message: 'Vui lòng nhập tên' }));
-      return;
-    }
-
-    if (currentUsername.trim() === '') {
-      setErrors({ ...errors, username: true });
-      dispatch(
-        setMessage({ type: 'error', message: 'Vui lòng nhập username' }),
-      );
-      return;
-    }
-
-    if (currentUsername.indexOf(' ') !== -1) {
-      setErrors({ ...errors, username: true });
-      dispatch(
-        setMessage({
-          type: 'error',
-          message: 'username không chứa khoảng trống',
-        }),
-      );
-      return;
-    }
-
-    if (currentUsername.length > MAX.USERNAME_LEN) {
-      setErrors({ ...errors, username: true });
-      dispatch(
-        setMessage({
-          type: 'error',
-          message: `username tối đa ${MAX.USERNAME_LEN} ký tự`,
-        }),
-      );
       return;
     }
 
@@ -92,7 +62,7 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
       return;
     }
 
-    onUpdateProfile(currentName.trim(), currentUsername.trim());
+    onUpdateProfile(currentName.trim());
   };
 
   return (
@@ -109,7 +79,7 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
             <div className={`${classes.cameraIconWrap} flex-center`}>
               <CameraIcon className={classes.cameraIcon} />
 
-              <UploadButton className={classes.fileInput} onChange={onUpload} />
+              <UploadButton className={classes.fileInput} />
             </div>
           </div>
         </div>
@@ -117,7 +87,7 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
         {!editMode ? (
           <div className="mt-8">
             <h2 className={classes.name}>{name}</h2>
-            <h4 className={classes.username}>{username}</h4>
+            {/* <h4 className={classes.username}>{username}</h4> */}
           </div>
         ) : (
           <div className="flex-center-col mt-8">
@@ -129,13 +99,13 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
               error={errors.name}
               defaultValue={name}
             />
-            <InputCustom
+            {/* <InputCustom
               onChange={(e) => handleInputChange(e.target.value, 0)}
               placeholder={username}
               label="Nhập username"
               error={errors.username}
               defaultValue={username}
-            />
+            /> */}
           </div>
         )}
 
@@ -148,12 +118,14 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
         </div>
 
         {!editMode ? (
-          <Button
-            onClick={() => setEditMode(true)}
-            className={`${classes.editBtn} _btn _btn-primary w-100`}
-            startIcon={<EditIcon />}>
-            Chỉnh sửa
-          </Button>
+          <>
+            <Button
+              onClick={() => setEditMode(true)}
+              className={`${classes.editBtn} _btn _btn-primary w-100`}
+              startIcon={<EditIcon />}>
+              Chỉnh sửa
+            </Button>
+          </>
         ) : (
           <div className="d-flex w-100">
             <Button
@@ -176,7 +148,6 @@ function UserAccount({ onUpload, onUpdateProfile, email, createdDate }) {
 UserAccount.propTypes = {
   createdDate: PropTypes.any,
   email: PropTypes.string,
-  onUpload: PropTypes.func,
   onUpdateProfile: PropTypes.func,
 };
 

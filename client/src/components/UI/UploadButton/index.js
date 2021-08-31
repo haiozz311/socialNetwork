@@ -6,9 +6,11 @@ import Compressor from 'compressorjs';
 import { MAX } from 'constant';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import { setUserAvatar } from 'redux/slices/userInfo.slice';
 import useStyle from './style';
+import axios from 'axios';
 
 function checkFile(file) {
   if (!file) return { status: false, message: 'File không hợp lệ' };
@@ -26,10 +28,11 @@ function checkFile(file) {
   return { status: true };
 }
 
-function UploadButton({ title, className, onChange, resetFlag }) {
+function UploadButton({ title, className, resetFlag }) {
   const classes = useStyle();
   const dispatch = useDispatch();
   const [state, setState] = useState({ status: 0, data: null });
+  const { refresh_token } = useSelector(state => state.token);
 
   useEffect(() => {
     if (!resetFlag) return;
@@ -94,6 +97,50 @@ function UploadButton({ title, className, onChange, resetFlag }) {
     setState({ status: 0, data: null });
   };
 
+  const changeAvatar = async (e) => {
+    e.preventDefault()
+    try {
+      const file = e.target.files[0];
+
+      if (!file) {
+        dispatch(
+          setMessage({ message: 'Chưa có file', type: 'error' }),
+        );
+        return;
+      }
+
+      if (file.size > 1024 * 1024) {
+        dispatch(
+          setMessage({ message: 'Kích thước của fle quá lớn', type: 'error' }),
+        );
+        return;
+      }
+
+      if (file.type !== 'image/jpeg' && file.type !== 'image/png') {
+        dispatch(
+          setMessage({ message: 'chỉ upload .jpeg và png', type: 'error' }),
+        );
+        return;
+      }
+      let formData = new FormData();
+      formData.append('file', file);
+
+      const res = await axios.post('/api/upload_avatar', formData, {
+        headers: { 'content-type': 'multipart/form-data', Authorization: refresh_token }
+      });
+      if (res.status = 200) {
+        dispatch(
+          setMessage({ message: 'Cập nhật ảnh đại diện thành công !', type: 'success' }),
+        );
+        dispatch(setUserAvatar(res.data.url));
+      }
+
+    } catch (err) {
+      dispatch(
+        setMessage({ message: err.response.data.msg, type: 'error' }),
+      );
+    }
+  }
   return (
     <div className={className}>
       {/* waiting */}
@@ -105,7 +152,7 @@ function UploadButton({ title, className, onChange, resetFlag }) {
             id="button-file"
             htmlFor="contained-button-file"
             type="file"
-            onChange={(e) => onFileChange(e.target.files[0])}
+            onChange={changeAvatar}
           />
           <label htmlFor="button-file">
             <Button
@@ -147,7 +194,7 @@ UploadButton.propTypes = {
 UploadButton.defaultProps = {
   title: 'Upload',
   className: '',
-  onChange: () => {},
+  onChange: () => { },
   resetFlag: 0,
 };
 

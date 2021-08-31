@@ -6,46 +6,37 @@ import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import useStyle from './style';
+import axios from 'axios';
 
 function LoginFacebook() {
   const classes = useStyle();
   const dispatch = useDispatch();
 
   // handle success login
-  const onLoginSuccess = async () => {
-    try {
-      dispatch(
-        setMessage({
-          type: 'success',
-          message: 'Đăng nhập thành công',
-          duration: UX.DELAY_TIME,
-        }),
-      );
-
-      setTimeout(() => {
-        location.href = '/';
-      }, UX.DELAY_TIME);
-    } catch (error) {}
-  };
 
   const responseFacebook = async (response) => {
     try {
-      if (response?.accessToken) {
-        const apiRes = await accountApi.postLoginWithFacebook(
-          response.accessToken,
+      const { accessToken, userID } = response;
+      const res = await axios.post('/user/facebook_login', { accessToken, userID });
+      localStorage.setItem('firstLogin', true);
+      if (res.status === 200) {
+        dispatch(
+          setMessage({
+            type: 'success',
+            message: 'Đăng nhập thành công',
+            duration: UX.DELAY_TIME,
+          }),
         );
-        if (apiRes.status === 200) {
-          onLoginSuccess();
-        }
-      }
-    } catch (error) {
-      const message =
-        error.response?.data?.message || 'Đăng nhập thất bại, thử lại !';
 
+        setTimeout(() => {
+          location.href = '/';
+        }, UX.DELAY_TIME);
+      }
+    } catch (err) {
       dispatch(
         setMessage({
           type: 'error',
-          message,
+          message: err.response.data.msg,
           duration: UX.DELAY_TIME,
         }),
       );

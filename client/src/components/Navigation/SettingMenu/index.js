@@ -10,11 +10,35 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import useStyle from './style';
+import accountApi from 'apis/accountApi';
+import { useDispatch } from 'react-redux';
+import { setMessage } from 'redux/slices/message.slice';
+import { UX } from 'constant';
 
 function SettingMenu({ anchorEl, onClose }) {
   const classes = useStyle();
   const [open, setOpen] = useState(false);
-
+  const dispatch = useDispatch();
+  const handleLogout = async () => {
+    try {
+      const res = await accountApi.userLogout();
+      if (res.status = 200) {
+        localStorage.removeItem('firstLogin');
+        onClose(null);
+        dispatch(
+          setMessage({ message: res.data.msg, type: 'success' }),
+        );
+        setTimeout(() => {
+          window.location.href = '/';
+        }, 2000);
+      }
+      setTimeout(() => {
+        window.location.href = '/';
+      }, 2000);
+    } catch (err) {
+      window.location.href = '/';
+    }
+  }
   return (
     <Menu
       classes={{ paper: classes.root }}
@@ -47,7 +71,7 @@ function SettingMenu({ anchorEl, onClose }) {
       </a>
 
       <Link to={ROUTES.LOGOUT}>
-        <MenuItem className={classes.menuItem}>
+        <MenuItem className={classes.menuItem} onClick={handleLogout} >
           <ExitToAppIcon className={classes.icon} fontSize="small" />
           <p className={classes.text}>Đăng xuất</p>
         </MenuItem>
@@ -65,7 +89,7 @@ SettingMenu.propTypes = {
 
 SettingMenu.defaultProps = {
   anchorEl: null,
-  onClose: function () {},
+  onClose: function () { },
 };
 
 export default SettingMenu;

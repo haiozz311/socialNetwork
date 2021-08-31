@@ -68,7 +68,7 @@ SettingModal.propTypes = {
 };
 
 SettingModal.defaultProps = {
-  onClose: function () {},
+  onClose: function () { },
   open: false,
 };
 

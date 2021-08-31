@@ -21,17 +21,17 @@ function Navigation() {
 
   const isXsDevice = useMediaQuery(theme.breakpoints.up('xs'));
 
-  const { avt, isAuth } = useSelector((state) => state.userInfo);
+  const { avatar, isAuth } = useSelector((state) => state.userInfo);
 
-  const avtSrc = Boolean(avt)
-    ? cloudinaryImgOptimize(avt, 48, 48)
+  const avtSrc = Boolean(avatar)
+    ? cloudinaryImgOptimize(avatar, 48, 48)
     : defaultUserImg;
   const [showInput, setShowInput] = useState(isXsDevice);
   const [anchorMenu, setAnchorMenu] = useState(null);
 
   const onOpenMenu = (e) => setAnchorMenu(e.currentTarget);
   const onCloseMenu = () => setAnchorMenu(null);
-  
+
   return (
     <div className={`${classes.navWrapper} w-100vw`} id="dynoNav">
       <div className={`${classes.nav} w-100`}>

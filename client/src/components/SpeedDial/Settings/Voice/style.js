@@ -65,7 +65,7 @@ export default makeStyles((theme) => ({
   },
 
   thumbSlider: {
-    backgroundColor: 'var(--accent-color) !important',
+    backgroundColor: 'var(--label-color) !important',
   },
 
   railSlider: {
