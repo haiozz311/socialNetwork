@@ -14,7 +14,7 @@ function IrregularVerbFilter({ classes, onSort, onFilter }) {
   const [anchorEl, setAnchorEl] = useState(null);
   const [sortType, setSortType] = useState(false);
   const [isFiltered, setIsFiltered] = useState(false);
-
+  console.log({ initList })
   const handleFilter = (v) => {
     setIsFiltered(Boolean(v));
     setAnchorEl(null);

@@ -10,7 +10,7 @@ import { setMessage } from 'redux/slices/message.slice';
 import { setAddFavorites } from 'redux/slices/userInfo.slice';
 
 function WordFavorite({ word }) {
-  const { isAuth, username, favoriteList } = useSelector(
+  const { isAuth, name, favoriteList } = useSelector(
     (state) => state.userInfo,
   );
   const history = useHistory();
@@ -23,7 +23,7 @@ function WordFavorite({ word }) {
   const handleClick = async () => {
     try {
       const apiRes = await accountApi.putToggleWordFavorite(
-        username,
+        name,
         word,
         !isFavorite,
       );

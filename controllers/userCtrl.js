@@ -6,6 +6,12 @@ const { ACCOUNT_TYPES } = require('../constant');
 const { google } = require('googleapis')
 const { OAuth2 } = google.auth
 const fetch = require('node-fetch')
+const {
+    updateFavoriteList,
+    isExistWordInFavorites,
+    isLimitedFavorites,
+    updateUserCoin
+} = require('../services/account.service');
 
 const client = new OAuth2(process.env.MAILING_SERVICE_CLIENT_ID)
 
@@ -297,7 +303,80 @@ const userCtrl = {
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
-    }
+    },
+    putToggleFavorite: async (req, res) => {
+        try {
+            const { word, name, isAdd = false } = req.body;
+
+            const isExist = await isExistWordInFavorites(word, name);
+
+            if (isAdd) {
+                const isLimited = await isLimitedFavorites(word, name);
+
+                if (isLimited) {
+                    return res.status(409).json({
+                        message:
+                            'Số từ đã vượt quá số lượng tối đa của danh sách yêu thích. Hãy nâng cấp nó.',
+                    });
+                }
+
+                if (isExist) {
+                    return res
+                        .status(406)
+                        .json({ message: `Từ ${word} đã tồn tại trong danh sách` });
+                }
+            } else {
+                if (!isExist) {
+                    return res
+                        .status(406)
+                        .json({ message: `Từ ${word} không tồn tại trong danh sách` });
+                }
+            }
+
+            const updateStatus = await updateFavoriteList(word, name, isAdd);
+
+            if (updateStatus && updateStatus.ok && updateStatus.nModified) {
+                return res.status(200).json({ message: 'success' });
+            } else {
+                return res.status(409).json({ message: 'failed' });
+            }
+
+            console.log(updateStatus);
+        } catch (error) {
+            console.error('PUT TOGGLE FAVORITE ERROR: ', error);
+            return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+        }
+    },
+
+    putUpdateUserCoin: async (req, res) => {
+        // const user = await Users.findById(req.user.id).select('-password');
+        // console.log({ user })
+        // return res.status(200).json({ message: 'success' });
+        try {
+            let { newCoin } = req.body;
+            console.log("newCoin", newCoin)
+            const user = await Users.findById(req.user.id).select('-password');
+            console.log({ user });
+            console.log("name", user.name)
+            // if (!user.name) {
+            //     return res.status(406).json({ message: 'Not Accept' });
+            // }
+            if (newCoin < 0) {
+                newCoin = 0;
+            }
+            const update = await updateUserCoin(newCoin, user.name);
+
+            if (update) {
+                return res.status(200).json({ message: 'success' });
+            }
+
+            // return res.status(406).json({ message: 'Not Accept' });
+        } catch (error) {
+            console.error('PUT UPDATE USER COIN ERROR: ', error);
+            return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+        }
+    },
+
 }
 
 

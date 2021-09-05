@@ -36,7 +36,7 @@ function CorrectWordResult({ nRight, nWrong, nRightConsecutive, onReplay }) {
   const history = useHistory();
   const dispatch = useDispatch();
   const { isAuth, coin } = useSelector((state) => state.userInfo);
-
+  const { refresh_token } = useSelector((state) => state.token);
   // play win audio
   useEffect(() => {
     onPlayAudio(winAudioSrc);
@@ -49,23 +49,25 @@ function CorrectWordResult({ nRight, nWrong, nRightConsecutive, onReplay }) {
     (async function () {
       try {
         const newCoin = convertQuesToCoin(nRight, nWrong, coin);
-        highscoreApi.putUpdateHighscore(HIGHSCORE_NAME.TOP_COIN, newCoin);
+        highscoreApi.putUpdateHighscore(HIGHSCORE_NAME.TOP_COIN, newCoin, refresh_token);
 
         highscoreApi.putUpdateHighscore(
           HIGHSCORE_NAME.CORRECT_GAME_RIGHT,
           nRight,
+          refresh_token
         );
 
         highscoreApi.putUpdateHighscore(
           HIGHSCORE_NAME.CORRECT_GAME_RIGHT_CONSECUTIVE,
           nRightConsecutive,
+          refresh_token
         );
 
-        const apiRes = await accountApi.putUpdateUserCoin(newCoin);
+        const apiRes = await accountApi.putUpdateUserCoin(newCoin, refresh_token);
         if (apiRes.status === 200) {
           dispatch(setUserCoin(newCoin));
         }
-      } catch (error) {}
+      } catch (error) { }
     })();
   }, []);
 
@@ -124,7 +126,7 @@ CorrectWordResult.defaultProps = {
   nRight: 0,
   nWrong: 0,
   nRightConsecutive: 0,
-  onReplay: function () {},
+  onReplay: function () { },
 };
 
 export default CorrectWordResult;

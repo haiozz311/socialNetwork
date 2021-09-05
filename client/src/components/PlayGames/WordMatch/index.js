@@ -122,8 +122,8 @@ function WordMatchGame({ list }) {
 
             {list && list.length > 0 ? (
               <SplitWord
-                mean={list[current].mean}
-                word={list[current].word}
+                mean={list[current]?.mean}
+                word={list[current]?.word}
                 onCorrect={handleCorrect}
                 onWrong={handleWrong}
                 resetFlag={resetFlag}

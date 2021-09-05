@@ -34,7 +34,7 @@ function FlashcardData() {
     (async function getTotalWordPack() {
       try {
         const apiRes = await commonApi.getWordPackTotal(pageInfo.packInfo);
-
+        console.log({ apiRes });
         if (apiRes.status === 200 && isSubscribe) {
           const { total = 0 } = apiRes.data;
           if (total === 0) {

@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient';
 
-const URL = '/games';
+const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
 
 const gameApi = {
   // correct word game
@@ -11,7 +11,7 @@ const gameApi = {
     topics = [],
     nQuestion = 50,
   ) => {
-    return axiosClient.get(`${URL}/correct-word/pack`, {
+    return axiosClient.get(`${URL}/api/correct-word/pack`, {
       params: {
         type,
         level,
@@ -30,7 +30,7 @@ const gameApi = {
     topics = [],
     nQuestion = 50,
   ) => {
-    return axiosClient.get(`${URL}/word-match/pack`, {
+    return axiosClient.get(`${URL}/api/word-match/pack`, {
       params: {
         type,
         level,
@@ -43,7 +43,7 @@ const gameApi = {
 
   // fast game
   getWordPackFG: (topic = 0) => {
-    return axiosClient.get(`${URL}/fast-game/pack`, {
+    return axiosClient.get(`${URL}/api/fast-game/pack`, {
       params: { topic },
     });
   },

@@ -26,7 +26,7 @@ function FastGameData() {
     (async function () {
       try {
         const apiRes = await gameApi.getWordPackFG(topicKey);
-
+        console.log({ apiRes });
         if (apiRes.status === 200 && isSub) {
           const { wordPack = [] } = apiRes.data;
           if (wordPack.length === 0) {

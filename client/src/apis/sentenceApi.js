@@ -1,6 +1,6 @@
 import axiosClient from './axiosClient';
 
-const URL = '/sentence';
+const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
 
 const sentenceApi = {
   postContributeSentence: (sentence, mean, note, topics) => {
@@ -13,13 +13,15 @@ const sentenceApi = {
   },
 
   getTotalSentences: (topics = []) => {
-    return axiosClient.get(`${URL}/total`, {
+    console.log({ topics });
+    return axiosClient.get(`${URL}/api/total`, {
       params: { topics: JSON.stringify(topics) },
     });
   },
 
   getSentenceList: (page = 1, perPage = 20, topics = []) => {
-    return axiosClient.get(`${URL}/list`, {
+    console.log({ page, perPage, topics });
+    return axiosClient.get(`${URL}/api/list`, {
       params: {
         page,
         perPage,

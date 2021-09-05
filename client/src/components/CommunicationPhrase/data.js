@@ -37,7 +37,15 @@ function CommunicationPhraseData() {
   // get total sentence
   useEffect(() => {
     let isSub = true;
-
+    // const getTotal = async () => {
+    //   const apiRes = await sentenceApi.getTotalSentences(topicList);
+    //   console.log({ apiRes });
+    //   if (apiRes.status === 200 && isSub) {
+    //     const { total = 0 } = apiRes.data;
+    //     totalPage.current = Math.ceil(total / perPage);
+    //   }
+    // }
+    // getTotal();
     (async function () {
       try {
         const apiRes = await sentenceApi.getTotalSentences(topicList);

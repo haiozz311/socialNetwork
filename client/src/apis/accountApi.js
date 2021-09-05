@@ -17,7 +17,7 @@ const accountApi = {
     });
   },
 
-  putUpdateProfile: (name = '',token) => {
+  putUpdateProfile: (name = '', token) => {
     return axiosClient.patch(`${URL}/user/update`, { name }, {
       headers: { Authorization: token }
     });
@@ -54,24 +54,18 @@ const accountApi = {
     return axiosClient.post(`${URL}/login-fb`, { access_token });
   },
 
-  // postLogout: () => {
-  //   return axiosClient.post(`${URL}/logout`);
-  // },
 
-  // postResetPassword: (email, password, verifyCode) => {
-  //   return axiosClient.post(`${URL}/reset-password`, {
-  //     email,
-  //     password,
-  //     verifyCode,
-  //   });
-  // },
-
-  putToggleWordFavorite: (username, word, isAdd) => {
-    return axiosClient.put(`${URL}/toggle-favorite`, { username, word, isAdd });
+  putToggleWordFavorite: (name, word, isAdd) => {
+    console.log({ name, word, isAdd });
+    return axiosClient.put(`${URL}/user/toggle-favorite`, { name, word, isAdd });
   },
 
-  putUpdateUserCoin: (newCoin) => {
-    return axiosClient.put(`${URL}/update-coin`, { newCoin });
+  putUpdateUserCoin: (newCoin, token) => {
+    console.log("newCoin", newCoin);
+    return axiosClient.put(`${URL}/user/update-coin`, { newCoin },
+      {
+        headers: { Authorization: token }
+      });
   },
 
   putUpdateAvt: (formData, refresh_token) => {

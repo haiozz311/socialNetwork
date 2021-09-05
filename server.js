@@ -20,6 +20,12 @@ app.use(fileUpload({
 app.use('/user', require('./routes/userRouter'));
 app.use('/api', require('./routes/upload'));
 app.use('/api', require('./routes/sentence'));
+app.use('/api', require('./routes/common'));
+app.use('/api', require('./routes/flashcard'));
+app.use('/api', require('./routes/word'));
+app.use('/api', require('./routes/blog'));
+app.use('/api', require('./routes/game'));
+app.use('/api', require('./routes/highscore'));
 
 
 // Connect to mongodb

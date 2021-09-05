@@ -33,6 +33,7 @@ function splitWord(word = '') {
 }
 
 function SplitWord({ word, mean, onCorrect, onWrong, resetFlag }) {
+  console.log({ word, mean, onCorrect, onWrong, resetFlag });
   const originSplit = useRef(splitWord(word.toLowerCase()));
   const [userSplit, setUserSplit] = useState([]);
   const [isCorrect, setIsCorrect] = useState(false);
@@ -93,9 +94,8 @@ function SplitWord({ word, mean, onCorrect, onWrong, resetFlag }) {
       return (
         <div
           key={index}
-          className={`${classes.char} ${
-            isSelected ? ` ${aniStyle.slideAni} disabled` : ''
-          }`}
+          className={`${classes.char} ${isSelected ? ` ${aniStyle.slideAni} disabled` : ''
+            }`}
           onClick={() => handleSelectCharacter(index)}>
           {isSelected ? '' : ch}
         </div>
@@ -199,9 +199,8 @@ function SplitWord({ word, mean, onCorrect, onWrong, resetFlag }) {
         </div>
         {isCheck && (
           <p
-            className={`${classes.answer} t-center ${
-              isCorrect ? 'right' : 'wrong'
-            }`}>
+            className={`${classes.answer} t-center ${isCorrect ? 'right' : 'wrong'
+              }`}>
             {isCorrect ? 'Chính xác' : 'Sai rồi'}
           </p>
         )}
@@ -235,8 +234,8 @@ SplitWord.propTypes = {
 SplitWord.defaultProps = {
   mean: '',
   word: '',
-  onCorrect: function () {},
-  onWrong: function () {},
+  onCorrect: function () { },
+  onWrong: function () { },
   resetFlag: -1,
 };
 

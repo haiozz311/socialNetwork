@@ -1,34 +1,34 @@
-// const { isExistSentence } = require('../services/common.service');
+const { isExistSentence } = require('../services/common.service');
 const {
-  // createSentence,
+  createSentence,
   getTotalSentences: getTotalSentencesService,
-  // getSentenceList: getSentenceListService,
+  getSentenceList: getSentenceListService,
 } = require('../services/sentence.service');
 
-// exports.postContributeSentence = async (req, res, next) => {
-//   try {
-//     const { sentence, mean, note, topics } = req.body;
+exports.postContributeSentence = async (req, res, next) => {
+  try {
+    const { sentence, mean, note, topics } = req.body;
 
-//     const isExist = await isExistSentence(sentence);
+    const isExist = await isExistSentence(sentence);
 
-//     if (isExist) {
-//       return res
-//         .status(409)
-//         .json({ message: 'Câu đã tồn tại. Vui lòng thêm câu khác. Cảm ơn' });
-//     }
+    if (isExist) {
+      return res
+        .status(409)
+        .json({ message: 'Câu đã tồn tại. Vui lòng thêm câu khác. Cảm ơn' });
+    }
 
-//     const isCreated = await createSentence(sentence, mean, note, topics);
+    const isCreated = await createSentence(sentence, mean, note, topics);
 
-//     if (isCreated) {
-//       return res.status(200).json({ message: 'success' });
-//     }
+    if (isCreated) {
+      return res.status(200).json({ message: 'success' });
+    }
 
-//     return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
-//   } catch (error) {
-//     console.error('POST CONTRIBUTE SENTENCE ERROR: ', error);
-//     return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
-//   }
-// };
+    return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  } catch (error) {
+    console.error('POST CONTRIBUTE SENTENCE ERROR: ', error);
+    return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  }
+};
 
 exports.getTotalSentences = async (req, res, next) => {
   try {
@@ -44,16 +44,16 @@ exports.getTotalSentences = async (req, res, next) => {
   }
 };
 
-// exports.getSentenceList = async (req, res, next) => {
-//   try {
-//     let { page = 1, perPage = 20, topics } = req.query;
-//     topics = typeof topics === 'string' ? JSON.parse(topics) : [];
+exports.getSentenceList = async (req, res, next) => {
+  try {
+    let { page = 1, perPage = 20, topics } = req.query;
+    topics = typeof topics === 'string' ? JSON.parse(topics) : [];
 
-//     const sentenceList = await getSentenceListService(page, perPage, topics);
+    const sentenceList = await getSentenceListService(page, perPage, topics);
 
-//     return res.status(200).json({ sentenceList });
-//   } catch (error) {
-//     console.error(' ERROR: ', error);
-//     return res.status(500).json({ message: 'Lỗi dịch vụ, thử lại sau' });
-//   }
-// };
+    return res.status(200).json({ sentenceList });
+  } catch (error) {
+    console.error(' ERROR: ', error);
+    return res.status(500).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  }
+};

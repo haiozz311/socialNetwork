@@ -100,6 +100,7 @@ function Result({ score }) {
   const classes = useStyle();
   const history = useHistory();
   const { isAuth, coin } = useSelector((state) => state.userInfo);
+  const { refresh_token } = useSelector((state) => state.token);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -109,15 +110,15 @@ function Result({ score }) {
       try {
         const newCoin = coin + score;
 
-        highscoreApi.putUpdateHighscore(HIGHSCORE_NAME.FAST_GAME, score);
+        highscoreApi.putUpdateHighscore(HIGHSCORE_NAME.FAST_GAME, score, refresh_token);
 
-        const apiRes = await accountApi.putUpdateUserCoin(newCoin);
+        const apiRes = await accountApi.putUpdateUserCoin(newCoin, refresh_token);
         if (apiRes.status === 200) {
           dispatch(setUserCoin(newCoin));
         }
-      } catch (error) {}
+      } catch (error) { }
     })();
-    return () => {};
+    return () => { };
   }, []);
 
   // play win audio

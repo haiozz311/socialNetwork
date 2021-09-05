@@ -17,10 +17,11 @@ function UserAccountData() {
     (async function () {
       try {
         const apiRes = await accountApi.fetchUser(refresh_token);
-
+        console.log({ apiRes });
         if (apiRes.status === 200 && isSub) {
-          const { email, createdDate } = apiRes.data;
-          setUserInfo({ email, createdDate: formatDate(createdDate) });
+          const { email, createdAt } = apiRes.data;
+          console.log("test1", { email, createdAt });
+          setUserInfo({ email, createdDate: formatDate(createdAt) });
         }
       } catch (error) { }
     })();

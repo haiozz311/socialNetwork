@@ -16,6 +16,8 @@ function FavoriteDictionaryData() {
   const { favoriteList } = useSelector((state) => state.userInfo);
   const totalPage = favoriteList.length;
   const preSearchList = useRef([]);
+  const { refresh_token } = useSelector(state => state.token);
+
 
   const nextPage = () => {
     if (page < totalPage) {
@@ -47,7 +49,7 @@ function FavoriteDictionaryData() {
         setList(packList);
         setMore(false);
       }
-    } catch (error) {}
+    } catch (error) { }
   };
 
   // get favorite list
@@ -61,7 +63,9 @@ function FavoriteDictionaryData() {
           page,
           perPage,
           sortType,
+          refresh_token
         );
+        console.log({ apiRes });
         if (apiRes.status === 200 && isSub) {
           const { packList = [] } = apiRes.data;
           const newList = [...list, ...packList];
