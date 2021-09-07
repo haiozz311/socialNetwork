@@ -28,7 +28,6 @@ function WordMatchGame({ list }) {
   const [isDone, setIsDone] = useState(false);
   const { current, nRight, nWrong, resetFlag } = state;
   const nRightConsecutive = useRef({ top: 0, n: 0 });
-
   const handleDone = () => {
     setIsDone(true);
   };
@@ -41,7 +40,7 @@ function WordMatchGame({ list }) {
       nRightConsecutive.current.top = nRightConsecutive.current.n;
     }
     setTimeout(() => {
-      if (current >= nQuestion) {
+      if (current >= nQuestion - 1) {
         handleDone();
       } else {
         setIsDelay(false);
@@ -122,8 +121,8 @@ function WordMatchGame({ list }) {
 
             {list && list.length > 0 ? (
               <SplitWord
-                mean={list[current]?.mean}
-                word={list[current]?.word}
+                mean={list[current].mean}
+                word={list[current].word}
                 onCorrect={handleCorrect}
                 onWrong={handleWrong}
                 resetFlag={resetFlag}

@@ -127,6 +127,7 @@ function SplitWord({ word, mean, onCorrect, onWrong, resetFlag }) {
     }
 
     const answer = userSplit.map((i) => i.ch).join('');
+    console.log("answer", answer);
     if (answer.toLowerCase() === word.toLowerCase()) {
       isSub && setIsCorrect(true);
       onCorrect();

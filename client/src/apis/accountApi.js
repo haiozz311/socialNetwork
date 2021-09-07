@@ -50,13 +50,7 @@ const accountApi = {
     return axiosClient.post(`${URL}/user/google_login`, { tokenId });
   },
 
-  postLoginWithFacebook: (access_token) => {
-    return axiosClient.post(`${URL}/login-fb`, { access_token });
-  },
-
-
   putToggleWordFavorite: (name, word, isAdd) => {
-    console.log({ name, word, isAdd });
     return axiosClient.put(`${URL}/user/toggle-favorite`, { name, word, isAdd });
   },
 
@@ -81,15 +75,15 @@ const accountApi = {
     return axiosClient.get(`${URL}/user/user-info`);
   },
 
-  getSendVerifyCode: (email) => {
-    return axiosClient.get(`${URL}/send-verify-code`, {
-      params: { email },
-    });
-  },
+  // getSendVerifyCode: (email) => {
+  //   return axiosClient.get(`${URL}/send-verify-code`, {
+  //     params: { email },
+  //   });
+  // },
 
-  getUserProfile: () => {
-    return axiosClient.get(`${URL}/user-profile`);
-  },
+  // getUserProfile: () => {
+  //   return axiosClient.get(`${URL}/user-profile`);
+  // },
 };
 
 export default accountApi;
