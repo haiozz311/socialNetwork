@@ -17,6 +17,25 @@ const accountApi = {
     });
   },
 
+  fetchUserById: (id, token) => {
+    return axiosClient.get(`${URL}/user/getUser/${id}`, {
+      headers: { Authorization: token }
+      // token
+    });
+  },
+
+  followUser: (id, token) => {
+    return axiosClient.patch(`${URL}/user/${id}/follow`, {}, {
+      headers: { Authorization: token }
+    });
+  },
+
+  unFollowUser: (id, token) => {
+    return axiosClient.patch(`${URL}/user/${id}/unfollow`, {}, {
+      headers: { Authorization: token }
+    });
+  },
+
   putUpdateProfile: (name = '', token) => {
     return axiosClient.patch(`${URL}/user/update`, { name }, {
       headers: { Authorization: token }
@@ -38,7 +57,7 @@ const accountApi = {
   },
 
   refresh_token: () => {
-    return axiosClient.post(`${URL}/user/refresh_token`, null);
+    return axiosClient.post(`${URL}/user/refresh_token`, {});
   },
 
   postLogin: (email, password) => {

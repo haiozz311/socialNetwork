@@ -65,7 +65,6 @@ function FavoriteDictionaryData() {
           sortType,
           refresh_token
         );
-        console.log({ apiRes });
         if (apiRes.status === 200 && isSub) {
           const { packList = [] } = apiRes.data;
           const newList = [...list, ...packList];

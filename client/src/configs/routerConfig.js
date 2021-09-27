@@ -4,6 +4,7 @@ import HomePage from 'pages/Home';
 import React from 'react';
 import { Route } from 'react-router';
 const ActivationEmail = React.lazy(() => import('pages/ActivationEmail'));
+const Social = React.lazy(() => import('pages/Social'));
 const ResetPassword = React.lazy(() => import('pages/ResetPassword'));
 const RegisterPage = React.lazy(() => import('pages/Register'));
 const LoginPage = React.lazy(() => import('pages/Login'));
@@ -40,6 +41,12 @@ const routes = [
     exact: true,
     isProtect: false,
     component: () => <ActivationEmail />,
+  },
+  {
+    path: ROUTES.SOCIAL,
+    exact: true,
+    isProtect: false,
+    component: () => <Social />,
   },
   {
     path: ROUTES.RESETPASSWORD,

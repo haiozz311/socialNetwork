@@ -12,7 +12,7 @@ import React, { Suspense, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Element } from 'react-scroll';
-import { getUserInfo, setDataUser } from 'redux/slices/userInfo.slice';
+import { setDataUser } from 'redux/slices/userInfo.slice';
 import { getTodos } from 'redux/slices/todo.slice';
 import { setToken } from 'redux/slices/token.slice';
 import accountApi from 'apis/accountApi';
@@ -43,7 +43,6 @@ function App() {
   }, [isAuth, dispatch]);
 
   useEffect(() => {
-    console.log("refresh_token", refresh_token)
     if (refresh_token) {
       const getUser = async () => {
 
@@ -57,11 +56,9 @@ function App() {
   // get user info
   useEffect(() => {
     dispatch(getTodos());
-    // dispatch(getUserInfo());
     setLoading(false);
     return () => { };
   }, []);
-
   return (
     <>
       {loading ? (

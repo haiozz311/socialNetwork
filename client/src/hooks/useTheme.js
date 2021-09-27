@@ -28,7 +28,7 @@ function useTheme() {
     htmlRoot.setAttribute(THEME_KEYS.ROOT_KEY, current);
     setTheme(current);
   }, []);
-  
+
   return theme;
 }
 

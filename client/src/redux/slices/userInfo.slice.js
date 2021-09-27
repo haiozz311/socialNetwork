@@ -1,22 +1,4 @@
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import accountApi from 'apis/accountApi';
-
-export const getUserInfo = createAsyncThunk(
-  'userInfo/getUserInfo',
-  async () => {
-    try {
-      const apiRes = await accountApi.fetchUser();
-      if (apiRes && apiRes.status === 200) {
-        return apiRes.data.user;
-      }
-      return {};
-    } catch (error) {
-      throw error;
-    }
-  },
-);
-
-
+import { createSlice } from '@reduxjs/toolkit';
 
 const userInfoSlice = createSlice({
   name: 'userInfo',
@@ -31,17 +13,19 @@ const userInfoSlice = createSlice({
     coin: 0,
     user: [],
     createdDate: '',
+    _id: '',
+    followers: [],
+    following: [],
   },
   reducers: {
 
     setDataUser(state, action) {
-      const { authType, name, avatar, coin, favoriteList, email, role, createdAt } = action.payload;
-      console.log("my data", { authType, name, avatar, coin, favoriteList, email, role, createdAt });
+      const { authType, name, avatar, coin, favoriteList, email, role, createdAt, _id, followers, following } = action.payload;
       if (!name || name === '') {
         state.isAuth = false;
         return;
       }
-      return { authType, isAuth: true, isAdmin: role === 1 ? true : false, name, email, coin, avatar, favoriteList, createdDate: createdAt };
+      return { authType, isAuth: true, isAdmin: role === 1 ? true : false, name, email, coin, avatar, favoriteList, createdDate: createdAt, _id, followers, following };
     },
 
     setUserAvatar(state, action) {
@@ -65,19 +49,27 @@ const userInfoSlice = createSlice({
     setUserAvt(state, action) {
       state.avt = action.payload;
     },
-  },
-  extraReducers: {
-    [getUserInfo.fulfilled]: (state, action) => {
-      const { username, name, avt, coin, favoriteList } = action.payload;
-      if (!username || username === '') {
-        state.isAuth = false;
-        return;
-      }
-      return { isAuth: true, username, name, avt, coin, favoriteList };
+
+    FollowAuth(state, action) {
+      const { users, user, auth } = action.payload;
+      const newUser = { ...user, following: [...user.following, auth] };
+      state.following.push(newUser);
     },
+
+    UnFollowAuth(state, action) {
+      const { users, user, auth } = action.payload;
+      console.log({ users, user, auth })
+      // const newUser = { ...user, following: user.following.filter(item => item._id !== auth._id) };
+      // const data = users.map(item => (item._id !== newUser._id ? newUser : item));
+      // console.log({ data })
+      const data = users.filter(item => (item._id !== user._id));
+      console.log({ data });
+      state.following = data;
+      // return state.following;
+    }
   },
 });
 
 const { reducer, actions } = userInfoSlice;
-export const { setAddFavorites, setUserCoin, setUserAvt, setDataUser, setUserAvatar } = actions;
+export const { setAddFavorites, setUserCoin, setUserAvt, setDataUser, setUserAvatar, FollowAuth, UnFollowAuth } = actions;
 export default reducer;

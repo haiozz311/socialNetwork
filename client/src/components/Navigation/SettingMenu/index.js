@@ -8,10 +8,10 @@ import SettingModal from 'components/SpeedDial/Settings/Modal';
 import { LINKS, ROUTES } from 'constant';
 import PropTypes from 'prop-types';
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 import useStyle from './style';
 import accountApi from 'apis/accountApi';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import { UX } from 'constant';
 
@@ -19,6 +19,8 @@ function SettingMenu({ anchorEl, onClose }) {
   const classes = useStyle();
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
+  const { _id } = useSelector((state) => state.userInfo);
+  const history = useHistory();
   const handleLogout = async () => {
     try {
       const res = await accountApi.userLogout();
@@ -38,7 +40,11 @@ function SettingMenu({ anchorEl, onClose }) {
     } catch (err) {
       window.location.href = '/';
     }
-  }
+  };
+  const handleClickProfile = (_id) => {
+    history.push(`/profile/${_id}`);
+    onClose();
+  };
   return (
     <Menu
       classes={{ paper: classes.root }}
@@ -51,7 +57,7 @@ function SettingMenu({ anchorEl, onClose }) {
         horizontal: 'right',
         vertical: 'bottom',
       }}>
-      <Link to={ROUTES.USER_ACCOUNT}>
+      <Link onClick={() => handleClickProfile(_id)}>
         <MenuItem className={classes.menuItem}>
           <AccountCircleIcon className={classes.icon} fontSize="small" />
           <p className={classes.text}>Thông tin cá nhân</p>

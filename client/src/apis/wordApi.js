@@ -11,6 +11,14 @@ const wordApi = {
     return axiosClient.get(`${URL}/api/exist`, { params: { word, type } });
   },
 
+  getSearchUser: (name, token) => {
+    return axiosClient.get(`${URL}/user/search`,
+      {
+        params: { name },
+        headers: { Authorization: token }
+      });
+  },
+
   // get word, type, phonetic, mean
   getWordList: (page = 1, perPage = 8, packInfo, sortType = 'rand') => {
 

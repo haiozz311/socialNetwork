@@ -11,16 +11,15 @@ import { ROUTES } from 'constant';
 import { cloudinaryImgOptimize } from 'helper';
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import SettingMenu from './SettingMenu';
 import useStyle from './style';
 
 function Navigation() {
   const classes = useStyle();
   const theme = useTheme();
-
+  const { pathname } = useLocation();
   const isXsDevice = useMediaQuery(theme.breakpoints.up('xs'));
-
   const { avatar, isAuth } = useSelector((state) => state.userInfo);
 
   const avtSrc = Boolean(avatar)
@@ -28,7 +27,6 @@ function Navigation() {
     : defaultUserImg;
   const [showInput, setShowInput] = useState(isXsDevice);
   const [anchorMenu, setAnchorMenu] = useState(null);
-
   const onOpenMenu = (e) => setAnchorMenu(e.currentTarget);
   const onCloseMenu = () => setAnchorMenu(null);
 
@@ -46,7 +44,6 @@ function Navigation() {
               />
             </Link>
           )}
-
           {/* control, setting */}
           <div className={`${classes.control} flex-center--ver`}>
             {showInput && !isXsDevice && (
@@ -59,7 +56,7 @@ function Navigation() {
             {/* Search bar */}
             <div className="mr-5">
               <SearchInputCustom
-                placeholder="Nhập từ khoá ..."
+                placeholder={pathname !== "/social" ? "Nhập từ khoá ..." : "Nhập tên bạn muốn tìm..."}
                 showInput={isXsDevice || showInput}
                 prefixIcon={
                   <Search

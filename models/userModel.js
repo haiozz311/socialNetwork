@@ -46,6 +46,13 @@ const userSchema = new mongoose.Schema({
         max: MAX.USER_COIN,
     },
     favoriteList: [String],
+    mobile: { type: String, default: '' },
+    address: { type: String, default: '' },
+    gender: {type: String, default: 'male'},
+    story: { type: String, default: '', maxlength: 200 },
+    followers: [{type: mongoose.Types.ObjectId, ref: 'Users'}],
+    following: [{type: mongoose.Types.ObjectId, ref: 'Users'}],
+    saved: [{type: mongoose.Types.ObjectId, ref: 'Users'}]
 }, {
     timestamps: true
 })

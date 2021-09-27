@@ -1,33 +1,45 @@
 import accountApi from 'apis/accountApi';
 import { formatDate } from 'helper';
 import React, { useEffect, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import { setUserAvt } from 'redux/slices/userInfo.slice';
+import { setUserProfile } from 'redux/slices/profile.slice';
 import UserAccount from '.';
 
 function UserAccountData() {
-  const [userInfo, setUserInfo] = useState({ email: null, createdDate: null });
+  // const [userInfo, setUserInfo] = useState({ email: null, createdDate: null });
   const { refresh_token } = useSelector(state => state.token);
+  const profile = useSelector(state => state.profile);
+
   const dispatch = useDispatch();
+  const { pathname } = useLocation();
+  const [idUser, setIdUser] = useState(pathname.split('/profile/')[1]);
+  const dataUserInfor = useSelector((state) => state.userInfo);
+  const [userData, setUserData] = useState([]);
+  useEffect(() => {
+    if (idUser !== dataUserInfor._id) {
+      const getUserById = async () => {
+        const res = await accountApi.fetchUserById(idUser, refresh_token);
+        dispatch(setUserProfile({ users: res.data.user, id: idUser }));
+      };
+      getUserById();
+    }
+  }, [idUser, pathname, dataUserInfor._id]);
 
   useEffect(() => {
-    let isSub = true;
+    setIdUser(pathname.split('/profile/')[1]);
+  }, [idUser, pathname]);
 
-    (async function () {
-      try {
-        const apiRes = await accountApi.fetchUser(refresh_token);
-        console.log({ apiRes });
-        if (apiRes.status === 200 && isSub) {
-          const { email, createdAt } = apiRes.data;
-          console.log("test1", { email, createdAt });
-          setUserInfo({ email, createdDate: formatDate(createdAt) });
-        }
-      } catch (error) { }
-    })();
-
-    return () => (isSub = false);
-  }, []);
+  useEffect(() => {
+    if (dataUserInfor._id === idUser) {
+      setUserData([dataUserInfor]);
+    } else {
+      const newData = profile.users.filter(user => user._id === idUser);
+      setUserData(newData);
+    }
+  }, [profile, idUser, pathname, dataUserInfor._id]);
 
   const handleUpdateProfile = async (name) => {
     try {
@@ -55,9 +67,8 @@ function UserAccountData() {
 
   return (
     <UserAccount
-      email={userInfo.email}
-      createdDate={userInfo.createdDate}
       onUpdateProfile={handleUpdateProfile}
+      userData={userData}
     />
   );
 }

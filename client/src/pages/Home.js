@@ -88,6 +88,13 @@ const FEATURE_LIST = [
       'Dyno rất mong được sự đóng góp của bạn. Bạn có thể thêm từ mới, sửa lỗi sai',
     to: ROUTES.CONTRIBUTION,
   },
+  {
+    title: 'Mạng xã hội',
+    imgUrl: friendsIcon,
+    subTitle:
+      'Dynonary đã góp phần tạo ra một công đồng cùng nhau học tiếng anh, cùng nhau chia sẽ kiến thức',
+    to: ROUTES.SOCIAL,
+  },
 ];
 
 function HomePage() {

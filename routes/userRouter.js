@@ -35,6 +35,14 @@ router.put(
   userCtrl.putUpdateUserCoin,
 );
 
+router.get('/search', auth, userCtrl.searchUser)
+
+router.get('/getUser/:id', auth, userCtrl.getUser)
+
+router.patch('/:id/follow', auth, userCtrl.follow)
+
+router.patch('/:id/unfollow', auth, userCtrl.unfollow)
+
 
 // Social Login
 router.post('/google_login', userCtrl.googleLogin)

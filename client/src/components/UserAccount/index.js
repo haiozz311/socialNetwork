@@ -7,35 +7,66 @@ import UploadButton from 'components/UI/UploadButton';
 import { DEFAULTS, MAX } from 'constant';
 import { cloudinaryImgOptimize } from 'helper';
 import PropTypes from 'prop-types';
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import useStyle from './style';
+import { formatDate } from 'helper';
+import { useLocation } from 'react-router-dom';
+import { AirlineSeatFlatAngled } from '@material-ui/icons';
+import PersonAddIcon from '@material-ui/icons/PersonAdd';
+import ButtonFollow from 'components/UI/ButtonFollow';
+import { formStyle } from 'components/UI/style';
+import Followers from 'components/UI/Followers';
+import Following from 'components/UI/Following';
 
-function UserAccount({ onUpdateProfile, email, createdDate }) {
-  const userInfo = useSelector((state) => state.userInfo);
-  const { username, name, avatar, coin } = userInfo;
+function UserAccount({ onUpdateProfile, userData }) {
+  const [data, setData] = useState({});
+  let { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
+
+  const dataUserInfor = useSelector((state) => state.userInfo);
+  console.log({ dataUserInfor })
   const avtSrc = Boolean(avatar)
     ? cloudinaryImgOptimize(avatar, 150, 150)
     : DEFAULTS.IMAGE_SRC;
   const classes = useStyle();
   const [editMode, setEditMode] = useState(false);
-  const inputRef = useRef({ name, username });
-  const [errors, setErrors] = useState({ name: false, username: false });
+  const inputRef = useRef({ name });
+  const [errors, setErrors] = useState({ name: false });
+  const { pathname } = useLocation();
+  const [idUser, setIdUser] = useState(pathname.split('/profile/')[1]);
+  const [flagAuth, setflagAuth] = useState(false);
+  const [showFollowers, setShowFollowers] = useState(false);
+  const [showFollowing, setShowFollowing] = useState(false);
   const dispatch = useDispatch();
 
   const handleInputChange = (v, type = 0) => {
     if (type) {
       errors.name && v !== '' && setErrors({ ...errors, name: false });
       inputRef.current.name = v;
-    } else {
-      errors.username && v !== '' && setErrors({ ...errors, username: false });
-      inputRef.current.username = v;
     }
   };
 
+  useEffect(() => {
+    userData.forEach(user => {
+      setData(user);
+    });
+  }, [userData]);
+
+  useEffect(() => {
+    setIdUser(pathname.split('/profile/')[1]);
+  }, [idUser, pathname]);
+
+  useEffect(() => {
+    if (dataUserInfor._id === idUser) {
+      setflagAuth(true);
+    } else {
+      setflagAuth(false);
+    }
+  }, [idUser, dataUserInfor._id]);
+
   const handleCloseEditMode = () => {
-    inputRef.current = { name, username };
+    inputRef.current = { name };
     setEditMode(false);
   };
 
@@ -65,6 +96,10 @@ function UserAccount({ onUpdateProfile, email, createdDate }) {
     onUpdateProfile(currentName.trim());
   };
 
+  useEffect(() => {
+    setData(dataUserInfor);
+  }, [dataUserInfor.following]);
+
   return (
     <div className={`${classes.wrap} container flex-center`}>
       <div className={classes.root}>
@@ -87,7 +122,6 @@ function UserAccount({ onUpdateProfile, email, createdDate }) {
         {!editMode ? (
           <div className="mt-8">
             <h2 className={classes.name}>{name}</h2>
-            {/* <h4 className={classes.username}>{username}</h4> */}
           </div>
         ) : (
           <div className="flex-center-col mt-8">
@@ -99,55 +133,81 @@ function UserAccount({ onUpdateProfile, email, createdDate }) {
               error={errors.name}
               defaultValue={name}
             />
-            {/* <InputCustom
-              onChange={(e) => handleInputChange(e.target.value, 0)}
-              placeholder={username}
-              label="Nhập username"
-              error={errors.username}
-              defaultValue={username}
-            /> */}
+
           </div>
         )}
 
         <div className={classes.info}>
+          <div>
+            <p className={classes.underLine} onClick={() => setShowFollowers(true)}>{followers?.length} Người theo dõi</p>
+          </div>
+          <div>
+            <p className={classes.underLine} onClick={() => setShowFollowing(true)}>{following?.length} Đang theo dõi</p>
+          </div>
           {Boolean(email) && <p>{email}</p>}
-          {Boolean(createdDate) && <p>Đã tham gia vào {createdDate}</p>}
+          {Boolean(createdDate || createdAt) && <p>Đã tham gia vào {formatDate(createdDate || createdAt)}</p>}
           <p>
             Số coin hiện tại: <span className={classes.coin}>{coin}</span>
           </p>
         </div>
+        {
+          showFollowers &&
+          <Followers
+            users={data.followers}
+            open={showFollowers}
+            setShowFollowers={setShowFollowers}
+            userInfo={dataUserInfor}
+          />
+        }
+        {
+          showFollowing &&
+          <Following
+            users={data.following}
+            open={setShowFollowing}
+            setShowFollowing={setShowFollowing}
+            userInfo={dataUserInfor}
+          />
+        }
+        <ButtonFollow user={data} />
 
-        {!editMode ? (
-          <>
-            <Button
-              onClick={() => setEditMode(true)}
-              className={`${classes.editBtn} _btn _btn-primary w-100`}
-              startIcon={<EditIcon />}>
-              Chỉnh sửa
-            </Button>
-          </>
-        ) : (
-          <div className="d-flex w-100">
-            <Button
-              onClick={handleCloseEditMode}
-              className={`${classes.editBtn} _btn _btn-outlined-accent w-50`}>
-              Huỷ bỏ
-            </Button>
-            <Button
-              onClick={handleUpdate}
-              className={`${classes.editBtn} _btn _btn-primary ml-4 w-50`}>
-              Cập nhật
-            </Button>
-          </div>
-        )}
+        {
+          flagAuth ? (
+            !editMode ?
+              <>
+                <Button
+                  onClick={() => setEditMode(true)}
+                  className={`_btn _btn-primary w-100`}
+                  startIcon={<EditIcon />}>
+                  Chỉnh sửa
+                </Button>
+              </>
+              :
+              (
+                <div className="d-flex w-100">
+                  <Button
+                    onClick={handleCloseEditMode}
+                    className={`${classes.editBtn} _btn _btn-outlined-accent w-50`}>
+                    Huỷ bỏ
+                  </Button>
+                  <Button
+                    onClick={handleUpdate}
+                    className={`${classes.editBtn} _btn _btn-primary ml-4 w-50`}>
+                    Cập nhật
+                  </Button>
+                </div>
+              )
+          ) : null
+
+        }
+
       </div>
-    </div>
+    </div >
   );
 }
 
 UserAccount.propTypes = {
-  createdDate: PropTypes.any,
-  email: PropTypes.string,
+  // createdDate: PropTypes.any,
+  // email: PropTypes.string,
   onUpdateProfile: PropTypes.func,
 };
 

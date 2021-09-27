@@ -51,6 +51,7 @@ export const getCustomPalettes = () => {
 // set palettes for root
 export const setRootPalettes = () => {
   const palettes = getCustomPalettes();
+  console.log("palettes", palettes);
   palettes?.forEach((item) => htmlRoot.style.setProperty(item.key, item.color));
 };
 
@@ -99,10 +100,10 @@ export const cloudinaryImgOptimize = (
   others = '',
 ) => {
   if (!originSrc) return '';
-
+  // check avatar of clould
   const cloudinaryBaseURL = 'https://res.cloudinary.com/dsvko7lfg/image/upload';
   const index = originSrc.indexOf(cloudinaryBaseURL);
-
+  // this is avatar of fb or gg
   if (index === -1) {
     return originSrc;
   }
@@ -112,8 +113,9 @@ export const cloudinaryImgOptimize = (
     }`;
 
   if (optimize[optimize.length - 1] === ',')
+    // remove ,
     optimize = optimize.slice(0, optimize.length - 1);
-
+  // console.log("data", `${cloudinaryBaseURL} / ${optimize}`);
   return originSrc.replace(
     cloudinaryBaseURL,
     `${cloudinaryBaseURL}/${optimize}`,

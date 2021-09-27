@@ -54,6 +54,7 @@ export const MIN = {
 
 export const ROUTES = {
   HOME: '/',
+  SOCIAL: '/social',
   ACTIVE_TOKEN: '/user/activate/:activation_token',
   RESETPASSWORD: '/user/reset/:token',
   LOGIN: '/login',

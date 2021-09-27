@@ -87,4 +87,16 @@ export default makeStyles(() => ({
     fontSize: '2rem',
   },
 
+  hiddenBtn: {
+    display: 'none !important',
+  },
+
+  underLine: {
+    display: 'inline-block',
+    borderBottom: '4px solid black',
+    '&:hover': {
+      borderBottom: '4px solid var(--primary-color)'
+    }
+  },
+
 }));

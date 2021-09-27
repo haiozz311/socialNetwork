@@ -82,7 +82,7 @@ const userCtrl = {
             const isMatch = await bcrypt.compare(password, user.password)
             if (!isMatch) return res.status(400).json({ msg: "Password is incorrect." })
 
-            const refresh_token = createRefreshToken({ id: user._id })
+            const refresh_token = createRefreshToken({ id: user._id });
             res.cookie('refreshtoken', refresh_token, {
                 httpOnly: true,
                 path: '/user/refresh_token',
@@ -96,7 +96,7 @@ const userCtrl = {
     },
     getAccessToken: (req, res) => {
         try {
-            const rf_token = req.cookies.refreshtoken
+            const rf_token = req.cookies.refreshtoken;
             if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
 
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -143,7 +143,7 @@ const userCtrl = {
     getUserInfor: async (req, res) => {
         try {
             const user = await Users.findById(req.user.id).select('-password')
-
+                .populate("followers following", "-password")
             res.json(user)
         } catch (err) {
             return res.status(500).json({ msg: err.message })
@@ -376,7 +376,68 @@ const userCtrl = {
             return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
         }
     },
+    searchUser: async (req, res) => {
+        try {
+            const users = await Users.find({ name: { $regex: req.query.name } })
+                .limit(10).select("name avatar")
 
+            res.json({ users })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    getUser: async (req, res) => {
+        try {
+            const user = await Users.findById(req.params.id).select('-password')
+                .populate("followers following", "-password")
+            if (!user) return res.status(400).json({ msg: "User does not exist." })
+
+            res.json({ user })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    follow: async (req, res) => {
+        try {
+            console.log("req.params.id", req.params.id);
+            console.log("req.user._id", req.user._id);
+            const user = await Users.findById(req.user.id).select('-password');
+            console.log({ user });
+            // const user = await Users.find({ _id: req.params.id, followers: req.user._id });
+            // console.log({ user });
+            if (user.length > 0) return res.status(500).json({ msg: "You followed this user." })
+
+            const newUser = await Users.findOneAndUpdate({ _id: req.params.id }, {
+                $push: { followers: req.user.id }
+            }, { new: true }).populate("followers following", "-password")
+
+            await Users.findOneAndUpdate({ _id: req.user.id }, {
+                $push: { following: req.params.id }
+            }, { new: true })
+
+            res.json({ newUser })
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    unfollow: async (req, res) => {
+        try {
+            const newUser = await Users.findOneAndUpdate({ _id: req.params.id }, {
+                $pull: { followers: req.user.id }
+            }, { new: true }).populate("followers following", "-password")
+
+            await Users.findOneAndUpdate({ _id: req.user.id }, {
+                $pull: { following: req.params.id }
+                // pull=> remove element on array 
+            }, { new: true })
+
+            res.json({ newUser })
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
 }
 
 
