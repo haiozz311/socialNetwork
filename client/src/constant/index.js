@@ -70,7 +70,7 @@ export const ROUTES = {
   GRAMMAR: '/grammar',
   FAVORITE: '/favorite-vocab',
   IRREGULAR: '/irregular-verbs',
-  USER_ACCOUNT: '/profile',
+  USER_ACCOUNT: '/profile/:id',
   LEADERBOARD: '/leaderboard',
   GAMES: {
     HOME: '/games',

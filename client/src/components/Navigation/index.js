@@ -18,7 +18,7 @@ import useStyle from './style';
 function Navigation() {
   const classes = useStyle();
   const theme = useTheme();
-  const { pathname } = useLocation();
+  const { pathname = {} } = useLocation();
   const isXsDevice = useMediaQuery(theme.breakpoints.up('xs'));
   const { avatar, isAuth } = useSelector((state) => state.userInfo);
 
@@ -56,7 +56,7 @@ function Navigation() {
             {/* Search bar */}
             <div className="mr-5">
               <SearchInputCustom
-                placeholder={pathname !== "/social" ? "Nhập từ khoá ..." : "Nhập tên bạn muốn tìm..."}
+                placeholder={pathname !== '/social' ? 'Nhập từ khoá ...' : 'Nhập tên bạn muốn tìm...'}
                 showInput={isXsDevice || showInput}
                 prefixIcon={
                   <Search

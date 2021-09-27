@@ -12,20 +12,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import useStyle from './style';
 import { formatDate } from 'helper';
-import { useLocation } from 'react-router-dom';
-import { AirlineSeatFlatAngled } from '@material-ui/icons';
-import PersonAddIcon from '@material-ui/icons/PersonAdd';
 import ButtonFollow from 'components/UI/ButtonFollow';
 import { formStyle } from 'components/UI/style';
 import Followers from 'components/UI/Followers';
 import Following from 'components/UI/Following';
 
-function UserAccount({ onUpdateProfile, userData }) {
+function UserAccount({ onUpdateProfile, userData, id }) {
   const [data, setData] = useState({});
   let { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
 
   const dataUserInfor = useSelector((state) => state.userInfo);
-  console.log({ dataUserInfor })
   const avtSrc = Boolean(avatar)
     ? cloudinaryImgOptimize(avatar, 150, 150)
     : DEFAULTS.IMAGE_SRC;
@@ -33,8 +29,7 @@ function UserAccount({ onUpdateProfile, userData }) {
   const [editMode, setEditMode] = useState(false);
   const inputRef = useRef({ name });
   const [errors, setErrors] = useState({ name: false });
-  const { pathname } = useLocation();
-  const [idUser, setIdUser] = useState(pathname.split('/profile/')[1]);
+  const [idUser, setIdUser] = useState(id);
   const [flagAuth, setflagAuth] = useState(false);
   const [showFollowers, setShowFollowers] = useState(false);
   const [showFollowing, setShowFollowing] = useState(false);
@@ -54,8 +49,8 @@ function UserAccount({ onUpdateProfile, userData }) {
   }, [userData]);
 
   useEffect(() => {
-    setIdUser(pathname.split('/profile/')[1]);
-  }, [idUser, pathname]);
+    setIdUser(id);
+  }, [id]);
 
   useEffect(() => {
     if (dataUserInfor._id === idUser) {

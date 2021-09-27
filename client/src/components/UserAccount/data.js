@@ -1,12 +1,11 @@
 import accountApi from 'apis/accountApi';
 import { formatDate } from 'helper';
 import React, { useEffect, useState } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
-import { setUserAvt } from 'redux/slices/userInfo.slice';
 import { setUserProfile } from 'redux/slices/profile.slice';
-import UserAccount from '.';
+import UserAccount from './index';
 
 function UserAccountData() {
   // const [userInfo, setUserInfo] = useState({ email: null, createdDate: null });
@@ -14,8 +13,8 @@ function UserAccountData() {
   const profile = useSelector(state => state.profile);
 
   const dispatch = useDispatch();
-  const { pathname } = useLocation();
-  const [idUser, setIdUser] = useState(pathname.split('/profile/')[1]);
+  const { id } = useParams();;
+  const [idUser, setIdUser] = useState(id);
   const dataUserInfor = useSelector((state) => state.userInfo);
   const [userData, setUserData] = useState([]);
   useEffect(() => {
@@ -26,11 +25,11 @@ function UserAccountData() {
       };
       getUserById();
     }
-  }, [idUser, pathname, dataUserInfor._id]);
+  }, [idUser, dataUserInfor._id]);
 
   useEffect(() => {
-    setIdUser(pathname.split('/profile/')[1]);
-  }, [idUser, pathname]);
+    setIdUser(id);
+  }, [id]);
 
   useEffect(() => {
     if (dataUserInfor._id === idUser) {
@@ -39,7 +38,7 @@ function UserAccountData() {
       const newData = profile.users.filter(user => user._id === idUser);
       setUserData(newData);
     }
-  }, [profile, idUser, pathname, dataUserInfor._id]);
+  }, [profile, idUser, dataUserInfor._id]);
 
   const handleUpdateProfile = async (name) => {
     try {
@@ -69,6 +68,7 @@ function UserAccountData() {
     <UserAccount
       onUpdateProfile={handleUpdateProfile}
       userData={userData}
+      id={id}
     />
   );
 }

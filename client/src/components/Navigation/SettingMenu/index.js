@@ -41,7 +41,7 @@ function SettingMenu({ anchorEl, onClose }) {
       window.location.href = '/';
     }
   };
-  const handleClickProfile = (_id) => {
+  const handleClickProfile = () => {
     history.push(`/profile/${_id}`);
     onClose();
   };
@@ -57,12 +57,10 @@ function SettingMenu({ anchorEl, onClose }) {
         horizontal: 'right',
         vertical: 'bottom',
       }}>
-      <Link onClick={() => handleClickProfile(_id)}>
-        <MenuItem className={classes.menuItem}>
-          <AccountCircleIcon className={classes.icon} fontSize="small" />
-          <p className={classes.text}>Thông tin cá nhân</p>
-        </MenuItem>
-      </Link>
+      <MenuItem className={classes.menuItem} onClick={() => handleClickProfile()}>
+        <AccountCircleIcon className={classes.icon} fontSize="small" />
+        <p className={classes.text}>Thông tin cá nhân</p>
+      </MenuItem>
 
       <MenuItem onClick={() => setOpen(true)} className={classes.menuItem}>
         <SettingsIcon className={classes.icon} fontSize="small" />
