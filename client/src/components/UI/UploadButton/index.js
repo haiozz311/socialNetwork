@@ -98,7 +98,7 @@ function UploadButton({ title, className, resetFlag }) {
   };
 
   const changeAvatar = async (e) => {
-    e.preventDefault()
+    e.preventDefault();
     try {
       const file = e.target.files[0];
 

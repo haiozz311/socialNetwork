@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/core/styles';
 
 export default makeStyles(() => ({
   wrap: {
-    minHeight: 'calc(100vh - 7.2rem)',
+    minHeight: 'calc(30vh)',
   },
 
   root: {

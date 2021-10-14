@@ -1,8 +1,32 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import axiosClient from 'apis/axiosClient';
+const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
+
+
+export const getProfileUsers = createAsyncThunk(
+  'profile/getProfileUsers',
+  async ({ id, refresh_token }) => {
+    const users = await axiosClient.get(`${URL}/user/getUser/${id}`, {
+      headers: { Authorization: refresh_token }
+    });
+    const posts = await axiosClient.get(`${URL}/api/user_posts/${id}`, {
+      headers: { Authorization: refresh_token }
+    });
+
+    const data = {
+      id,
+      users: users.data,
+      posts: { ...posts.data, _id: id }
+    };
+    return data;
+
+  },
+);
 
 const profileSlice = createSlice({
   name: 'profile',
   initialState: {
+    ids: [],
     users: [],
     posts: []
   },
@@ -24,9 +48,19 @@ const profileSlice = createSlice({
       const data = users.map(user => (user._id === newUser._id ? newUser : user));
       state.users = data;
     },
+    setIds(state, action) {
+      state.ids.push(action.payload);
+    },
   },
+  extraReducers: {
+    [getProfileUsers.fulfilled]: (state, action) => {
+      state.ids.push(action.payload.id);
+      state.users.push(action.payload.users.user);
+      state.posts.push(action.payload.posts);
+    },
+  }
 });
 
 const { reducer, actions } = profileSlice;
-export const { setUserProfile, follow, unfollow } = actions;
+export const { setUserProfile, follow, unfollow, setIds } = actions;
 export default reducer;

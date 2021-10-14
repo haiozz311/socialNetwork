@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 
 
 export default function IconHeader({ post }) {
+  const userInfo = useSelector((state) => state.userInfo);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -36,8 +37,14 @@ export default function IconHeader({ post }) {
         open={open}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleEditPost}>Chỉnh sửa</MenuItem>
-        <MenuItem onClick={handleClose}>Xóa</MenuItem>
+        {
+          userInfo._id === post.user._id &&
+          <>
+            <MenuItem onClick={handleEditPost}>Chỉnh sửa</MenuItem>
+            <MenuItem onClick={handleClose}>Xóa</MenuItem>
+          </>
+        }
+
         <MenuItem onClick={handleClose}>copy link</MenuItem>
       </Menu>
     </div>

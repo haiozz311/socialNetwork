@@ -27,6 +27,7 @@ app.use('/api', require('./routes/blog'));
 app.use('/api', require('./routes/game'));
 app.use('/api', require('./routes/highscore'));
 app.use('/api', require('./routes/postRouter'));
+app.use('/api', require('./routes/commentRouter'));
 
 
 // Connect to mongodb

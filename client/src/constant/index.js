@@ -71,6 +71,7 @@ export const ROUTES = {
   FAVORITE: '/favorite-vocab',
   IRREGULAR: '/irregular-verbs',
   USER_ACCOUNT: '/profile/:id',
+  POST: '/post/:id',
   LEADERBOARD: '/leaderboard',
   GAMES: {
     HOME: '/games',

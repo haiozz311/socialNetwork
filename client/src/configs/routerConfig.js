@@ -27,6 +27,7 @@ const IrregularVerbPage = React.lazy(() => import('pages/IrregularVerb'));
 const ForgotPasswordPage = React.lazy(() => import('pages/ForgotPassword'));
 const UserAccountPage = React.lazy(() => import('pages/UserAccount'));
 const LeaderBoardPage = React.lazy(() => import('pages/LeaderBoard'));
+const PostPage = React.lazy(() => import('pages/Post'));
 
 // routes for app
 const routes = [
@@ -39,13 +40,13 @@ const routes = [
   {
     path: ROUTES.ACTIVE_TOKEN,
     exact: true,
-    isProtect: false,
+    isProtect: true,
     component: () => <ActivationEmail />,
   },
   {
     path: ROUTES.SOCIAL,
     exact: true,
-    isProtect: false,
+    isProtect: true,
     component: () => <Social />,
   },
   {
@@ -155,6 +156,12 @@ const routes = [
     exact: false,
     isProtect: true,
     component: () => <UserAccountPage />,
+  },
+  {
+    path: ROUTES.POST,
+    exact: false,
+    isProtect: true,
+    component: () => <PostPage />,
   },
   {
     path: ROUTES.LEADERBOARD,

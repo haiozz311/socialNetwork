@@ -81,14 +81,13 @@ const userCtrl = {
 
             const isMatch = await bcrypt.compare(password, user.password)
             if (!isMatch) return res.status(400).json({ msg: "Password is incorrect." })
-
+            console.log("login", user)
             const refresh_token = createRefreshToken({ id: user._id });
             res.cookie('refreshtoken', refresh_token, {
                 httpOnly: true,
                 path: '/user/refresh_token',
                 maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
             })
-
             res.json({ msg: "Login success!" })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
@@ -97,6 +96,8 @@ const userCtrl = {
     getAccessToken: (req, res) => {
         try {
             const rf_token = req.cookies.refreshtoken;
+            console.log("refresh token", rf_token);
+            console.log("req.cookies", req.cookies)
             if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
 
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -454,7 +455,7 @@ const createActivationToken = (payload) => {
 }
 
 const createAccessToken = (payload) => {
-    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '15m' })
+    return jwt.sign(payload, process.env.ACCESS_TOKEN_SECRET, { expiresIn: '1d' })
 }
 
 const createRefreshToken = (payload) => {

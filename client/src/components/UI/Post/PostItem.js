@@ -12,6 +12,9 @@ import { useDispatch, useSelector } from 'react-redux';
 import LikePost from '../LikePost';
 import { Link } from 'react-router-dom'
 import PostContent from './PostContent';
+import Comments from '../Comments';
+import InputCustom from '../InputCustom';
+import InputComment from '../Comments/InputComment';
 
 const PostItem = ({ post, refresh_token, userInfo }) => {
   const dispatch = useDispatch();
@@ -47,20 +50,6 @@ const PostItem = ({ post, refresh_token, userInfo }) => {
           </Link>
           <IconHeader post={post} />
         </div>
-        {/* {
-          post.content.length > 0 && <CardContent>
-            <Typography variant="body2" color="text.secondary">
-              {post.content.length < 200 ? post.content : readMore ? post.content + ' ' : post.content.slice(0, 200) + '...'}
-              {
-                post.content.length > 200 &&
-                <span onClick={() => setReadMore(!readMore)}>
-                  {readMore ? 'Hide content' : 'Read more'}
-                </span>
-              }
-            </Typography>
-          </CardContent>
-        } */}
-
         <PostContent post={post} readMore={readMore} setReadMore={setReadMore} />
 
         {
@@ -91,6 +80,8 @@ const PostItem = ({ post, refresh_token, userInfo }) => {
             </IconButton>
           </div>
         </CardActions>
+        <Comments post={post} />
+        <InputComment post={post} />
       </Card>
     </>
   );

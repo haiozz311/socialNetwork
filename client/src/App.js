@@ -20,7 +20,7 @@ import accountApi from 'apis/accountApi';
 const { routes, renderRoutes } = routerConfig;
 
 function App() {
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { isAuth } = useSelector((state) => state.userInfo);
   const { refresh_token } = useSelector(state => state.token);
@@ -45,20 +45,19 @@ function App() {
   useEffect(() => {
     if (refresh_token) {
       const getUser = async () => {
-
         const res = await accountApi.fetchUser(refresh_token);
         dispatch(setDataUser(res.data));
       };
       getUser();
     }
-  }, [refresh_token, dispatch]);
+  }, [refresh_token]);
 
   // get user info
-  useEffect(() => {
-    dispatch(getTodos());
-    setLoading(false);
-    return () => { };
-  }, []);
+  // useEffect(() => {
+  //   dispatch(getTodos());
+  //   setLoading(false);
+  //   return () => { };
+  // }, []);
   return (
     <>
       {loading ? (

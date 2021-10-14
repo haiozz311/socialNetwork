@@ -55,7 +55,7 @@ function WordPack(props) {
       classes={{ paper: classes.dialogPaper }}
       maxWidth="md"
       fullWidth
-      disableBackdropClick
+      disableBackdropClick={true}
       open={open}>
       <DialogTitle classes={{ root: classes.title }}>{title}</DialogTitle>
 

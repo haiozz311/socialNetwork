@@ -10,18 +10,23 @@ import PropTypes from 'prop-types';
 import React, { useRef, useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import { getProfileUsers, setIds } from 'redux/slices/profile.slice';
 import useStyle from './style';
 import { formatDate } from 'helper';
 import ButtonFollow from 'components/UI/ButtonFollow';
 import { formStyle } from 'components/UI/style';
 import Followers from 'components/UI/Followers';
 import Following from 'components/UI/Following';
+import MyPostProfile from 'components/UI/MyPostProfile/MyPostProfile';
 
 function UserAccount({ onUpdateProfile, userData, id }) {
   const [data, setData] = useState({});
-  let { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
-
   const dataUserInfor = useSelector((state) => state.userInfo);
+  const profile = useSelector(state => state.profile);
+  const { refresh_token } = useSelector(state => state.token);
+  const { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
+
+
   const avtSrc = Boolean(avatar)
     ? cloudinaryImgOptimize(avatar, 150, 150)
     : DEFAULTS.IMAGE_SRC;
@@ -46,11 +51,17 @@ function UserAccount({ onUpdateProfile, userData, id }) {
     userData.forEach(user => {
       setData(user);
     });
-  }, [userData]);
+  }, [userData, userData.avatar]);
 
   useEffect(() => {
     setIdUser(id);
   }, [id]);
+
+  useEffect(() => {
+    if (profile.ids.every(item => item !== id)) {
+      dispatch(getProfileUsers({ id, refresh_token }));
+    }
+  }, [id, profile.ids, refresh_token, dispatch]);
 
   useEffect(() => {
     if (dataUserInfor._id === idUser) {
@@ -96,107 +107,110 @@ function UserAccount({ onUpdateProfile, userData, id }) {
   }, [dataUserInfor.following]);
 
   return (
-    <div className={`${classes.wrap} container flex-center`}>
-      <div className={classes.root}>
-        <div className="flex-center w-100 h-100">
-          <div className={classes.avtWrap}>
-            <img
-              className={`${classes.avt} w-100 h-100`}
-              src={avtSrc}
-              alt="Avatar Photo"
-            />
+    <>
+      <div className={`${classes.wrap} container flex-center`}>
+        <div className={classes.root}>
+          <div className="flex-center w-100 h-100">
+            <div className={classes.avtWrap}>
+              <img
+                className={`${classes.avt} w-100 h-100`}
+                src={avtSrc}
+                alt="Avatar Photo"
+              />
 
-            <div className={`${classes.cameraIconWrap} flex-center`}>
-              <CameraIcon className={classes.cameraIcon} />
+              <div className={`${classes.cameraIconWrap} flex-center`}>
+                <CameraIcon className={classes.cameraIcon} />
 
-              <UploadButton className={classes.fileInput} />
+                <UploadButton className={classes.fileInput} />
+              </div>
             </div>
           </div>
-        </div>
 
-        {!editMode ? (
-          <div className="mt-8">
-            <h2 className={classes.name}>{name}</h2>
+          {!editMode ? (
+            <div className="mt-8">
+              <h2 className={classes.name}>{name}</h2>
+            </div>
+          ) : (
+            <div className="flex-center-col mt-8">
+              <InputCustom
+                onChange={(e) => handleInputChange(e.target.value, 1)}
+                className="mb-8"
+                placeholder={name}
+                label="Nhập tên"
+                error={errors.name}
+                defaultValue={name}
+              />
+
+            </div>
+          )}
+
+          <div className={classes.info}>
+            <div>
+              <p className={classes.underLine} onClick={() => setShowFollowers(true)}>{followers?.length} Người theo dõi</p>
+            </div>
+            <div>
+              <p className={classes.underLine} onClick={() => setShowFollowing(true)}>{following?.length} Đang theo dõi</p>
+            </div>
+            {Boolean(email) && <p>{email}</p>}
+            {Boolean(createdDate || createdAt) && <p>Đã tham gia vào {formatDate(createdDate || createdAt)}</p>}
+            <p>
+              Số coin hiện tại: <span className={classes.coin}>{coin}</span>
+            </p>
           </div>
-        ) : (
-          <div className="flex-center-col mt-8">
-            <InputCustom
-              onChange={(e) => handleInputChange(e.target.value, 1)}
-              className="mb-8"
-              placeholder={name}
-              label="Nhập tên"
-              error={errors.name}
-              defaultValue={name}
+          {
+            showFollowers &&
+            <Followers
+              users={data.followers}
+              open={showFollowers}
+              setShowFollowers={setShowFollowers}
+              userInfo={dataUserInfor}
             />
+          }
+          {
+            showFollowing &&
+            <Following
+              users={data.following}
+              open={setShowFollowing}
+              setShowFollowing={setShowFollowing}
+              userInfo={dataUserInfor}
+            />
+          }
+          <ButtonFollow user={data} />
 
-          </div>
-        )}
+          {
+            flagAuth ? (
+              !editMode ?
+                <>
+                  <Button
+                    onClick={() => setEditMode(true)}
+                    className={`_btn _btn-primary w-100`}
+                    startIcon={<EditIcon />}>
+                    Chỉnh sửa
+                  </Button>
+                </>
+                :
+                (
+                  <div className="d-flex w-100">
+                    <Button
+                      onClick={handleCloseEditMode}
+                      className={`${classes.editBtn} _btn _btn-outlined-accent w-50`}>
+                      Huỷ bỏ
+                    </Button>
+                    <Button
+                      onClick={handleUpdate}
+                      className={`${classes.editBtn} _btn _btn-primary ml-4 w-50`}>
+                      Cập nhật
+                    </Button>
+                  </div>
+                )
+            ) : null
 
-        <div className={classes.info}>
-          <div>
-            <p className={classes.underLine} onClick={() => setShowFollowers(true)}>{followers?.length} Người theo dõi</p>
-          </div>
-          <div>
-            <p className={classes.underLine} onClick={() => setShowFollowing(true)}>{following?.length} Đang theo dõi</p>
-          </div>
-          {Boolean(email) && <p>{email}</p>}
-          {Boolean(createdDate || createdAt) && <p>Đã tham gia vào {formatDate(createdDate || createdAt)}</p>}
-          <p>
-            Số coin hiện tại: <span className={classes.coin}>{coin}</span>
-          </p>
+          }
+
         </div>
-        {
-          showFollowers &&
-          <Followers
-            users={data.followers}
-            open={showFollowers}
-            setShowFollowers={setShowFollowers}
-            userInfo={dataUserInfor}
-          />
-        }
-        {
-          showFollowing &&
-          <Following
-            users={data.following}
-            open={setShowFollowing}
-            setShowFollowing={setShowFollowing}
-            userInfo={dataUserInfor}
-          />
-        }
-        <ButtonFollow user={data} />
-
-        {
-          flagAuth ? (
-            !editMode ?
-              <>
-                <Button
-                  onClick={() => setEditMode(true)}
-                  className={`_btn _btn-primary w-100`}
-                  startIcon={<EditIcon />}>
-                  Chỉnh sửa
-                </Button>
-              </>
-              :
-              (
-                <div className="d-flex w-100">
-                  <Button
-                    onClick={handleCloseEditMode}
-                    className={`${classes.editBtn} _btn _btn-outlined-accent w-50`}>
-                    Huỷ bỏ
-                  </Button>
-                  <Button
-                    onClick={handleUpdate}
-                    className={`${classes.editBtn} _btn _btn-primary ml-4 w-50`}>
-                    Cập nhật
-                  </Button>
-                </div>
-              )
-          ) : null
-
-        }
-
-      </div>
-    </div >
+      </div >
+      <MyPostProfile auth={dataUserInfor} profile={profile} id={id} />
+    </>
   );
 }
 

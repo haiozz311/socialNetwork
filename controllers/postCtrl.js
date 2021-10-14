@@ -74,13 +74,13 @@ const postCtrl = {
             const userAuth = await Users.findById(req.user.id).select('-password');
             const posts = await Posts.find({ user: [...userAuth.following, userAuth._id] }).sort('-createdAt')
                 .populate("user likes", "avatar name followers")
-            //     .populate({
-            //         path: "comments",
-            //         populate: {
-            //             path: "user likes",
-            //             select: "-password"
-            //         }
-            //     })
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "user likes",
+                        select: "-password"
+                    }
+                })
             // const features = new APIfeatures(Posts.find({
             //     user: [...req.user.following, req.user._id]
             // }), req.query).paginating()
@@ -170,8 +170,9 @@ const postCtrl = {
     },
     getUserPosts: async (req, res) => {
         try {
-            const features = new APIfeatures(Posts.find({ user: req.params.id }), req.query).paginating()
-            const posts = await features.query.sort("-createdAt");
+            // const features = new APIfeatures(Posts.find({ user: req.params.id }), req.query).paginating()
+            // const posts = await features.query.sort("-createdAt");
+            const posts = await Posts.find({ user: req.params.id }).sort("-createdAt");
             res.json({
                 posts,
                 result: posts.length
@@ -182,7 +183,7 @@ const postCtrl = {
         // try {
         //     const features = new APIfeatures(Posts.find({ user: req.params.id }), req.query)
         //         .paginating()
-        //     const posts = await features.query.sort("-createdAt")
+        //     const posts = await Posts.find({ user: req.params.id })
 
         //     res.json({
         //         posts,
