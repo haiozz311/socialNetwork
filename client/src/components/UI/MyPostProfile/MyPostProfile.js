@@ -3,7 +3,8 @@ import { Link } from 'react-router-dom';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
 import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
-const MyPostProfile = ({ auth, profile, id }) => {
+
+const MyPostProfile = ({ profile, id }) => {
   const [posts, setPosts] = useState([]);
 
   useEffect(() => {
@@ -14,7 +15,8 @@ const MyPostProfile = ({ auth, profile, id }) => {
         }
       });
     }
-  }, [profile.posts, id]);
+  }, [profile.posts, id, profile.posts.comments]);
+
   return (
     <div>
       {
@@ -24,9 +26,15 @@ const MyPostProfile = ({ auth, profile, id }) => {
               {
                 <img src={post?.images[0]?.url} alt={post?.images[0]?.url} />
               }
+              {
+                post?.images[0]?.url && (
+                  <div>
+                    {post.likes.length} < FavoriteBorderIcon />
+                    {post.comments.length}<ChatBubbleOutlineIcon />
+                  </div>
+                )
+              }
             </div>
-            {post.likes.length}<FavoriteBorderIcon />
-            {post.comments.length}<ChatBubbleOutlineIcon />
           </Link>
         ))
       }

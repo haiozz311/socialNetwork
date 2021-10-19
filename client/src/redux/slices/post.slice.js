@@ -22,10 +22,9 @@ export const likePostAction = createAsyncThunk(
   'post/likePost',
   async ({ post, userInfo, refresh_token }) => {
     const newPost = { ...post, likes: [...post.likes, userInfo] };
-    const res = await axiosClient.patch(`${URL}/api/post/${post._id}/like`, {}, {
+    await axiosClient.patch(`${URL}/api/post/${post._id}/like`, {}, {
       headers: { Authorization: refresh_token }
     });
-    console.log({ res });
     return newPost;
   },
 );
@@ -34,7 +33,7 @@ export const unlikePostAction = createAsyncThunk(
   'post/unlikePost',
   async ({ post, userInfo, refresh_token }) => {
     const newPost = { ...post, likes: post.likes.filter(like => like._id !== userInfo._id) };
-    const res = await axiosClient.patch(`${URL}/api/post/${post._id}/unlike`, {}, {
+    await axiosClient.patch(`${URL}/api/post/${post._id}/unlike`, {}, {
       headers: { Authorization: refresh_token }
     });
     return newPost;
@@ -136,7 +135,6 @@ export const unLikeComment = createAsyncThunk(
     return newPost;
   },
 );
-
 
 const postSlice = createSlice({
   name: 'post',

@@ -38,7 +38,7 @@ function UserAccountData() {
       const newData = profile.users.filter(user => user._id === idUser);
       setUserData(newData);
     }
-  }, [profile, idUser, dataUserInfor._id]);
+  }, [profile, idUser, dataUserInfor._id, dataUserInfor.avatar]);
 
   const handleUpdateProfile = async (name) => {
     try {

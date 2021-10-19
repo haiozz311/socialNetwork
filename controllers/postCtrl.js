@@ -197,7 +197,7 @@ const postCtrl = {
     getPost: async (req, res) => {
         try {
             const post = await Posts.findById(req.params.id)
-                .populate("user likes", "avatar username fullname followers")
+                .populate("user likes", "avatar name fullname followers")
                 .populate({
                     path: "comments",
                     populate: {
@@ -205,7 +205,7 @@ const postCtrl = {
                         select: "-password"
                     }
                 })
-
+            console.log("post BE", post)
             if (!post) return res.status(400).json({ msg: 'This post does not exist.' })
 
             res.json({

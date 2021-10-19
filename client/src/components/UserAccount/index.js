@@ -25,6 +25,7 @@ function UserAccount({ onUpdateProfile, userData, id }) {
   const profile = useSelector(state => state.profile);
   const { refresh_token } = useSelector(state => state.token);
   const { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
+  console.log(data.avatar);
 
 
   const avtSrc = Boolean(avatar)
@@ -51,7 +52,7 @@ function UserAccount({ onUpdateProfile, userData, id }) {
     userData.forEach(user => {
       setData(user);
     });
-  }, [userData, userData.avatar]);
+  }, [userData, userData.avatar, dataUserInfor.avatar]);
 
   useEffect(() => {
     setIdUser(id);
@@ -209,7 +210,7 @@ function UserAccount({ onUpdateProfile, userData, id }) {
 
         </div>
       </div >
-      <MyPostProfile auth={dataUserInfor} profile={profile} id={id} />
+      <MyPostProfile profile={profile} id={id} />
     </>
   );
 }
