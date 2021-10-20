@@ -37,6 +37,7 @@ const PostItem = ({ post, refresh_token, userInfo }) => {
       setIsLike(false);
     }
   }, [post.likes, userInfo._id]);
+
   return (
     <>
       <Card className="mb-8">

@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axiosClient from 'apis/axiosClient';
 const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
+import { createPost } from './post.slice';
 
 
 export const getProfileUsers = createAsyncThunk(
@@ -58,9 +59,13 @@ const profileSlice = createSlice({
       state.users.push(action.payload.users.user);
       state.posts.push(action.payload.posts);
     },
+    [createPost.fulfilled]: (state, action) => {
+      state.posts.unshift(action.payload);
+    },
   }
 });
 
 const { reducer, actions } = profileSlice;
 export const { setUserProfile, follow, unfollow, setIds } = actions;
 export default reducer;
+

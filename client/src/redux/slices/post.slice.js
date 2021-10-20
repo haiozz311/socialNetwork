@@ -136,6 +136,14 @@ export const unLikeComment = createAsyncThunk(
   },
 );
 
+export const deletePost = createAsyncThunk(
+  'post/deletePost',
+  async ({ post, refresh_token }) => {
+    deleteDataAPI(`post/${post._id}`, refresh_token);
+    return post;
+  },
+);
+
 const postSlice = createSlice({
   name: 'post',
   initialState: {
@@ -179,14 +187,14 @@ const postSlice = createSlice({
       const data = state.posts.map(post => post._id === action.payload._id ? action.payload : post);
       state.posts = data;
     },
+    [deletePost.fulfilled]: (state, action) => {
+      const data = state.posts.filter(item => item._id !== action.payload._id);
+      state.posts = data;
+    },
   },
 });
+
 
 const { reducer, actions } = postSlice;
 export const { setPosts } = actions;
 export default reducer;
-
-// const newData = data.map(item =>
-//   (item._id === id ? post : item)
-// )
-// return newData;

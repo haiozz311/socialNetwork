@@ -47,18 +47,10 @@ const MenuItemComment = ({ post, myComment, setOnEdit, comment }) => {
         open={open}
         onClose={handleClose}
       >
-        {/* {myComment ? (
-          <>
-            <MenuItem onClick={() => {
-              handleEditPost()
-            }}>Chỉnh sửa</MenuItem>
-            <MenuItem onClick={handleClose}>Xóa</MenuItem>
-          </>
-        ) : <MenuItem onClick={handleClose}>Xóa</MenuItem>} */}
         <MenuItem onClick={() => {
           handleEditPost()
         }}>Chỉnh sửa</MenuItem>
-        <MenuItem onClick={handleRemove}>Xóa</MenuItem>
+        <MenuItem onClick={handleRemove}>Xóa comment</MenuItem>
       </Menu>
     </div>
   );

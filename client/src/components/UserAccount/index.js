@@ -22,6 +22,7 @@ import MyPostProfile from 'components/UI/MyPostProfile/MyPostProfile';
 function UserAccount({ onUpdateProfile, userData, id }) {
   const [data, setData] = useState({});
   const dataUserInfor = useSelector((state) => state.userInfo);
+  const { posts } = useSelector((state) => state.post);
   const profile = useSelector(state => state.profile);
   const { refresh_token } = useSelector(state => state.token);
   const { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
@@ -62,7 +63,7 @@ function UserAccount({ onUpdateProfile, userData, id }) {
     if (profile.ids.every(item => item !== id)) {
       dispatch(getProfileUsers({ id, refresh_token }));
     }
-  }, [id, profile.ids, refresh_token, dispatch]);
+  }, [id, profile.ids, refresh_token, dispatch, posts]);
 
   useEffect(() => {
     if (dataUserInfor._id === idUser) {

@@ -218,19 +218,6 @@ const postCtrl = {
     },
     getPostsDicover: async (req, res) => {
         try {
-            // const features = new APIfeatures(Posts.find({
-            //     user: [...req.user.following, req.user._id]
-            // }), req.query).paginating()
-
-            // const posts = await features.query.sort('-createdAt')
-            //     .populate("user likes", "avatar username fullname followers")
-            //     .populate({
-            //         path: "comments",
-            //         populate: {
-            //             path: "user likes",
-            //             select: "-password"
-            //         }
-            //     })
 
             const newArr = [...req.user.following, req.user._id]
             console.log("newArr", newArr)
@@ -260,7 +247,7 @@ const postCtrl = {
     },
     deletePost: async (req, res) => {
         try {
-            const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.user._id })
+            const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.user.id })
             await Comments.deleteMany({ _id: { $in: post.comments } })
 
             res.json({

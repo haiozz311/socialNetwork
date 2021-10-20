@@ -5,10 +5,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { setStatus } from 'redux/slices/status.slice';
 import { useDispatch, useSelector } from 'react-redux';
+import { deletePost } from 'redux/slices/post.slice';
 
 
 export default function IconHeader({ post }) {
   const userInfo = useSelector((state) => state.userInfo);
+  const { refresh_token } = useSelector((state) => state.token);
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -21,6 +23,11 @@ export default function IconHeader({ post }) {
 
   const handleEditPost = () => {
     dispatch(setStatus({ ...post, onEdit: true }));
+    setAnchorEl(null);
+  };
+
+  const handleDeletePost = () => {
+    dispatch(deletePost({ post, refresh_token }));
     setAnchorEl(null);
   };
 
@@ -41,7 +48,7 @@ export default function IconHeader({ post }) {
           userInfo._id === post.user._id &&
           <>
             <MenuItem onClick={handleEditPost}>Chỉnh sửa</MenuItem>
-            <MenuItem onClick={handleClose}>Xóa</MenuItem>
+            <MenuItem onClick={handleDeletePost}>Xóa Post</MenuItem>
           </>
         }
 
