@@ -439,6 +439,28 @@ const userCtrl = {
             return res.status(500).json({ msg: err.message })
         }
     },
+    suggestionsUser: async (req, res) => {
+        try {
+            const user = await Users.findById(req.user.id).select('-password');
+            const newArr = [...user.following, user._id]
+            console.log({ newArr })
+            const num = req.query.num || 10
+            const users = await Users.aggregate([
+                { $match: { _id: { $nin: newArr } } },
+                { $sample: { size: Number(num) } },
+                { $lookup: { from: 'users', localField: 'followers', foreignField: '_id', as: 'followers' } },
+                { $lookup: { from: 'users', localField: 'following', foreignField: '_id', as: 'following' } },
+            ]).project("-password");
+
+            return res.json({
+                users,
+                result: users.length
+            })
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
 }
 
 

@@ -49,5 +49,6 @@ router.post('/google_login', userCtrl.googleLogin)
 
 router.post('/facebook_login', userCtrl.facebookLogin)
 
+router.get('/suggestionsUser', auth, userCtrl.suggestionsUser)
 
 module.exports = router

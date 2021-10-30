@@ -5,15 +5,22 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { setStatus } from 'redux/slices/status.slice';
 import { useDispatch, useSelector } from 'react-redux';
-import { deletePost } from 'redux/slices/post.slice';
+import { setMessage } from 'redux/slices/message.slice';
+import ComfirmModal from 'components/UI/ComfirmModal';
+
+const BASE_URL = process.env.REACT_APP_LOCALHOST;
+
 
 
 export default function IconHeader({ post }) {
   const userInfo = useSelector((state) => state.userInfo);
-  const { refresh_token } = useSelector((state) => state.token);
+
   const [anchorEl, setAnchorEl] = useState(null);
+  const [openModal, setOpenModal] = useState(false);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
+
+
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -27,8 +34,20 @@ export default function IconHeader({ post }) {
   };
 
   const handleDeletePost = () => {
-    dispatch(deletePost({ post, refresh_token }));
+    setOpenModal(true);
     setAnchorEl(null);
+  };
+
+  const handleCopyLink = () => {
+    navigator.clipboard.writeText(`${BASE_URL}/post/${post._id}`);
+    setAnchorEl(null);
+    dispatch(
+      setMessage({ type: 'success', message: 'Link đã được sao chép' }),
+    );
+  };
+
+  const handleCloseModal = () => {
+    setOpenModal(false);
   };
 
   return (
@@ -52,8 +71,9 @@ export default function IconHeader({ post }) {
           </>
         }
 
-        <MenuItem onClick={handleClose}>copy link</MenuItem>
+        <MenuItem onClick={handleCopyLink}>copy link</MenuItem>
       </Menu>
+      <ComfirmModal post={post} open={openModal} onclose={handleCloseModal} />
     </div>
   );
 }

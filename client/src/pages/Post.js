@@ -47,7 +47,7 @@ const Post = () => {
       {
         post.map(post => (
           <>
-            <PostItem post={post} refresh_token={refresh_token} userInfo={userInfo} />
+            <PostItem key={post._id} post={post} refresh_token={refresh_token} userInfo={userInfo} />
           </>
         ))
       }

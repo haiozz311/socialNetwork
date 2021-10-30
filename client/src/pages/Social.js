@@ -7,6 +7,7 @@ import Grid from '@material-ui/core/Grid';
 import postApi from 'apis/postApi';
 import { setPosts } from 'redux/slices/post.slice';
 import GlobalLoading from 'components/UI/GlobalLoading';
+import RightSideBar from 'components/UI/RightSideBar/RightSideBar';
 
 
 
@@ -37,10 +38,10 @@ function Social() {
       <Grid container>
         <Grid item xs={8}>
           <Status />
-          <Post/>
+          <Post />
         </Grid>
         <Grid item xs={4}>
-          <p>hello</p>
+          <RightSideBar />
         </Grid>
       </Grid>
       {loading && <GlobalLoading />}

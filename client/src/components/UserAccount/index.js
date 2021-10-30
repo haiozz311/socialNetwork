@@ -60,10 +60,10 @@ function UserAccount({ onUpdateProfile, userData, id }) {
   }, [id]);
 
   useEffect(() => {
-    if (profile.ids.every(item => item !== id)) {
-      dispatch(getProfileUsers({ id, refresh_token }));
-    }
-  }, [id, profile.ids, refresh_token, dispatch, posts]);
+    // if (profile.ids.every(item => item !== id)) {
+    dispatch(getProfileUsers({ id, refresh_token }));
+    // }
+  }, [id, refresh_token, dispatch]);
 
   useEffect(() => {
     if (dataUserInfor._id === idUser) {

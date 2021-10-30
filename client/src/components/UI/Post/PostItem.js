@@ -21,12 +21,10 @@ const PostItem = ({ post, refresh_token, userInfo }) => {
   const [isLike, setIsLike] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const handleLike = async () => {
-    console.log("handleLike")
     dispatch(likePostAction({ post, userInfo, refresh_token }));
   };
 
   const handleUnLike = async () => {
-    console.log("handleUnLike")
     dispatch(unlikePostAction({ post, userInfo, refresh_token }));
   };
 

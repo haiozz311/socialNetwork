@@ -7,6 +7,7 @@ import tokensReducer from './slices/token.slice';
 import profileSlice from './slices/profile.slice';
 import postSlice from './slices/post.slice';
 import statusSlice from './slices/status.slice';
+import suggestionSlice from './slices/suggestion.slice';
 
 const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ const store = configureStore({
     profile: profileSlice,
     post: postSlice,
     status: statusSlice,
+    suggestion:suggestionSlice   
   },
   devTools: process.env.NODE_ENV !== 'production',
 });
