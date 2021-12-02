@@ -33,7 +33,7 @@ const postCtrl = {
             })
             console.log("newPost", newPost);
             await newPost.save()
-
+            
             res.json({
                 msg: 'Created Post!',
                 newPost: {
@@ -247,6 +247,7 @@ const postCtrl = {
     },
     deletePost: async (req, res) => {
         try {
+            const userData = await Users.findById(req.user.id).select('-password');
             const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.user.id })
             await Comments.deleteMany({ _id: { $in: post.comments } })
 
@@ -254,9 +255,10 @@ const postCtrl = {
                 msg: 'Deleted Post!',
                 newPost: {
                     ...post,
-                    user: req.user
+                    user: userData
                 }
             })
+
 
         } catch (err) {
             return res.status(500).json({ msg: err.message })

@@ -13,9 +13,11 @@ import { useDispatch, useSelector } from 'react-redux';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import { Element } from 'react-scroll';
 import { setDataUser } from 'redux/slices/userInfo.slice';
-import { getTodos } from 'redux/slices/todo.slice';
 import { setToken } from 'redux/slices/token.slice';
+import { setSocket } from 'redux/slices/socket.slice';
 import accountApi from 'apis/accountApi';
+import io from 'socket.io-client';
+import SocketClient from './SocketClient';
 
 const { routes, renderRoutes } = routerConfig;
 
@@ -23,7 +25,9 @@ function App() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { isAuth } = useSelector((state) => state.userInfo);
-  const { refresh_token } = useSelector(state => state.token);
+  console.log("isAuth", isAuth);
+  const { refresh_token } = useSelector((state) => state.token);
+
 
   // get and set theme
   useTheme();
@@ -32,8 +36,7 @@ function App() {
   useVoice();
 
   useEffect(() => {
-    const firstLogin = localStorage.getItem('firstLogin');
-    if (firstLogin) {
+    if (isAuth) {
       const getToken = async () => {
         const res = await accountApi.refresh_token();
         dispatch(setToken(res.data.access_token));
@@ -50,14 +53,11 @@ function App() {
       };
       getUser();
     }
+    const socket = io();
+    dispatch(setSocket(socket));
+    return () => socket.close();
   }, [refresh_token]);
 
-  // get user info
-  // useEffect(() => {
-  //   dispatch(getTodos());
-  //   setLoading(false);
-  //   return () => { };
-  // }, []);
   return (
     <>
       {loading ? (
@@ -68,7 +68,7 @@ function App() {
             <div className="dynonary-app">
               <Element name="scrollTop" />
               <Navigation />
-
+              {refresh_token && <SocketClient />}
               {/* routes */}
               <Suspense fallback={<GlobalLoading />}>
                 <Switch>

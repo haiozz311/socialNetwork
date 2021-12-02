@@ -5,6 +5,7 @@ import React from 'react';
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import { setLogin } from 'redux/slices/userInfo.slice';
 import useStyle from './style';
 import axios from 'axios';
 
@@ -18,7 +19,7 @@ function LoginFacebook() {
     try {
       const { accessToken, userID } = response;
       const res = await axios.post('/user/facebook_login', { accessToken, userID });
-      localStorage.setItem('firstLogin', true);
+      dispatch(setLogin());
       if (res.status === 200) {
         dispatch(
           setMessage({

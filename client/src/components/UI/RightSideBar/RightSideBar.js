@@ -23,12 +23,14 @@ const RightSideBar = () => {
       </Link>
       <div>
         <h5>Gợi ý kết bạn</h5>
-        <AutorenewIcon />
+        <AutorenewIcon onClick={()=>{
+          dispatch(getSuggestions({ refresh_token }));
+        }} />
         {
           suggestion.users.map(item => (
             <Link key={item._id} to={`/profile/${item._id}`} className="d-flex mx-8">
               <Avatar src={item.avatar} />
-              <h4 className={`ml-4`}>{item.name}</h4>
+              <h4 className="ml-4">{item.name}</h4>
             </Link>
           ))
         }

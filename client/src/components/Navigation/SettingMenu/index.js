@@ -13,6 +13,7 @@ import useStyle from './style';
 import accountApi from 'apis/accountApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import { setLogout } from 'redux/slices/userInfo.slice';
 import { UX } from 'constant';
 
 function SettingMenu({ anchorEl, onClose }) {
@@ -25,7 +26,7 @@ function SettingMenu({ anchorEl, onClose }) {
     try {
       const res = await accountApi.userLogout();
       if (res.status = 200) {
-        localStorage.removeItem('firstLogin');
+        dispatch(setLogout());
         onClose(null);
         dispatch(
           setMessage({ message: res.data.msg, type: 'success' }),

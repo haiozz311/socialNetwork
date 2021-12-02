@@ -20,6 +20,7 @@ const userInfoSlice = createSlice({
   reducers: {
 
     setDataUser(state, action) {
+      console.log('setDataUser', action);
       const { authType, name, avatar, coin, favoriteList, email, role, createdAt, _id, followers, following } = action.payload;
       if (!name || name === '') {
         state.isAuth = false;
@@ -51,7 +52,7 @@ const userInfoSlice = createSlice({
     },
 
     FollowAuth(state, action) {
-      const { users, user, auth } = action.payload;
+      const { user, auth } = action.payload;
       const newUser = { ...user, following: [...user.following, auth] };
       state.following.push(newUser);
     },
@@ -66,10 +67,18 @@ const userInfoSlice = createSlice({
       console.log({ data });
       state.following = data;
       // return state.following;
-    }
+    },
+
+    setLogout(state, action) {
+      state.isAuth = false;
+    },
+
+    setLogin(state, action) {
+      state.isAuth = true;
+    },
   },
 });
 
 const { reducer, actions } = userInfoSlice;
-export const { setAddFavorites, setUserCoin, setUserAvt, setDataUser, setUserAvatar, FollowAuth, UnFollowAuth } = actions;
+export const { setAddFavorites, setUserCoin, setUserAvt, setDataUser, setUserAvatar, FollowAuth, UnFollowAuth, setLogout, setLogin } = actions;
 export default reducer;

@@ -6,7 +6,6 @@ import ChatBubbleOutlineIcon from '@material-ui/icons/ChatBubbleOutline';
 
 const MyPostProfile = ({ profile, id }) => {
   const [posts, setPosts] = useState([]);
-  console.log({ posts })
 
   useEffect(() => {
     if (profile.posts) {

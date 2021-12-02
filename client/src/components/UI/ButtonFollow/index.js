@@ -13,6 +13,8 @@ const ButtonFollow = ({ user, dataFlag = false, className = '' }) => {
   const [followed, setFollowed] = useState(false);
   const userInfo = useSelector(state => state.userInfo);
   const profile = useSelector(state => state.profile);
+  const { socket } = useSelector((state) => state.socket);
+
   const { refresh_token } = useSelector((state) => state.token);
   const [flag, setFlag] = useState(dataFlag);
   const { pathname } = useLocation();
@@ -37,10 +39,14 @@ const ButtonFollow = ({ user, dataFlag = false, className = '' }) => {
 
   const handleFollow = async () => {
     setFollowed(true);
-    await dispatch(follow({ users: profile.users, user, auth: userInfo }));
-    await dispatch(FollowAuth({ users: userInfo.following, user, auth: userInfo }));
+    await dispatch(follow({ users: profile.users, user, auth: userInfo,socket }));
+    await dispatch(FollowAuth({ user, auth: userInfo }));
     try {
       const apiRes = await accountApi.followUser(user._id, refresh_token);
+      if (apiRes) {
+        console.log('news user', apiRes.data.newUser);
+        socket.emit('follow', apiRes.data.newUser);
+      }
       if (apiRes.status === 200) {
         dispatch(
           setMessage({
@@ -60,10 +66,14 @@ const ButtonFollow = ({ user, dataFlag = false, className = '' }) => {
 
   const handleUnFollow = async () => {
     setFollowed(false);
-    await dispatch(unfollow({ users: profile.users, user, auth: userInfo }));
+    await dispatch(unfollow({ users: profile.users, user, auth: userInfo, socket }));
     await dispatch(UnFollowAuth({ users: userInfo.following, user, auth: userInfo }));
     try {
       const apiRes = await accountApi.unFollowUser(user._id, refresh_token);
+      if (apiRes) {
+        console.log('news user', apiRes.data.newUser);
+        socket.emit('unfollow', apiRes.data.newUser);
+      }
       if (apiRes.status === 200) {
         dispatch(
           setMessage({

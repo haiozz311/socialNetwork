@@ -21,6 +21,7 @@ const FormStatus = ({ open, setModalStatus, userInfor }) => {
   const classes = useStyle();
   const { refresh_token } = useSelector(state => state.token);
   const { statusPost } = useSelector((state) => state.status);
+  const { socket } = useSelector((state) => state.socket);
   const [content, setContent] = useState('');
   const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(false);
@@ -71,7 +72,7 @@ const FormStatus = ({ open, setModalStatus, userInfor }) => {
           dispatch(setPosts(res.data.posts));
         }
       } else {
-        dispatch(createPost({ content, images, refresh_token }));
+        dispatch(createPost({ content, images, refresh_token, socket }));
       }
       setContent('');
       setImages([]);

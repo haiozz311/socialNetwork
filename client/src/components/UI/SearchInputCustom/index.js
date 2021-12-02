@@ -38,7 +38,6 @@ function SearchInputCustom({ placeholder, showInput, prefixIcon }) {
   }, [pathname]);
 
   const handleCloseModal = () => {
-    console.log("close");
     setAnchorEl(null);
   };
 

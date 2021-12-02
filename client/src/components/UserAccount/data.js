@@ -14,31 +14,35 @@ function UserAccountData() {
 
   const dispatch = useDispatch();
   const { id } = useParams();;
-  const [idUser, setIdUser] = useState(id);
+  // const [id, setid] = useState(id);
   const dataUserInfor = useSelector((state) => state.userInfo);
   const [userData, setUserData] = useState([]);
   useEffect(() => {
-    if (idUser !== dataUserInfor._id) {
+    if (id !== dataUserInfor._id) {
       const getUserById = async () => {
-        const res = await accountApi.fetchUserById(idUser, refresh_token);
-        dispatch(setUserProfile({ users: res.data.user, id: idUser }));
+        const res = await accountApi.fetchUserById(id, refresh_token);
+        dispatch(setUserProfile({ users: res.data.user, id: id }));
       };
       getUserById();
     }
-  }, [idUser, dataUserInfor._id]);
+  }, [id, dataUserInfor._id]);
+
+  // useEffect(() => {
+  //   setid(id);
+  // }, [id]);
 
   useEffect(() => {
-    setIdUser(id);
-  }, [id]);
-
-  useEffect(() => {
-    if (dataUserInfor._id === idUser) {
-      setUserData([dataUserInfor]);
+    if (dataUserInfor._id === id) {
+      setUserData(dataUserInfor);
+      console.log("mydata1", dataUserInfor);
     } else {
-      const newData = profile.users.filter(user => user._id === idUser);
-      setUserData(newData);
+      const newData = profile.users.find(user => user._id === id);
+      console.log("mydata2",newData);
+      if (newData) {
+        setUserData(newData);
+      }
     }
-  }, [profile, idUser, dataUserInfor._id, dataUserInfor.avatar]);
+  }, [profile, id, dataUserInfor._id, dataUserInfor.avatar]);
 
   const handleUpdateProfile = async (name) => {
     try {

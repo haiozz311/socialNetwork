@@ -96,8 +96,6 @@ const userCtrl = {
     getAccessToken: (req, res) => {
         try {
             const rf_token = req.cookies.refreshtoken;
-            console.log("refresh token", rf_token);
-            console.log("req.cookies", req.cookies)
             if (!rf_token) return res.status(400).json({ msg: "Please login now!" })
 
             jwt.verify(rf_token, process.env.REFRESH_TOKEN_SECRET, (err, user) => {
@@ -401,7 +399,6 @@ const userCtrl = {
     follow: async (req, res) => {
         try {
             console.log("req.params.id", req.params.id);
-            console.log("req.user._id", req.user._id);
             const user = await Users.findById(req.user.id).select('-password');
             console.log({ user });
             // const user = await Users.find({ _id: req.params.id, followers: req.user._id });

@@ -20,14 +20,13 @@ import Following from 'components/UI/Following';
 import MyPostProfile from 'components/UI/MyPostProfile/MyPostProfile';
 
 function UserAccount({ onUpdateProfile, userData, id }) {
+  console.log({userData, id});
   const [data, setData] = useState({});
   const dataUserInfor = useSelector((state) => state.userInfo);
   const { posts } = useSelector((state) => state.post);
   const profile = useSelector(state => state.profile);
   const { refresh_token } = useSelector(state => state.token);
   const { name, avatar, coin, email, createdDate, createdAt, followers, following } = data;
-  console.log(data.avatar);
-
 
   const avtSrc = Boolean(avatar)
     ? cloudinaryImgOptimize(avatar, 150, 150)
@@ -50,19 +49,17 @@ function UserAccount({ onUpdateProfile, userData, id }) {
   };
 
   useEffect(() => {
-    userData.forEach(user => {
-      setData(user);
-    });
-  }, [userData, userData.avatar, dataUserInfor.avatar]);
+    setData(userData);
+  }, [userData, dataUserInfor.avatar,dataUserInfor.followers, dataUserInfor.following ]);
 
   useEffect(() => {
     setIdUser(id);
   }, [id]);
 
   useEffect(() => {
-    // if (profile.ids.every(item => item !== id)) {
-    dispatch(getProfileUsers({ id, refresh_token }));
-    // }
+    if (profile.ids.every(item => item !== id)) {
+      dispatch(getProfileUsers({ id, refresh_token }));
+    }
   }, [id, refresh_token, dispatch]);
 
   useEffect(() => {
@@ -105,8 +102,10 @@ function UserAccount({ onUpdateProfile, userData, id }) {
   };
 
   useEffect(() => {
-    setData(dataUserInfor);
-  }, [dataUserInfor.following]);
+    if (id === dataUserInfor._id) {
+      setData(dataUserInfor);
+    }
+  }, [dataUserInfor.following,dataUserInfor.followers]);
 
   return (
     <>

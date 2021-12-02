@@ -6,6 +6,8 @@ const cookieParser = require('cookie-parser')
 const fileUpload = require('express-fileupload')
 const path = require('path')
 const corsConfig = require('./config/cors.config');
+const { Socket } = require('socket.io');
+const SocketServer = require('./SocketServer');
 
 
 const app = express()
@@ -15,6 +17,17 @@ app.use(cookieParser())
 app.use(fileUpload({
     useTempFiles: true
 }))
+
+// Socket
+const http = require('http').createServer(app)
+const io = require('socket.io')(http)
+
+
+io.on('connection', socket => {
+    console.log(socket.id + ' connect')
+    SocketServer(socket)
+})
+
 
 // Routes
 app.use('/user', require('./routes/userRouter'));
@@ -28,6 +41,8 @@ app.use('/api', require('./routes/game'));
 app.use('/api', require('./routes/highscore'));
 app.use('/api', require('./routes/postRouter'));
 app.use('/api', require('./routes/commentRouter'));
+app.use('/api', require('./routes/notifyRouter'))
+
 
 
 // Connect to mongodb
@@ -52,6 +67,6 @@ if (process.env.NODE_ENV === 'production') {
 
 
 const PORT = process.env.PORT || 5000
-app.listen(PORT, () => {
+http.listen(PORT, () => {
     console.log('Server is running on port', PORT)
 })

@@ -5,6 +5,7 @@ import React from 'react';
 import GoogleLogin from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import { setLogin } from 'redux/slices/userInfo.slice';
 import useStyle from './style';
 import axios from 'axios';
 
@@ -16,7 +17,7 @@ function LoginGoogle() {
   const onLoginWithGoogle = async (response) => {
     try {
       const res = await axios.post('/user/google_login', { tokenId: response.tokenId });
-      localStorage.setItem('firstLogin', true);
+      dispatch(setLogin());
       if (res.status === 200) {
         dispatch(
           setMessage({

@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { CardContent, Typography, Card, CardActions, IconButton } from '@material-ui/core';
+import {
+  CardContent,
+  Typography,
+  Card,
+  CardActions,
+  IconButton,
+} from '@material-ui/core';
 import Avatar from '@material-ui/core/Avatar';
 import IconHeader from '../IconHeader';
 import Carousel from '../Carousel';
@@ -10,26 +16,27 @@ import SendIcon from '@material-ui/icons/Send';
 import moment from 'moment';
 import { useDispatch, useSelector } from 'react-redux';
 import LikePost from '../LikePost';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 import PostContent from './PostContent';
 import Comments from '../Comments';
 import InputCustom from '../InputCustom';
 import InputComment from '../Comments/InputComment';
 
 const PostItem = ({ post, refresh_token, userInfo }) => {
+  const { socket } = useSelector((state) => state.socket);
   const dispatch = useDispatch();
   const [isLike, setIsLike] = useState(false);
   const [readMore, setReadMore] = useState(false);
   const handleLike = async () => {
-    dispatch(likePostAction({ post, userInfo, refresh_token }));
+    dispatch(likePostAction({ post, userInfo, refresh_token, socket }));
   };
 
   const handleUnLike = async () => {
-    dispatch(unlikePostAction({ post, userInfo, refresh_token }));
+    dispatch(unlikePostAction({ post, userInfo, refresh_token, socket }));
   };
 
   useEffect(() => {
-    if (post.likes.find(like => like._id === userInfo._id)) {
+    if (post.likes.find((like) => like._id === userInfo._id)) {
       setIsLike(true);
     } else {
       setIsLike(false);
@@ -39,23 +46,27 @@ const PostItem = ({ post, refresh_token, userInfo }) => {
   return (
     <>
       <Card className="mb-8">
-        <div className='d-flex jus-content-between'>
+        <div className="d-flex jus-content-between">
           <Link to={`/profile/${post.user._id}`}>
             <div className="d-flex mt-4">
-              <Avatar className='mx-8' src={post?.user?.avatar} />
-              <div >
-                <p className='pb-4'>{post.user.name}</p>
+              <Avatar className="mx-8" src={post?.user?.avatar} />
+              <div>
+                <p className="pb-4">{post.user.name}</p>
                 <p>{moment(post?.createdAt).fromNow()}</p>
               </div>
             </div>
           </Link>
           <IconHeader post={post} />
         </div>
-        <PostContent post={post} readMore={readMore} setReadMore={setReadMore} />
+        <PostContent
+          post={post}
+          readMore={readMore}
+          setReadMore={setReadMore}
+        />
 
-        {
-          post?.images?.length > 0 && <Carousel images={post.images} id={post._id} />
-        }
+        {post?.images?.length > 0 && (
+          <Carousel images={post.images} id={post._id} />
+        )}
         <CardActions disableSpacing className="d-flex jus-content-between">
           <div>
             <IconButton aria-label="add to favorites">

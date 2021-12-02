@@ -4,6 +4,7 @@ import { UX } from 'constant';
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import { setLogin } from 'redux/slices/userInfo.slice';
 import Login from './index';
 
 function LoginData() {
@@ -20,7 +21,7 @@ function LoginData() {
         dispatch(
           setMessage({ message: 'Đăng nhập thành công', type: 'success' }),
         );
-        localStorage.setItem('firstLogin', true);
+        dispatch(setLogin());
 
         setTimeout(() => {
           window.location.href = '/';

@@ -11,6 +11,8 @@ import { deleteComment } from 'redux/slices/post.slice';
 const MenuItemComment = ({ post, myComment, setOnEdit, comment }) => {
   const userInfo = useSelector(state => state.userInfo);
   const { refresh_token } = useSelector(state => state.token);
+  const { socket } = useSelector((state) => state.socket);
+
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const dispatch = useDispatch();
@@ -30,7 +32,7 @@ const MenuItemComment = ({ post, myComment, setOnEdit, comment }) => {
 
   const handleRemove = () => {
     if (post.user._id === userInfo._id || comment.user._id === userInfo._id) {
-      dispatch(deleteComment({ post, comment, refresh_token }));
+      dispatch(deleteComment({ post, comment, refresh_token,socket }));
     }
   };
 

@@ -6,6 +6,7 @@ import useStyle from './style';
 const InputComment = ({ children, post, onReply, setOnReply }) => {
   const userInfo = useSelector(state => state.userInfo);
   const { refresh_token } = useSelector(state => state.token);
+  const { socket } = useSelector((state) => state.socket);
   const dispatch = useDispatch();
   const classes = useStyle();
   const handleSubmit = (e) => {
@@ -26,7 +27,7 @@ const InputComment = ({ children, post, onReply, setOnReply }) => {
       tag: onReply && onReply.user
     };
     console.log("newComment", newComment)
-    dispatch(comment({ post, newComment, userInfo, refresh_token, dispatch }));
+    dispatch(comment({ post, newComment, userInfo, refresh_token, socket }));
 
     if (setOnReply) return setOnReply(false);
   };
