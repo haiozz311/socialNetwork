@@ -4,7 +4,7 @@ const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
 
 const sentenceApi = {
   postContributeSentence: (sentence, mean, note, topics) => {
-    return axiosClient.post(`${URL}/contribute/add-sentence`, {
+    return axiosClient.post(`${URL}/api/contribute/add-sentence`, {
       sentence,
       mean,
       note,

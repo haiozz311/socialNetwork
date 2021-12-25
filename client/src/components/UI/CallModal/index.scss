@@ -1,0 +1,52 @@
+.call_modal{
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 999;
+  background: #0008;
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .call_box{
+    width: 100%;
+    max-width: 400px;
+    background: #f35e67;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    color: white;
+    padding: 50px 0;
+    border-radius: 20px;
+    box-shadow: 0 0 5px #f35e67;
+    .name{
+      font-size: 20px;
+      color: #fff;
+    }
+    .cover-image{
+      text-align: center;
+    }
+  }
+  .call_menu{
+    img{
+      width: 40px;
+      height: auto;
+      object-fit: cover;
+      margin: 10px 15px 0;
+    }
+    .turn_off{
+      transform: rotate(135deg);
+    }
+  }
+  .img-avatar{
+    border-radius: 50%;
+    width: 160px;
+    height: auto;
+    object-fit: cover;
+  }
+  .timer{
+    font-size: 16px;
+  }
+}

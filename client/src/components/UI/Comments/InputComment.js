@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { comment } from 'redux/slices/post.slice';
+import Icons from '../Icon/Icons';
 import useStyle from './style';
 
 const InputComment = ({ children, post, onReply, setOnReply }) => {
@@ -38,8 +39,7 @@ const InputComment = ({ children, post, onReply, setOnReply }) => {
       <input className={`${classes.comment_input}`} type="text" placeholder="Add your comments..."
         value={content} onChange={e => setContent(e.target.value)} />
 
-      {/* <Icons setContent={setContent} content={content} theme={theme} /> */}
-
+      {/* <Icons setContent={setContent} content={content} /> */}
       <button type="submit" className={`${classes.btnSubmit}`}>
         Post
       </button>

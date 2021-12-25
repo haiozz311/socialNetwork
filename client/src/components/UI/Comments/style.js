@@ -26,10 +26,9 @@ export default makeStyles(() => ({
 
   textContent: {
     fontSize: '16px',
-    background: '#eee',
+    background: '#f9fafc',
     padding: '7px',
     borderRadius: '10px',
-    borderTopLeftRadius: 0,
     margin: '0 1.6rem'
   },
 

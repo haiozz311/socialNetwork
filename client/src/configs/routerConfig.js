@@ -28,7 +28,7 @@ const ForgotPasswordPage = React.lazy(() => import('pages/ForgotPassword'));
 const UserAccountPage = React.lazy(() => import('pages/UserAccount'));
 const LeaderBoardPage = React.lazy(() => import('pages/LeaderBoard'));
 const PostPage = React.lazy(() => import('pages/Post'));
-const NotifyPage = React.lazy(() => import('pages/notify'));
+const MessagePage = React.lazy(() => import('pages/Message'));
 
 // routes for app
 const routes = [
@@ -51,11 +51,17 @@ const routes = [
     component: () => <Social />,
   },
   {
-    path: ROUTES.NOTIFY,
-    exact: true,
+    path: ROUTES.MESSAGE,
+    exact: false,
     isProtect: true,
-    component: () => <NotifyPage />,
+    component: () => <MessagePage />,
   },
+  // {
+  //   path: ROUTES.MESSAGEDETAIL,
+  //   exact: true,
+  //   isProtect: true,
+  //   component: () => <MessagePage />,
+  // },
   {
     path: ROUTES.RESETPASSWORD,
     exact: true,

@@ -13,6 +13,10 @@ import statusSlice from './slices/status.slice';
 import suggestionSlice from './slices/suggestion.slice';
 import socketSlice from './slices/socket.slice';
 import notifySlice from './slices/notify.slice';
+import messengerSlice from './slices/messenger';
+import onlineSlice from './slices/online.slice';
+import callSlice from './slices/call.slice';
+import peerSlice from './slices/peer.slice';
 
 const reducer = combineReducers({
   message: messageReducer,
@@ -26,6 +30,10 @@ const reducer = combineReducers({
   suggestion: suggestionSlice,
   socket: socketSlice,
   notify: notifySlice,
+  messenger: messengerSlice,
+  online: onlineSlice,
+  call: callSlice,
+  peer: peerSlice,
 });
 
 const persistConfig = {

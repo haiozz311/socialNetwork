@@ -144,7 +144,7 @@ const postCtrl = {
                 $push: { likes: user._id }
             }, { new: true })
             console.log("like", like)
-            if (!like) return res.status(400).json({ msg: 'This post does not exist.' })
+            if (!like) return res.status(400).json({ msg: 'Bài viết này đã bị xóa' })
 
             res.json({ msg: 'Liked Post!' })
 
@@ -160,7 +160,7 @@ const postCtrl = {
                 $pull: { likes: user._id }
             }, { new: true })
 
-            if (!like) return res.status(400).json({ msg: 'This post does not exist.' })
+            if (!like) return res.status(400).json({ msg: 'Bài viết này đã bị xóa' })
 
             res.json({ msg: 'UnLiked Post!' })
 
@@ -206,7 +206,7 @@ const postCtrl = {
                     }
                 })
             console.log("post BE", post)
-            if (!post) return res.status(400).json({ msg: 'This post does not exist.' })
+            if (!post) return res.status(400).json({ msg: 'Bài viết này đã bị xóa' })
 
             res.json({
                 post

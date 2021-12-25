@@ -18,6 +18,7 @@ import { formStyle } from 'components/UI/style';
 import Followers from 'components/UI/Followers';
 import Following from 'components/UI/Following';
 import MyPostProfile from 'components/UI/MyPostProfile/MyPostProfile';
+import './index.scss';
 
 function UserAccount({ onUpdateProfile, userData, id }) {
   console.log({userData, id});
@@ -109,8 +110,8 @@ function UserAccount({ onUpdateProfile, userData, id }) {
 
   return (
     <>
-      <div className={`${classes.wrap} container flex-center`}>
-        <div className={classes.root}>
+      <div className={`${classes.wrap} cover-profile container flex-center`}>
+        <div className={`${classes.root} profile`}>
           <div className="flex-center w-100 h-100">
             <div className={classes.avtWrap}>
               <img

@@ -9,6 +9,7 @@ function SentenceContributionData() {
   const dispatch = useDispatch();
 
   const handleSubmit = async (formData) => {
+    console.log('submit form',formData) ;
     const { sentence, mean, note, topics } = formData;
     try {
       setSubmitting(true);
@@ -19,6 +20,7 @@ function SentenceContributionData() {
         note,
         topics,
       );
+      console.log({ apiRes });
       if (apiRes.status === 200) {
         dispatch(
           setMessage({

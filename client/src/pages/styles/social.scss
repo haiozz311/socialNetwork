@@ -1,0 +1,38 @@
+.social{
+  background-color: #f9fafc;
+  font-size: 14px;
+  display: flex;
+  justify-content: center;
+  .form-social{
+    background-color: #fff;
+    padding:20px;
+    display: flex;
+    justify-content: space-between;    margin: 20px 0;
+    border-radius: 20px;
+    margin: 20px 0;
+  }
+  .social-infor{
+    display: flex;
+    align-items: center;
+    font-weight: 500;
+    color: #b0b9c6;
+    p{
+      margin-left: 10px;
+    }
+  }
+  .btn-create{
+    background-color: #1877f2;
+    color: #fff;
+    border: none;
+    padding: 12px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-size: 16px;
+    margin-left: auto;
+  }
+  .icon{
+    width: 30px;
+    height: auto;
+    object-fit: cover;
+  }
+}

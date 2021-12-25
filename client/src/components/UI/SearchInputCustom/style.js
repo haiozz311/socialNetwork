@@ -28,7 +28,7 @@ export default makeStyles((theme) => ({
     transition: theme.transitions.create('width'),
     width: '100%',
     fontSize: '1.6rem',
-
+    borderRadius: '8px',
     [theme.breakpoints.up('xs')]: {
       width: '16ch',
       '&:focus': {

@@ -6,7 +6,7 @@ const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
 
 export const createPost = createAsyncThunk(
   'post/createPost',
-  async ({ content, images, refresh_token, socket }) => {
+  async ({ content, images, refresh_token, userInfor, socket }) => {
     let media = [];
     if (images.length > 0) {
       media = await imageUpload(images);
@@ -37,6 +37,14 @@ export const createPost = createAsyncThunk(
           headers: { Authorization: refresh_token },
         },
       );
+
+      socket.emit('createNotify', {
+        ...resNotify.data.notify,
+        user: {
+            name: userInfor.name,
+            avatar: userInfor.avatar
+        }
+    })
       console.log({ resNotify });
     }
 
@@ -49,13 +57,16 @@ export const likePostAction = createAsyncThunk(
   async ({ post, userInfo, refresh_token, socket }) => {
     const newPost = { ...post, likes: [...post.likes, userInfo] };
     socket.emit('likePost', newPost);
-    await axiosClient.patch(
-      `${URL}/api/post/${post._id}/like`,
-      {},
-      {
-        headers: { Authorization: refresh_token },
-      },
-    );
+    try {
+      const res = await axiosClient.patch(
+        `${URL}/api/post/${post._id}/like`,
+        {},
+        {
+          headers: { Authorization: refresh_token },
+        },
+      );
+    } catch (error) {
+    }
     return newPost;
   },
 );
@@ -63,18 +74,16 @@ export const likePostAction = createAsyncThunk(
 export const unlikePostAction = createAsyncThunk(
   'post/unlikePost',
   async ({ post, userInfo, refresh_token, socket }) => {
-    const newPost = {
-      ...post,
-      likes: post.likes.filter((like) => like._id !== userInfo._id),
-    };
-    socket.emit('likePost', newPost);
-    await axiosClient.patch(
+    const newPost = { ...post, likes: post.likes.filter(like => like._id !== userInfo._id) };
+    socket.emit('unlikePost', newPost);
+    const res = await axiosClient.patch(
       `${URL}/api/post/${post._id}/unlike`,
       {},
       {
         headers: { Authorization: refresh_token },
       },
     );
+    console.log({ res });
     return newPost;
   },
 );
@@ -83,13 +92,40 @@ export const comment = createAsyncThunk(
   'post/comment',
   async ({ post, newComment, userInfo, refresh_token, socket }) => {
     const data = { ...newComment, postId: post._id, postUserId: post.user._id };
-
     const res = await axiosClient.post(`${URL}/api/comment`, data, {
       headers: { Authorization: refresh_token },
     });
     const newData = { ...res.data.newComment, user: userInfo };
     const newPostData = { ...post, comments: [...post.comments, newData] };
     socket.emit('createComment', newPostData);
+    // if (res) {
+    //   const msg = {
+    //     id: res.data.newComment._id,
+    //     text: newComment.reply ? 'mentioned you in a comment.' : 'has commented on your post.',
+    //     recipients: newComment.reply ? [newComment.tag._id] : [post.user._id],
+    //     url: `/post/${post._id}`,
+    //     content: post.content,
+    //     image: post.images[0].url
+    //   };
+    //   console.log("msg", msg);
+    //   const resNotify = await axiosClient.post(
+    //     `${URL}/api/notify`,
+    //     { msg },
+    //     {
+    //       headers: { Authorization: refresh_token },
+    //     },
+    //   );
+    //   socket.emit('createNotify', {
+    //   ...resNotify.data.notify,
+    //   user: {
+    //     name: userInfor.name,
+    //     avatar: userInfor.avatar
+    //   }
+    // });
+    // }
+
+
+
     return newPostData;
   },
 );
@@ -204,7 +240,7 @@ export const unLikeComment = createAsyncThunk(
 
 export const deletePost = createAsyncThunk(
   'post/deletePost',
-  async ({ post, refresh_token }) => {
+  async ({ post, refresh_token, socket }) => {
     const res = await axiosClient.delete(`/api/post/${post._id}`, {
       headers: { Authorization: refresh_token },
     });
@@ -213,7 +249,7 @@ export const deletePost = createAsyncThunk(
       console.log(res.data.newPost._doc);
       const msg = {
         id: post._id,
-        text: 'added a new post.',
+        text: 'đã xóa bài viết này',
         recipients: res.data.newPost.user.followers,
         url: `/post/${post._id}`,
     }
@@ -224,6 +260,7 @@ export const deletePost = createAsyncThunk(
           headers: { Authorization: refresh_token },
         },
       );
+      socket.emit('removeNotify', msg);
       console.log({ resNotify });
     }
 
@@ -267,7 +304,7 @@ const postSlice = createSlice({
     },
     [comment.fulfilled]: (state, action) => {
       const data = state.posts.map((post) =>
-        post._id === action.payload._id ? action.payload : post,
+        post._id === action?.payload._id ? action?.payload : post,
       );
       state.posts = data;
     },

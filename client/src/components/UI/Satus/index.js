@@ -3,6 +3,8 @@ import Avatar from '@material-ui/core/Avatar';
 import { useDispatch, useSelector } from 'react-redux';
 import useStyle from './style';
 import FormStatus from '../FormStatus';
+import more from 'assets/icons/message/more.png';
+
 
 const Status = () => {
   const classes = useStyle();
@@ -16,12 +18,14 @@ const Status = () => {
     }
   }, [statusPost.onEdit]);
   return (
-    <div className={`${classes.status} my-3 d-flex`} >
-      <Avatar className="mr-4" src={userInfor.avatar} size="big-avatar" />
-
-      <button className={`${classes.statusBtn}`}
+    <div className={`${classes.status} form-social`} >
+      <div className="social-infor">
+        <Avatar className="mr-4" src={userInfor.avatar} size="big-avatar" />
+        <p>What`s new, {userInfor.name}</p>
+      </div>
+      <button className='btn-create'
         onClick={() => setModalStatus(true)}>
-        {userInfor.name} ơi, Bạn đang nghĩ gì thế?
+        Post it!
       </button>
 
       {

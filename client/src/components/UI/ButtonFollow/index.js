@@ -8,6 +8,7 @@ import { FollowAuth, UnFollowAuth } from 'redux/slices/userInfo.slice';
 import { setMessage } from 'redux/slices/message.slice';
 import { useLocation } from 'react-router-dom';
 import accountApi from 'apis/accountApi';
+import axiosClient from 'apis/axiosClient';
 
 const ButtonFollow = ({ user, dataFlag = false, className = '' }) => {
   const [followed, setFollowed] = useState(false);
@@ -43,9 +44,35 @@ const ButtonFollow = ({ user, dataFlag = false, className = '' }) => {
     await dispatch(FollowAuth({ user, auth: userInfo }));
     try {
       const apiRes = await accountApi.followUser(user._id, refresh_token);
+      // const resNotify = await axiosClient.post(`${process.env.REACT_APP_API_LOCAL_BASE_URL}/api/notify`,
+      //     { msg },
+      //     {
+      //       headers: { Authorization: refresh_token },
+      //     },
+      //   );
       if (apiRes) {
-        console.log('news user', apiRes.data.newUser);
         socket.emit('follow', apiRes.data.newUser);
+        // Notify
+        const msg = {
+          id: userInfo._id,
+          text: 'đã theo dõi bạn',
+          recipients: [apiRes.data.newUser._id],
+          url: `/profile/${userInfo._id}`,
+        };
+        const resNotify = await axiosClient.post(`${process.env.REACT_APP_API_LOCAL_BASE_URL}/api/notify`,
+        { msg },
+        {
+          headers: { Authorization: refresh_token },
+        },
+        );
+
+        socket.emit('createNotify', {
+          ...resNotify.data.notify,
+          user: {
+            name: userInfor.name,
+            avatar: userInfor.avatar
+          }
+        });
       }
       if (apiRes.status === 200) {
         dispatch(
@@ -57,10 +84,10 @@ const ButtonFollow = ({ user, dataFlag = false, className = '' }) => {
         );
       }
     } catch (error) {
-      const message =
-        error.response?.data?.message ||
-        'Kết bạn thất bại, thử lại !';
-      dispatch(setMessage({ type: 'error', message }));
+      // const message =
+      //   error.response?.data?.message ||
+      //   'Kết bạn thất bại, thử lại !';
+      // dispatch(setMessage({ type: 'error', message }));
     }
   };
 

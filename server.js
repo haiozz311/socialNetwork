@@ -8,6 +8,8 @@ const path = require('path')
 const corsConfig = require('./config/cors.config');
 const { Socket } = require('socket.io');
 const SocketServer = require('./SocketServer');
+const { ExpressPeerServer, PeerServer } = require('peer')
+
 
 
 const app = express()
@@ -42,8 +44,10 @@ app.use('/api', require('./routes/highscore'));
 app.use('/api', require('./routes/postRouter'));
 app.use('/api', require('./routes/commentRouter'));
 app.use('/api', require('./routes/notifyRouter'))
+app.use('/api', require('./routes/messageRouter'))
 
-
+// Create peer server
+PeerServer({ port: 3001 , path: '/' })
 
 // Connect to mongodb
 const URI = process.env.MONGODB_URL

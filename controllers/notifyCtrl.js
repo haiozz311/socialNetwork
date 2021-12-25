@@ -1,4 +1,5 @@
 const Notifies = require('../models/notifyModel')
+const Users = require('../models/userModel');
 
 
 const notifyCtrl = {
@@ -7,7 +8,6 @@ const notifyCtrl = {
             
             const { id, recipients, url, text, content, image } = req.body.msg;
             
-            console.log("notify BE",  {id, recipients, url, text, content, image});
             if(recipients.includes(req.user.id.toString())) return;
 
             const notify = new Notifies({
@@ -34,8 +34,8 @@ const notifyCtrl = {
     getNotifies: async (req, res) => {
         try {
             const notifies = await Notifies.find({recipients: req.user.id})
-            .sort('-createdAt').populate('user', 'avatar name')
-            
+                .sort('-createdAt').populate('user', 'avatar name', Users)
+            // add Users => fix => Schema hasn't been registered for model            
             return res.json({notifies})
         } catch (err) {
             return res.status(500).json({msg: err.message})

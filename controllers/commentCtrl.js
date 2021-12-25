@@ -12,11 +12,11 @@ const commentCtrl = {
             const user = await Users.findById(req.user.id).select('-password');
             console.log({ user })
             const post = await Posts.findById(postId)
-            if (!post) return res.status(400).json({ msg: "This post does not exist." })
+            if (!post) return res.status(400).json({ msg: "Bài viết này đã bị xóa" })
 
             if (reply) {
                 const cm = await Comments.findById(reply)
-                if (!cm) return res.status(400).json({ msg: "This comment does not exist." })
+                if (!cm) return res.status(400).json({ msg: "Bình luận này đã bị xóa" })
             }
 
             const newComment = new Comments({

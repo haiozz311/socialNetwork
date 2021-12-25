@@ -4,6 +4,7 @@ import Avatar from '@material-ui/core/Avatar';
 import { Link } from 'react-router-dom';
 import { getSuggestions } from 'redux/slices/suggestion.slice';
 import AutorenewIcon from '@material-ui/icons/Autorenew';
+import './index.scss';
 
 const RightSideBar = () => {
   const auth = useSelector((state) => state.userInfo);
@@ -16,25 +17,24 @@ const RightSideBar = () => {
     }
   }, [refresh_token]);
   return (
-    <div>
-      <Link to={`/profile/${auth._id}`} className="d-flex mx-8">
-        <Avatar src={auth.avatar} />
-        {/* <h4 className={`${classes.textName} ml-4`}>{comment.user.name}</h4> */}
-      </Link>
-      <div>
-        <h5>Gợi ý kết bạn</h5>
-        <AutorenewIcon onClick={()=>{
-          dispatch(getSuggestions({ refresh_token }));
-        }} />
+    <div className='suggestion-cover'>
+        <div className='suggestion'>
+          <h3>Suggestion For You</h3>
+          <AutorenewIcon onClick={()=>{
+            dispatch(getSuggestions({ refresh_token }));
+          }} />
+        </div>
         {
           suggestion.users.map(item => (
-            <Link key={item._id} to={`/profile/${item._id}`} className="d-flex mx-8">
-              <Avatar src={item.avatar} />
-              <h4 className="ml-4">{item.name}</h4>
-            </Link>
+            <div key={item._id} className='user-item'>
+              <div className="d-flex align-i-center">
+                <Avatar src={item.avatar} />
+                <h4 className="ml-8">{item.name}</h4>
+              </div>
+              <Link to={`/profile/${item._id}`}>Take it</Link>
+            </div>
           ))
         }
-      </div>
     </div>
   );
 };

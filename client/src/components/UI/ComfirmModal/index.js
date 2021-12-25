@@ -13,11 +13,12 @@ import { setMessage } from 'redux/slices/message.slice';
 
 export default function ComfirmModal({ post, open, onclose }) {
   const { refresh_token } = useSelector((state) => state.token);
+  const { socket } = useSelector((state) => state.socket);
   const dispatch = useDispatch();
   let history = useHistory();
   const { id } = useParams();
   const handleRemovePost = () => {
-    dispatch(deletePost({ post, refresh_token }));
+    dispatch(deletePost({ post, refresh_token, socket }));
     dispatch(
       setMessage({ type: 'success', message: 'Xóa bài viết thành công' }),
     );

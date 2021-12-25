@@ -60,16 +60,20 @@ exports.getLeaderboardWithName = async (name = '') => {
     let topList = [];
 
     for (let i = 0; i < l; ++i) {
-      const { name, avatar } = await UserModel.findOne({
+      console.log("test", top[i].accountId);
+      const data = await UserModel.findOne({
         _id: top[i].accountId,
       }).select('name avatar -_id');
-
-      topList.push({
-        name: name || 'Anonymous',
-        avatar,
-        score: top[i].score,
-      });
+      // console.log(data.avatar);
+      if (data) {
+        topList.push({
+          name: data.name || 'Anonymous',
+          avatar: data.avatar,
+          score: top[i].score,
+        });
+      }
     }
+    console.log("topList", topList)
     return topList;
   } catch (error) {
     throw error;

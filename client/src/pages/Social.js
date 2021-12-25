@@ -8,6 +8,8 @@ import postApi from 'apis/postApi';
 import { setPosts } from 'redux/slices/post.slice';
 import GlobalLoading from 'components/UI/GlobalLoading';
 import RightSideBar from 'components/UI/RightSideBar/RightSideBar';
+import './styles/social.scss';
+
 
 
 
@@ -34,8 +36,8 @@ function Social() {
   }, [refresh_token, dispatch]);
 
   return (
-    <div className="container">
-      <Grid container>
+    <div className="social">
+      <Grid container className="container">
         <Grid item xs={8}>
           <Status />
           <Post />

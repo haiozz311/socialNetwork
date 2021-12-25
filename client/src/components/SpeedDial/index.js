@@ -10,6 +10,8 @@ import { useHistory } from 'react-router-dom';
 import { Link } from 'react-scroll';
 import SettingButton from './Settings/SettingButton';
 import SettingReset from './Settings/SettingReset';
+import SettingNotify from './Settings/SettingNotify';
+import MailOutlineIcon from '@material-ui/icons/MailOutline';
 import useStyle from './style';
 
 function ScrollTop() {
@@ -42,6 +44,18 @@ const actions = [
     to: null,
     isBlank: false,
   },
+  {
+    icon: <SettingNotify />,
+    name: 'Thông báo',
+    to: null,
+    isBlank: false,
+  },
+  {
+    icon: <MailOutlineIcon />,
+    name: 'Tin nhắn',
+    to: '/message',
+    isBlank: false,
+  },
 ];
 
 function SpeedDials() {
@@ -65,6 +79,7 @@ function SpeedDials() {
   };
 
   return (
+    <>
     <SpeedDial
       classes={{
         root: classes.root,
@@ -87,6 +102,8 @@ function SpeedDials() {
         />
       ))}
     </SpeedDial>
+    {/* <NotifyModal /> */}
+    </>
   );
 }
 

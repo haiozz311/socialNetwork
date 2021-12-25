@@ -77,6 +77,7 @@ const userCtrl = {
         try {
             const { email, password } = req.body
             const user = await Users.findOne({ email })
+            .populate("followers following", "avatar name followers following")
             if (!user) return res.status(400).json({ msg: "This email does not exist." })
 
             const isMatch = await bcrypt.compare(password, user.password)
@@ -378,7 +379,8 @@ const userCtrl = {
     searchUser: async (req, res) => {
         try {
             const users = await Users.find({ name: { $regex: req.query.name } })
-                .limit(10).select("name avatar")
+                .limit(10)
+                // .select("name avatar")
 
             res.json({ users })
         } catch (err) {

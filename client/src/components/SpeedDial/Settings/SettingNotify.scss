@@ -1,0 +1,19 @@
+.notify{
+  position: relative;
+  &-number{
+    position: absolute;
+    top: -25%;
+    left: 75%;
+    color: white;
+    background-color: gray;
+    border-radius: 50%;
+    width: 25px;
+    height: 25px;
+    opacity: 0.5;
+  }
+}
+.wrapper{
+  position: fixed;
+  top: 0;
+  right: 0;
+}

@@ -9,13 +9,13 @@ import InfoIcon from '@material-ui/icons/Info';
 
 const MAX_LEN_NAME = 20;
 
-function LeaderBoardItem({ classes, nthTop, avt, name, score, unit }) {
+function LeaderBoardItem({ classes, nthTop, name, score, unit, avatar }) {
   const nameReduced =
     Boolean(name) && name.length >= MAX_LEN_NAME
       ? `${name.slice(0, 17)}...`
       : name;
-  const avtSrc = Boolean(avt)
-    ? cloudinaryImgOptimize(avt, 50, 50)
+  const avtSrc = Boolean(avatar)
+    ? cloudinaryImgOptimize(avatar, 50, 50)
     : DEFAULTS.IMAGE_SRC;
   const color =
     nthTop === 1

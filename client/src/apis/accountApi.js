@@ -17,6 +17,13 @@ const accountApi = {
     });
   },
 
+  getNotify: (token) => {
+    return axiosClient.get(`${URL}/api/notifies`, {
+      headers: { Authorization: token }
+      // token
+    });
+  },
+
   fetchUserById: (id, token) => {
     return axiosClient.get(`${URL}/user/getUser/${id}`, {
       headers: { Authorization: token }
@@ -74,7 +81,6 @@ const accountApi = {
   },
 
   putUpdateUserCoin: (newCoin, token) => {
-    console.log("newCoin", newCoin);
     return axiosClient.put(`${URL}/user/update-coin`, { newCoin },
       {
         headers: { Authorization: token }

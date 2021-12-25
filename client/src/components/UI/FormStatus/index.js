@@ -16,6 +16,7 @@ import GlobalLoading from '../GlobalLoading';
 import { setStatus, updatePost } from 'redux/slices/status.slice';
 import postApi from 'apis/postApi';
 import { setPosts } from 'redux/slices/post.slice';
+import Icons from '../Icon/Icons';
 
 const FormStatus = ({ open, setModalStatus, userInfor }) => {
   const classes = useStyle();
@@ -72,7 +73,7 @@ const FormStatus = ({ open, setModalStatus, userInfor }) => {
           dispatch(setPosts(res.data.posts));
         }
       } else {
-        dispatch(createPost({ content, images, refresh_token, socket }));
+        dispatch(createPost({ content, images, refresh_token, userInfor, socket }));
       }
       setContent('');
       setImages([]);
@@ -146,6 +147,7 @@ const FormStatus = ({ open, setModalStatus, userInfor }) => {
                 <ImageIcon className="mr-2" />Ảnh/Video
               </Fab>
             </label>
+            <Icons setContent={setContent} content={content} />
           </div>
           <div className={`${classes.show_images}`}>
             {
