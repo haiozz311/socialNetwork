@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/core/styles';
 export default makeStyles(() => ({
   root: {
     position: 'fixed',
-    bottom: 16,
+    bottom: 120,
     right: 16,
 
     '& .MuiSpeedDialAction-fab': {

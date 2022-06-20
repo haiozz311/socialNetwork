@@ -4,7 +4,8 @@ const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
 
 export const addMessage = createAsyncThunk(
   'messenger/addMessage',
-  async ({ msg, userInfor,refresh_token, socket }) => {
+  async ({ msg, userInfor, refresh_token, socket }) => {
+    console.log('redux', { msg, userInfor, refresh_token, socket });
     const { _id, avatar, name } = userInfor;
     socket.emit('addMessage', { ...msg, user: { _id, avatar, name } });
     const res = await axiosClient.post(
@@ -14,7 +15,7 @@ export const addMessage = createAsyncThunk(
         headers: { Authorization: refresh_token },
       },
     );
-    console.log('data res addmessage',{ res });
+    console.log('data res addmessage', { res });
     return msg;
   },
 );
@@ -37,13 +38,13 @@ export const getConversations = createAsyncThunk(
       });
     });
     console.log('newArr', newArr);
-    return {newArr, result: res.data.result};
+    return { newArr, result: res.data.result };
   },
 );
 
 export const getMessages = createAsyncThunk(
   'messenger/getMessages',
-  async ({ refresh_token, id , page = 1 }) => {
+  async ({ refresh_token, id, page = 1 }) => {
     const res = await axiosClient.get(`${URL}/api/message/${id}?limit=${page * 9}`, {
       headers: { Authorization: refresh_token }
     });
@@ -55,12 +56,12 @@ export const getMessages = createAsyncThunk(
 
 export const loadMoreMessages = createAsyncThunk(
   'messenger/loadMoreMessages',
-  async ({ refresh_token, id , page = 1 }) => {
+  async ({ refresh_token, id, page = 1 }) => {
     const res = await axiosClient.get(`${URL}/api/message/${id}?limit=${page * 9}`, {
       headers: { Authorization: refresh_token }
     });
     const newData = { ...res.data, messages: res.data.messages.reverse() };
-    return  {...newData, _id: id, page};
+    return { ...newData, _id: id, page };
   },
 );
 

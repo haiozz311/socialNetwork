@@ -28,7 +28,7 @@
   .content-left{
     background-color: #ffffff !important;
     border-radius: 20px;
-    height: calc(80vh - 5px);
+    height: 79%;
     margin: 0 15px;
   }
   .message_header{
@@ -102,6 +102,11 @@
         display: flex;
         position: relative;
         margin-bottom: 40px;
+        button{
+          img{
+            height: 30px;
+          }
+        }
       }
       .content{
         max-width: 50%;
@@ -189,6 +194,7 @@
     }
     .chat_input{
       position: relative;
+      top:-50px;
       input{
         padding: 20px;
         margin: 20px;

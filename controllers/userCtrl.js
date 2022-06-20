@@ -43,10 +43,44 @@ const userCtrl = {
 
             const activation_token = createActivationToken(newUser);
             const url = `${CLIENT_URL}/user/activate/${activation_token}`;
+            console.log('url12', url);
             sendMail(email, url, "Verify your email address");
 
 
-            res.json({ msg: "Register Success! Please activate your email to start." })
+            res.json({ msg: "Register Success! Please active your email to start." })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    addUserByAdmin: async (req, res) => {
+        try {
+            const { name, email, password } = req.body
+
+            if (!name || !email || !password)
+                return res.status(400).json({ msg: "Please fill in all fields." })
+
+            if (!validateEmail(email))
+                return res.status(400).json({ msg: "Invalid emails." })
+
+            const user = await Users.findOne({ email })
+            if (user) return res.status(400).json({ msg: "This email already exists." })
+
+            if (password.length < 6)
+                return res.status(400).json({ msg: "Password must be at least 6 characters." })
+
+            const passwordHash = await bcrypt.hash(password, 12)
+
+            const newUser = {
+                name, email, password: passwordHash
+            }
+
+            const activation_token = createActivationToken(newUser);
+            const url = `${CLIENT_URL}/user/activate/${activation_token}`;
+            console.log('url12', url);
+            sendMail(email, url, "Verify your email address");
+
+
+            res.json({ msg: "Register Success! Please active your email to start." })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
@@ -171,6 +205,18 @@ const userCtrl = {
             const { name } = req.body
             await Users.findOneAndUpdate({ _id: req.user.id }, {
                 name
+            })
+
+            res.json({ msg: "Update Success!" })
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    updateInforUser: async (req, res) => {
+        try {
+            const { name, coin, role } = req.body
+            await Users.findOneAndUpdate({ _id: req.params.id }, {
+                name, coin, role 
             })
 
             res.json({ msg: "Update Success!" })
@@ -455,6 +501,16 @@ const userCtrl = {
                 users,
                 result: users.length
             })
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    getTotalUser: async (req, res) => {
+        try {
+            const users = await Users.find().select('-password')
+
+            res.json({users});
 
         } catch (err) {
             return res.status(500).json({ msg: err.message })

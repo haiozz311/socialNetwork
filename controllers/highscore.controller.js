@@ -1,6 +1,7 @@
 const {
   updateTop,
   getLeaderboardWithName,
+  getLeaderboardWithNameByAdmin,
 } = require('../services/hightscore.service');
 const Users = require('../models/userModel')
 
@@ -31,6 +32,21 @@ exports.getLeaderboard = async (req, res, next) => {
     }
 
     const list = await getLeaderboardWithName(name);
+    return res.status(200).json({ list });
+  } catch (error) {
+    console.error('GET LEADERBOARD ERROR: ', error);
+    return res.status(500).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  }
+};
+
+exports.getLeaderboardByAdmin = async (req, res, next) => {
+  try {
+     const { name } = req.query;
+    console.log("name", name)
+    if (!Boolean(name)) {
+      return res.status(400).json({ message: 'failed' });
+    }
+    const list = await getLeaderboardWithNameByAdmin(name);
     return res.status(200).json({ list });
   } catch (error) {
     console.error('GET LEADERBOARD ERROR: ', error);

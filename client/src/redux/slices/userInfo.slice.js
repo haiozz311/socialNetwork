@@ -21,7 +21,7 @@ const userInfoSlice = createSlice({
 
     setDataUser(state, action) {
       console.log('setDataUser', action);
-      const { authType, name, avatar, coin, favoriteList, email, role, createdAt, _id, followers, following } = action.payload;
+      const { authType, name, avatar, coin, favoriteList, email, role, createdAt, _id, followers, following } = action?.payload;
       if (!name || name === '') {
         state.isAuth = false;
         return;

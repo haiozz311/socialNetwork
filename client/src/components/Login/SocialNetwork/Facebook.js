@@ -50,7 +50,7 @@ function LoginFacebook() {
       autoload={false}
       callback={responseFacebook}
       render={(renderProps) => (
-        <div className={classes.socialBtn} onClick={renderProps.onClick}>
+        <div className={classes.socialBtn} id="login-facebook" onClick={renderProps.onClick}>
           <img className={classes.socialImg} src={fbIcon} alt="FB" />
           <span className={classes.socialName}>Facebook</span>
         </div>

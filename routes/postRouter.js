@@ -5,7 +5,8 @@ const auth = require('../middleware/auth')
 router.route('/posts')
     .post(auth, postCtrl.createPost)
     .get(auth, postCtrl.getPosts)
-// router.post('/posts', postCtrl.createPost)
+router.route('/getAllPost')
+    .get(postCtrl.getAllPost)
 
 router.route('/post/:id')
     .patch(auth, postCtrl.updatePost)
@@ -26,5 +27,6 @@ router.patch('/unSavePost/:id', auth, postCtrl.unSavePost)
 
 router.get('/getSavePosts', auth, postCtrl.getSavePosts)
 
+router.get('/getTotalPost', postCtrl.getTotalPost)
 
 module.exports = router

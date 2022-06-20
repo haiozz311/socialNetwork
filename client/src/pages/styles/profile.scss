@@ -1,0 +1,19 @@
+.profile{
+  .card__body{
+    .title {
+      font-weight: bold;
+      font-size: 16px;
+    }
+  }
+  .profile-image {
+    display: flex;
+    justify-content: center;
+  }
+  .profile-body{
+    display: flex;
+    align-items: center;
+  }
+  .profile-center{
+    text-align: center;
+  }
+}

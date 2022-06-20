@@ -1,0 +1,22 @@
+[
+    {
+        "icon": "bx bx-user",
+        "count": "1,995",
+        "title": "Total sales"
+    },
+    {
+        "icon": "bx bx-list-ul",
+        "count": "2,001",
+        "title": "Centences"
+    },
+    {
+        "icon": "bx bxs-layout",
+        "count": "$2,632",
+        "title": "Words"
+    },
+    {
+        "icon": "bx bx-receipt",
+        "count": "1,711",
+        "title": "Posts"
+    }
+]

@@ -19,9 +19,13 @@ router.get('/infor', auth, userCtrl.getUserInfor)
 
 router.get('/all_infor', auth, authAdmin, userCtrl.getUsersAllInfor)
 
+// router.get('/info_users', userCtrl.) 
+
 router.get('/logout', userCtrl.logout)
 
 router.patch('/update', auth, userCtrl.updateUser)
+
+router.patch('/updateInforUser/:id', auth, authAdmin, userCtrl.updateInforUser)
 
 router.patch('/update_role/:id', auth, authAdmin, userCtrl.updateUsersRole)
 
@@ -36,6 +40,8 @@ router.put(
 );
 
 router.get('/search', auth, userCtrl.searchUser)
+
+router.get('/getTotalUser', userCtrl.getTotalUser)
 
 router.get('/getUser/:id', auth, userCtrl.getUser)
 

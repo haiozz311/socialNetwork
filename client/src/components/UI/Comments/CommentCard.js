@@ -105,7 +105,7 @@ const CommentCard = ({ children, comment, post, commentId }) => {
                   >
                     update
                   </small>
-                  <small className={`${classes.point}`}
+                  <small className={`${classes.point} px-8`}
                     onClick={() => setOnEdit(false)}>
                     cancel
                   </small>

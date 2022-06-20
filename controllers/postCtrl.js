@@ -47,30 +47,6 @@ const postCtrl = {
     },
     getPosts: async (req, res) => {
         try {
-            // const features = new APIfeatures(Posts.find({
-            //     user: [...req.user.following, req.user._id]
-            // }), req.query).paginating()
-
-            // const posts = await features.query.sort('-createdAt')
-            //     .populate("user likes", "avatar username fullname followers")
-            //     .populate({
-            //         path: "comments",
-            //         populate: {
-            //             path: "user likes",
-            //             select: "-password"
-            //         }
-            //     })
-
-            // res.json({
-            //     msg: 'Success!',
-            //     result: posts.length,
-            //     posts
-            // })
-
-            // const posts = await Posts.find({ user: [...req.user.following, req.user._id] })
-            // const features =  new APIfeatures(Posts.find({
-            //     user: [...req.user.following, req.user._id]
-            // }), req.query).paginating()
             const userAuth = await Users.findById(req.user.id).select('-password');
             const posts = await Posts.find({ user: [...userAuth.following, userAuth._id] }).sort('-createdAt')
                 .populate("user likes", "avatar name followers")
@@ -81,19 +57,28 @@ const postCtrl = {
                         select: "-password"
                     }
                 })
-            // const features = new APIfeatures(Posts.find({
-            //     user: [...req.user.following, req.user._id]
-            // }), req.query).paginating()
 
-            // const posts = await features.query.sort('-createdAt')
-            //     .populate("user likes", "avatar username fullname followers")
-            //     .populate({
-            //         path: "comments",
-            //         populate: {
-            //             path: "user likes",
-            //             select: "-password"
-            //         }
-            //     })
+            res.json({
+                msg: 'Success!',
+                result: posts.length,
+                posts
+            })
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    getAllPost: async (req, res) => {
+        try {
+            const posts = await Posts.find().sort('-createdAt')
+                .populate("user likes", "avatar name followers")
+                .populate({
+                    path: "comments",
+                    populate: {
+                        path: "user likes",
+                        select: "-password"
+                    }
+                })
 
             res.json({
                 msg: 'Success!',
@@ -307,6 +292,16 @@ const postCtrl = {
                 savePosts,
                 result: savePosts.length
             })
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    getTotalPost: async (req, res) => {
+        try {
+            const posts = await Posts.find().select('-password')
+
+            res.json({total: posts.length})
 
         } catch (err) {
             return res.status(500).json({ msg: err.message })

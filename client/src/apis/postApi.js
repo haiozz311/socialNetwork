@@ -8,7 +8,12 @@ const postApi = {
       headers: { Authorization: token }
     });
   },
-
+  getTotalPost: () => {
+    return axiosClient.get(`${URL}/api/getTotalPost`);
+  },
+   getAllPost: () => {
+    return axiosClient.get(`${URL}/api/getAllPost`);
+  },
 };
 
 export default postApi;

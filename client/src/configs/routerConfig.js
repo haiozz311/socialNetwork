@@ -41,7 +41,7 @@ const routes = [
   {
     path: ROUTES.ACTIVE_TOKEN,
     exact: true,
-    isProtect: true,
+    isProtect: false,
     component: () => <ActivationEmail />,
   },
   {

@@ -94,6 +94,7 @@ export default makeStyles(() => ({
   underLine: {
     display: 'inline-block',
     borderBottom: '4px solid black',
+    cursor: 'pointer',
     '&:hover': {
       borderBottom: '4px solid var(--primary-color)'
     }

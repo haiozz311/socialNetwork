@@ -14,10 +14,10 @@ const MsgDisplay = ({ user, msg }) => {
   const handleDeleteMessages = () => {
     if (!message.data) return;
     const data = message.data;
-    if(window.confirm('Do you want to delete?')){
+    if (window.confirm('Do you want to delete?')) {
       dispatch(deleteMessages({ msg, data, refresh_token }));
     }
-}
+  }
   return (
     <div className="display-message">
       <div className="cover-display">
@@ -29,39 +29,37 @@ const MsgDisplay = ({ user, msg }) => {
           </div>
           {
             msg.media.map((item, index) => (
-                <div key={index} className='message-display-content'>
-                    {
-                        item.url.match(/video/i)
-                        ? <video controls src={src.url} alt="images" className="img-thumbnail"/>
-                        : <img src={item.url} alt="images" className="img-thumbnail"/>
-                    }
-                </div>
+              <div key={index} className='message-display-content'>
+                {
+                  item.url.match(/video/i)
+                    ? <video controls src={src.url} alt="images" className="img-thumbnail" />
+                    : <img src={item.url} alt="images" className="img-thumbnail" />
+                }
+              </div>
             ))
           }
         </p>}
         {
           msg.call &&
           <button className="btn d-flex align-items-center py-3"
-          style={{background: '#eee', borderRadius: '10px'}}>
+            style={{ background: '#eee', borderRadius: '10px', padding: '10px', borderColor: 'transparent', margin: '0 5px' }}>
 
-                  {
-                msg.call.times === 0 && (
-                  <img src={phoneErr} />
-                  )
-                      // ? msg.call.video ? 'videocam_off' : 'phone_disabled'
-                      // : msg.call.video ? 'video_camera_front' : 'call'
-                  }
+            {
+              msg.call.times === 0 && (
+                <img src={phoneErr} />
+              )
+            }
 
-              <div className="text-left">
-                  <h6>{msg.call.video ? 'Video Call' : 'Audio Call'}</h6>
-                  <small>
-                      {
-                          msg.call.times > 0
-                          ? <Times total={msg.call.times} />
-                          : new Date(msg.createdAt).toLocaleTimeString()
-                      }
-                  </small>
-              </div>
+            <div className="text-left">
+              <h6>{msg.call.video ? 'Video Call' : 'Audio Call'}</h6>
+              <small>
+                {
+                  msg.call.times > 0
+                    ? <Times total={msg.call.times} />
+                    : new Date(msg.createdAt).toLocaleTimeString()
+                }
+              </small>
+            </div>
 
           </button>
         }

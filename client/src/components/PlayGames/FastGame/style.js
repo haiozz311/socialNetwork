@@ -147,7 +147,7 @@ export default makeStyles((theme) => ({
     width: '80%',
     flexBasis: '64px',
     textAlign: 'center',
-    border: 'solid 5px var(--grey)',
+    // border: 'solid 5px var(--grey)',
     margin: '0 auto 1.2rem',
     borderRadius: '12px',
     overflow: 'hidden',
@@ -168,10 +168,10 @@ export default makeStyles((theme) => ({
     top: '50%',
     left: '50%',
     transform: 'translate(-50%,-50%)',
-    fontSize: '1.6rem',
     color: '#fff',
     fontWeight: 500,
     letterSpacing: '1px',
+    fontSize:'9px',
   },
 
   doneTitle: {

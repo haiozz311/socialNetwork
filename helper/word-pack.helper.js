@@ -6,6 +6,8 @@ exports.addTopicsQuery = (topics, query) => {
     topics.forEach((topic) =>
       orList.push({ topics: { $elemMatch: { $eq: topic } } }),
     );
+    console.log('topics',topics);
+    console.log('orList',orList);
     query['$or'] = orList;
   }
 

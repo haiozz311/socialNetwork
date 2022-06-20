@@ -17,6 +17,7 @@ import messengerSlice from './slices/messenger';
 import onlineSlice from './slices/online.slice';
 import callSlice from './slices/call.slice';
 import peerSlice from './slices/peer.slice';
+import themeSlice from './slices/Theme.slice';
 
 const reducer = combineReducers({
   message: messageReducer,
@@ -34,6 +35,7 @@ const reducer = combineReducers({
   online: onlineSlice,
   call: callSlice,
   peer: peerSlice,
+  theme: themeSlice,
 });
 
 const persistConfig = {

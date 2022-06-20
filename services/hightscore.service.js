@@ -79,3 +79,30 @@ exports.getLeaderboardWithName = async (name = '') => {
     throw error;
   }
 };
+
+exports.getLeaderboardWithNameByAdmin = async (name = '') => {
+  try {
+    const highscores = await HighscoreModel.findOne({ name });
+    if (!Boolean(highscores)) {
+      return [];
+    }
+    console.log("highscores", highscores)
+    const { top } = highscores;
+    const l = top.length;
+    let topList = [];
+
+    for (let i = 0; i < l; ++i) {
+      const data = await UserModel.find().sort({score: 1}).select('name avatar -_id');
+      if (data.length > 0) {
+        topList.push({
+            name: data[i]?.name || 'Anonymous',
+            avatar: data[i]?.avatar,
+            score: top[i].score,
+          });
+      }
+    }
+    return topList;
+  } catch (error) {
+    throw error;
+  }
+};

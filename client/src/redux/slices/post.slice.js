@@ -23,7 +23,7 @@ export const createPost = createAsyncThunk(
     if (res) {
       const msg = {
         id: res.data.newPost._id,
-        text: 'added a new post.',
+        text: 'đã đăng bài viết mới',
         recipients: res.data.newPost.user.followers,
         url: `/post/${res.data.newPost._id}`,
         content,

@@ -46,10 +46,10 @@ export default function NotifyModal() {
 
   const handleDeleteAll = () => {
     const newArr = data.filter(item => item.isRead === false);
-    if (newArr.length === 0) return dispatch(deleteAllNotify({refresh_token}));
+    if (newArr.length === 0) return dispatch(deleteAllNotify({ refresh_token }));
 
     if (window.confirm(`You have ${newArr.length} unread notices. Are you sure you want to delete all?`)) {
-      return dispatch(deleteAllNotify({refresh_token}));
+      return dispatch(deleteAllNotify({ refresh_token }));
     }
   };
 
@@ -90,10 +90,10 @@ export default function NotifyModal() {
       {
         dataNotify.length === 0 ? (
           <Link>
-          <List>
-              <ListItemText primary="Chưa có thông báo mới" style={{textAlign: 'center'}} />
-          </List>
-          <Divider />
+            <List>
+              <ListItemText primary="Chưa có thông báo mới" style={{ textAlign: 'center' }} />
+            </List>
+            <Divider />
           </Link>
         ) : (
           <>
@@ -101,24 +101,24 @@ export default function NotifyModal() {
               {dataNotify?.map((notify, index) => (
                 <Link to={`${notify.url}`} key={index}>
                   <ListItem button onClick={() => handleIsRead(notify)}>
-                    <ListItemIcon><Avatar src={notify?.user?.avatar}/> </ListItemIcon>
+                    <ListItemIcon><Avatar src={notify?.user?.avatar} /> </ListItemIcon>
                     <ListItemText primary={notify?.user?.name + ' ' + notify.text} />
-                    </ListItem>
-                    <small className="text-muted d-flex justify-content-between px-2">
-                        {moment(notify.createdAt).fromNow()}
-                        {
-                            notify.isRead && <p>đã xem</p>
-                        }
-                    </small>
-                  </Link>
-                ))}
+                  </ListItem>
+                  <small className="text-muted d-flex jus-content-around px-2">
+                    {moment(notify.createdAt).fromNow()}
+                    {
+                      notify.isRead && <p>đã xem</p>
+                    }
+                  </small>
+                </Link>
+              ))}
             </List>
-              <Divider />
-              <List>
-                <ListItem button onClick={handleDeleteAll}>
-                  <ListItemText primary="Xóa tất cả thông báo" style={{textAlign: 'center'}} />
-                </ListItem>
-              </List>
+            <Divider />
+            <List>
+              <ListItem button onClick={handleDeleteAll}>
+                <ListItemText primary="Xóa tất cả thông báo" style={{ textAlign: 'center' }} />
+              </ListItem>
+            </List>
           </>
         )
       }
@@ -130,9 +130,9 @@ export default function NotifyModal() {
     <div>
       {['right'].map((anchor) => (
         <React.Fragment key={anchor}>
-          <div className="notify"onClick={toggleDrawer(anchor, true)}>
-          <NotificationsNoneIcon  />
-          {dataNotify.length > 0 && <p className="notify-number">{dataNotify.length}</p>}
+          <div className="notify" onClick={toggleDrawer(anchor, true)}>
+            <NotificationsNoneIcon />
+            {dataNotify.length > 0 && <p className="notify-number">{dataNotify.length}</p>}
           </div>
           {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
           <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>

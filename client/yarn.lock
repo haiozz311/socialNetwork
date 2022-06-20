@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+"@alan-ai/alan-sdk-web@^1.8.29":
+  "integrity" "sha512-4jLRAfw7+YoLlT7z4bQgSIBwLzmESFFT5US3ZMUfK5lC2yCYRq+9udHEQBL3klQQlUpd3x8l8IjLyb7pFld+cQ=="
+  "resolved" "https://registry.npmjs.org/@alan-ai/alan-sdk-web/-/alan-sdk-web-1.8.29.tgz"
+  "version" "1.8.29"
+
 "@babel/code-frame@^7.0.0", "@babel/code-frame@^7.10.4", "@babel/code-frame@^7.14.5", "@babel/code-frame@^7.5.5":
   "integrity" "sha512-9pzDqyc6OLDaqe+zbACgFkb6fKMNG6CObKpnYXChRsvYGyEdc7CA2BaqeOM+vOtCS5ndmJicPJhKAwYRI6UfFw=="
   "resolved" "https://registry.npmjs.org/@babel/code-frame/-/code-frame-7.14.5.tgz"
@@ -9745,7 +9750,7 @@
     "tiny-invariant" "^1.0.2"
     "tiny-warning" "^1.0.0"
 
-"react-scripts@4.0.3":
+"react-scripts@^4.0.3":
   "integrity" "sha512-S5eO4vjUzUisvkIPB7jVsKtuH2HhWcASREYWHAQ1FP5HyCv3xgn+wpILAEWkmy+A+tTNbSZClhxjT3qz6g4L1A=="
   "resolved" "https://registry.npmjs.org/react-scripts/-/react-scripts-4.0.3.tgz"
   "version" "4.0.3"

@@ -166,7 +166,7 @@ function FastGame({ list }) {
     setScore(score + ~~(restTime / 1000) * SCORE_PER_SEC);
     setIsDone(true);
   };
-
+  // ~~ 2.35 => 2
   // flag to increase or decrease time
   const [flag, setFlag] = useState({
     correct: 0,

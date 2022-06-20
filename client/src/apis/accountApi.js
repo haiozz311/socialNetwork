@@ -49,6 +49,12 @@ const accountApi = {
     });
   },
 
+  putUpdateProfileByAdmin: (name = '', coin, role , token, id) => {
+    return axiosClient.patch(`${URL}/user/updateInforUser/${id}`, { name ,coin, role }, {
+      headers: { Authorization: token }
+    });
+  },
+
   resetPassword: (password, token) => {
     return axiosClient.post(`${URL}/user/reset`, { password }, {
       headers: { Authorization: token }
@@ -100,15 +106,16 @@ const accountApi = {
     return axiosClient.get(`${URL}/user/user-info`);
   },
 
-  // getSendVerifyCode: (email) => {
-  //   return axiosClient.get(`${URL}/send-verify-code`, {
-  //     params: { email },
-  //   });
-  // },
+  getTotalUser: () => {
+    return axiosClient.get(`${URL}/user/getTotalUser`);
+  },
 
-  // getUserProfile: () => {
-  //   return axiosClient.get(`${URL}/user-profile`);
-  // },
+  deleteUser: (id, token) => {
+    return axiosClient.delete(`${URL}/user/delete/${id}`, {
+        headers: { Authorization: token }
+      });
+  },
+
 };
 
 export default accountApi;
