@@ -9,58 +9,54 @@ import PropTypes from 'prop-types';
 import React, { useState } from 'react';
 import Table from 'components/DashBoard/table/Table';
 import useStyle from './style';
+import { TOPICS } from 'constant/topics';
+import { WORD_SPECIALTY } from 'constant';
+import Tag from 'components/UI/Tag';
 
-function ModalWord({ open, onClose, item, onRemove, onUpdate, isUpdate, handleConfirmUpdate, renderHead, token }) {
+
+function ModalWord({ open, onClose, item, onRemove, onUpdate, renderHead }) {
   const classes = useStyle();
-  const [state, setState] = useState({
-    userName: item.name,
-    coin: item.coin,
-    role: item.role,
-  });
   const customerTableHead = [
-    'Word',
-    'Phonetic',
-    'Type',
-    'Picture',
-    'Mean',
-];
-  const [data, setData] = useState({});
-  const handleChange = (evt) => {
-    const value = evt.target.value;
-    setState({
-    ...state,
-    [evt.target.name]: value
+    'Từ vựng',
+    'Phiên âm',
+    'Cấp bật từ',
+    'Loại từ',
+    'Hình ảnh',
+    'Nghĩa của từ',
+    'Chuyên ngành',
+    'Ví dụ',
+    'Từ đồng nghĩa',
+    'Từ trái nghĩa',
+    'chủ đề',
+    'chú thích',
+  ];
+  function sliceTopics(topics) {
+    let res = [];
+    topics.forEach((topic) => {
+      res.push(TOPICS.find((i) => i.key === topic));
     });
-    setData({
-      id: item._id,
-      name: state.userName,
-      coin: state.coin,
-      role: state.role,
-      token: token,
-    });
-  };
+    return res;
+  }
   const renderBody = (item, index) => (
     <tr key={index}>
-        <td>{item.word}</td>
-        <td>{item.phonetic}</td>
-        <td>{item.type ? item.type : '?'}</td>
-        <td>{item.picture ? <Avatar src={item.picture} /> : ''}</td>
-        <td>{item.mean}</td>
+      <td>{item?.word}</td>
+      <td>{item?.phonetic}</td>
+      <td>{item?.level === '0' ? 'Chưa Xác Định' : item.level}</td>
+      <td>{item?.type ? item.type : 'Chưa Xác Định'}</td>
+      <td>{item?.picture ? <Avatar src={item.picture} /> : ''}</td>
+      <td>{item?.mean.length < 20 ? item.mean : item.mean.slice(0, 20) + '...'}</td>
+      <td>{WORD_SPECIALTY.find((i) => i.value === item.specialty)?.label ||
+        'Chưa Xác Định'}</td>
+      <td>{item?.examples}</td>
+      <td>{item?.synonyms ? item?.synonyms.join(', ') : ''}</td>
+      <td>{item?.antonyms ? item?.antonyms.join(', ') : ''}</td>
+      <td>{item.topics && sliceTopics(item.topics).map((topic, index) => (
+        <Tag key={index} title={topic.title} iconSrc={topic.icon} />
+      ))}</td>
+      <td>{item.note}</td>
     </tr>
-);
-  const renderBodyUpdate = (item, index) => (
-  <tr key={index} onClick={() => {}}>
-        <td><input className={classes.borderInput} type="text" placeholder={`${state.userName}`} name="userName" value={state.userName} onChange={handleChange} /></td>
-        <td>{item.email}</td>
-        <td>{item.authType === 'gg' ? 'Gmail' : item.authType === 'fb' ? 'Facebook': 'Local'}</td>
-        <td><input className={`${classes.borderInput} ${classes.widthCoin}`} type="text" value={state.coin} name="coin" onChange={handleChange} /></td>
-        <td><select name="role" className={classes.role} onChange={handleChange} value={state.role}>
-          <option value="0">User</option>
-          <option value="1">Admin</option>
-        </select></td>
-        <td><Avatar src={item.avatar} /></td>
-    </tr>
-);
+  );
+
   return (
     <Dialog
       classes={{
@@ -69,7 +65,7 @@ function ModalWord({ open, onClose, item, onRemove, onUpdate, isUpdate, handleCo
       onClose={onClose}
       aria-labelledby="setting dialog"
       disableBackdropClick={true}
-      maxWidth="md"
+      maxWidth="xl"
       open={open}>
       <div className={`${classes.title} flex-center-between`}>
         <span>Word</span>
@@ -81,18 +77,14 @@ function ModalWord({ open, onClose, item, onRemove, onUpdate, isUpdate, handleCo
           headData={customerTableHead}
           renderHead={(item, index) => renderHead(item, index)}
           bodyData={[item]}
-          renderBody={(item, index) => !isUpdate ? renderBody(item, index) : renderBodyUpdate(item, index)}
-      />
+          renderBody={(item, index) => renderBody(item, index)}
+        />
       </DialogContent>
       <div className="d-flex jus-content-end">
-        {
-          !isUpdate ? (
-            <>
         <DialogActions className={classes.actions}>
           <Button
-            className="_btn _btn-secondary"
             onClick={onUpdate}
-            color="secondary"
+            color="primary"
             size="small"
             variant="contained">
             Chỉnh sữa
@@ -100,50 +92,13 @@ function ModalWord({ open, onClose, item, onRemove, onUpdate, isUpdate, handleCo
         </DialogActions>
         <DialogActions className={classes.actions}>
           <Button
-            className="_btn _btn-accent"
             onClick={onRemove}
-            color="accent"
+            color="secondary"
             size="small"
             variant="contained">
             Xóa
           </Button>
         </DialogActions>
-        <DialogActions className={classes.actions}>
-          <Button
-            className="_btn _btn-primary"
-            onClick={onClose}
-            color="primary"
-            size="small"
-            variant="contained">
-            Đóng
-          </Button>
-        </DialogActions>
-            </>
-          ) : <>
-          <DialogActions className={classes.actions}>
-          <Button
-            className="_btn _btn-primary"
-                  onClick={() => {
-                    handleConfirmUpdate(data);
-            }}
-            color="primary"
-            size="small"
-            variant="contained">
-            Chỉnh sửa
-          </Button>
-            </DialogActions>
-                  <DialogActions className={classes.actions}>
-          <Button
-            className="_btn _btn-primary"
-            onClick={onClose}
-            color="primary"
-            size="small"
-            variant="contained">
-            Đóng
-          </Button>
-        </DialogActions></>
-        }
-
       </div>
     </Dialog>
   );
@@ -154,11 +109,8 @@ ModalWord.propTypes = {
   open: PropTypes.bool,
   onRemove: PropTypes.func,
   onUpdate: PropTypes.func,
-  isUpdate: PropTypes.bool,
-  handleConfirmUpdate: PropTypes.func,
   renderHead: PropTypes.any,
   renderBody: PropTypes.any,
-  token: PropTypes.any,
 };
 
 ModalWord.defaultProps = {

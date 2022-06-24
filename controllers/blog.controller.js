@@ -2,6 +2,8 @@ const {
   getBlogListService,
   getBlogHtmlService,
 } = require('../services/blog.service');
+const BlogModel = require('../models/blog.model');
+
 
 exports.getBlogList = async (req, res, next) => {
   try {
@@ -25,5 +27,22 @@ exports.getBlogHtml = async (req, res, next) => {
   } catch (error) {
     console.error(' ERROR: ', error);
     return res.status(500).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  }
+};
+
+exports.addBlog = async (req, res, next) => {
+  try {
+    const { title, desc, html } = req.body;
+    const newBlog = new BlogModel({
+      title, desc, html
+    })
+    console.log("newBlog", newBlog);
+    await newBlog.save()
+
+    res.json({
+      msg: 'Created blogs!'
+    })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
   }
 };

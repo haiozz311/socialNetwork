@@ -12,6 +12,16 @@ const sentenceApi = {
     });
   },
 
+  updateSentenceByAdmin: (
+    mean, sentence, note, topics,
+    refresh_token, _id) => {
+    return axiosClient.patch(`${URL}/api/updateSentence/${_id}`, {
+      mean, sentence, note, topics,
+    }, {
+      headers: { Authorization: refresh_token }
+    });
+  },
+
   getTotalSentences: (topics = []) => {
     console.log({ topics });
     return axiosClient.get(`${URL}/api/total`, {
@@ -27,6 +37,12 @@ const sentenceApi = {
         perPage,
         topics: JSON.stringify(topics),
       },
+    });
+  },
+
+  deleteSentence: (id, token) => {
+    return axiosClient.delete(`${URL}/api/deleteSentence/${id}`, {
+      headers: { Authorization: token }
     });
   },
 };

@@ -43,4 +43,8 @@ export default makeStyles(() => ({
   sentenceInput: {
     minHeight: '8rem',
   },
+
+  hidden: {
+    display: 'none',
+  }
 }));

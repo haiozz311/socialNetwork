@@ -8,7 +8,7 @@ const CommentMenu = ({ post, comment, setOnEdit }) => {
   return (
     <div className="menu">
       {
-        (post.user._id === userInfo._id || comment.user._id === userInfo._id) &&
+        (post?.user?._id === userInfo?._id || comment?.user?._id === userInfo?._id) &&
         <div className="nav-item dropdown">
 
 

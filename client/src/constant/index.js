@@ -46,6 +46,7 @@ export const MAX = {
   SENTENCE_NOTE_LEN: 100,
   USER_COIN: 99999,
   VERIFY_CODE: 6,
+  COIN: 1000,
 };
 
 export const MIN = {
@@ -144,6 +145,17 @@ export const WORD_TYPES = [
   },
 ];
 
+export const ROLE_TYPES = [
+  {
+    value: '0',
+    label: 'Người Dùng',
+  },
+  {
+    value: '1',
+    label: 'Quản trị viên',
+  },
+]
+
 export const WORD_LEVELS = [
   {
     value: '0',
@@ -176,7 +188,7 @@ export const WORD_LEVELS = [
 ];
 
 export const WORD_SPECIALTY = [
-  { value: '0', label: 'Không' },
+  { value: '0', label: 'Chưa Xác Định' },
   { value: '1', label: 'Công nghệ sinh học (Biotechnology)' },
   { value: '6', label: 'Công nghệ thông tin (Information Technology)' },
   { value: '14', label: 'Công nghệ thực phẩm (Food Technology)' },

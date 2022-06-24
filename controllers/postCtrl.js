@@ -234,7 +234,27 @@ const postCtrl = {
         try {
             const userData = await Users.findById(req.user.id).select('-password');
             const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.user.id })
-            await Comments.deleteMany({ _id: { $in: post.comments } })
+            await Comments.deleteMany({ _id: { $in: post?.comments } })
+
+            res.json({
+                msg: 'Deleted Post!',
+                newPost: {
+                    ...post,
+                    user: userData
+                }
+            })
+
+
+        } catch (err) {
+            return res.status(500).json({ msg: err.message })
+        }
+    },
+    deletePostByAdmin: async (req, res) => {
+        try {
+            const userData = await Users.findById(req.params.userId).select('-password');
+            const post = await Posts.findOneAndDelete({ _id: req.params.id, user: req.params.userId })
+            
+            await Comments.deleteMany({ _id: { $in: post?.comments } })
 
             res.json({
                 msg: 'Deleted Post!',

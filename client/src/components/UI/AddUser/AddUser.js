@@ -43,7 +43,7 @@ const schema = yup.object().shape({
 function AddUser({ open, onClose, onRegister, loading }) {
   const classes = useStyle();
   const [visiblePw, setVisiblePw] = useState(false);
-    const {
+  const {
     register,
     handleSubmit,
     formState: { errors },
@@ -66,89 +66,83 @@ function AddUser({ open, onClose, onRegister, loading }) {
       </div>
 
       <DialogContent classes={{ root: classes.content }}>
-            <form
-      className={`${classes.root} flex-col`}
-      onSubmit={handleSubmit(onRegister)}
-      autoComplete="off">
-      <div className="flex-col">
-        <div className="t-center my-5">
-          <AccountCircleIcon className={classes.labelIcon} />
-        </div>
-      </div>
+        <form
+          className={`${classes.root} flex-col`}
+          onSubmit={handleSubmit(onRegister)}
+          autoComplete="off">
+          <div className="flex-col mb-4">
+            <InputCustom
+              label="Email"
+              size="small"
+              placeholder="Nhập email"
+              error={Boolean(errors.email)}
+              inputProps={{
+                name: 'email',
+                maxLength: MAX.EMAIL_LEN,
+                autoFocus: true,
+                ...register('email'),
+              }}
+            />
+            {errors.email && <p className="text-error">{errors.email?.message}</p>}
+          </div>
 
-      <div className="flex-col mb-4">
-        <InputCustom
-          label="Email"
-          size="small"
-          placeholder="Nhập email"
-          error={Boolean(errors.email)}
-          inputProps={{
-            name: 'email',
-            maxLength: MAX.EMAIL_LEN,
-            autoFocus: true,
-            ...register('email'),
-          }}
-        />
-        {errors.email && <p className="text-error">{errors.email?.message}</p>}
-      </div>
+          <div className="flex-col mb-4">
+            <InputCustom
+              label="Họ tên"
+              size="small"
+              placeholder="Nhập họ tên"
+              error={Boolean(errors.name)}
+              inputProps={{
+                name: 'name',
+                maxLength: MAX.NAME_LEN,
+                ...register('name'),
+              }}
+            />
+            {errors.name && <p className="text-error">{errors.name?.message}</p>}
+          </div>
 
-      <div className="flex-col mb-4">
-        <InputCustom
-          label="Họ tên"
-          size="small"
-          placeholder="Nhập họ tên"
-          error={Boolean(errors.name)}
-          inputProps={{
-            name: 'name',
-            maxLength: MAX.NAME_LEN,
-            ...register('name'),
-          }}
-        />
-        {errors.name && <p className="text-error">{errors.name?.message}</p>}
-      </div>
+          <div className="flex-col mb-4">
+            <InputCustom
+              label="Mật khẩu"
+              size="small"
+              placeholder="Nhập mật khẩu"
+              error={Boolean(errors.password)}
+              inputProps={{
+                name: 'password',
+                maxLength: MAX.PASSWORD_LEN,
+                type: visiblePw ? 'text' : 'password',
+                ...register('password'),
+              }}
+              endAdornment={
+                visiblePw ? (
+                  <VisibilityIcon
+                    className={`${classes.icon} ${classes.visiblePw}`}
+                    onClick={() => setVisiblePw(false)}
+                  />
+                ) : (
+                  <VisibilityOffIcon
+                    className={classes.icon}
+                    onClick={() => setVisiblePw(true)}
+                  />
+                )
+              }
+            />
+            {errors.password && (
+              <p className="text-error">{errors.password?.message}</p>
+            )}
+          </div>
 
-      <div className="flex-col mb-4">
-        <InputCustom
-          label="Mật khẩu"
-          size="small"
-          placeholder="Nhập mật khẩu"
-          error={Boolean(errors.password)}
-          inputProps={{
-            name: 'password',
-            maxLength: MAX.PASSWORD_LEN,
-            type: visiblePw ? 'text' : 'password',
-            ...register('password'),
-          }}
-          endAdornment={
-            visiblePw ? (
-              <VisibilityIcon
-                className={`${classes.icon} ${classes.visiblePw}`}
-                onClick={() => setVisiblePw(false)}
-              />
-            ) : (
-              <VisibilityOffIcon
-                className={classes.icon}
-                onClick={() => setVisiblePw(true)}
-              />
-            )
-          }
-        />
-        {errors.password && (
-          <p className="text-error">{errors.password?.message}</p>
-        )}
-      </div>
-
-      <Button
-        className="_btn _btn-primary"
-        type="submit"
-        variant="contained"
-        color="primary"
-        disabled={loading}
-        endIcon={loading && <LoopIcon className="ani-spin" />}
-        size="large">
-        Đăng ký
-      </Button>
-    </form>
+          <Button
+            className="_btn _btn-primary"
+            type="submit"
+            variant="contained"
+            color="primary"
+            disabled={loading}
+            endIcon={loading && <LoopIcon className="ani-spin" />}
+            size="large">
+            Đăng ký
+          </Button>
+        </form>
       </DialogContent>
     </Dialog>
   );

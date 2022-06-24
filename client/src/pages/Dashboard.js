@@ -255,7 +255,7 @@ const Dashboard = () => {
                 <div className="col-12">
                     <div className="card">
                         <div className="card__header">
-                            <h3>top customers</h3>
+                            <div className='title'>top customers</div>
                         </div>
                         <div className="card__body">
                             <Table

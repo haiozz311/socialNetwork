@@ -49,9 +49,9 @@ const accountApi = {
     });
   },
 
-  putUpdateProfileByAdmin: (name = '', coin, role , token, id) => {
-    return axiosClient.patch(`${URL}/user/updateInforUser/${id}`, { name ,coin, role }, {
-      headers: { Authorization: token }
+  putUpdateProfileByAdmin: (name = '', coin, role , email, refresh_token, _id) => {
+    return axiosClient.patch(`${URL}/user/updateInforUser/${_id}`, { name, coin, role, email }, {
+      headers: { Authorization: refresh_token }
     });
   },
 

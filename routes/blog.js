@@ -5,4 +5,6 @@ router.get('/blog-list', blogController.getBlogList);
 
 router.get('/blog-html', blogController.getBlogHtml);
 
+router.post('/add-blog-html', blogController.addBlog);
+
 module.exports = router;

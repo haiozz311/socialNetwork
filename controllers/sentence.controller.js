@@ -4,6 +4,9 @@ const {
   getTotalSentences: getTotalSentencesService,
   getSentenceList: getSentenceListService,
 } = require('../services/sentence.service');
+const SentenceModel = require('../models/sentence.model');
+
+
 
 exports.postContributeSentence = async (req, res, next) => {
   try {
@@ -55,5 +58,46 @@ exports.getSentenceList = async (req, res, next) => {
   } catch (error) {
     console.error(' ERROR: ', error);
     return res.status(500).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  }
+};
+
+exports.updateSentence = async (req, res, next) => {
+  try {
+    const {
+      sentence,
+      mean,
+      note,
+      topics,
+    } = req.body;
+    console.log('req.body', req.body);
+    const prevSentence = await SentenceModel.findById(req.params.id).select('word');
+    if (prevSentence.sentence !== sentence) {
+      const isExist = await isExistSentence(sentence);
+      if (isExist) {
+        return res
+          .status(409)
+          .json({ message: `Câu "${sentence}" đã tồn tại trong từ điển` });
+      }
+    }
+    await SentenceModel.findOneAndUpdate({ _id: req.params.id }, {
+      sentence,
+      mean,
+      note,
+      topics,
+      isChecked: false,
+    })
+
+    res.json({ msg: "Cập nhật từ vựng thành công" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
+  }
+};
+
+exports.deleteSentencce = async (req, res, next) => {
+  try {
+    await SentenceModel.findByIdAndDelete(req.params.id)
+    res.json({ msg: "Deleted Success!" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
   }
 };

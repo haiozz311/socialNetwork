@@ -111,7 +111,7 @@ const userCtrl = {
         try {
             const { email, password } = req.body
             const user = await Users.findOne({ email })
-            .populate("followers following", "avatar name followers following")
+                .populate("followers following", "avatar name followers following")
             if (!user) return res.status(400).json({ msg: "This email does not exist." })
 
             const isMatch = await bcrypt.compare(password, user.password)
@@ -214,9 +214,9 @@ const userCtrl = {
     },
     updateInforUser: async (req, res) => {
         try {
-            const { name, coin, role } = req.body
+            const { name, coin, role, email } = req.body
             await Users.findOneAndUpdate({ _id: req.params.id }, {
-                name, coin, role 
+                name, coin, role, email
             })
 
             res.json({ msg: "Update Success!" })
@@ -426,7 +426,7 @@ const userCtrl = {
         try {
             const users = await Users.find({ name: { $regex: req.query.name } })
                 .limit(10)
-                // .select("name avatar")
+            // .select("name avatar")
 
             res.json({ users })
         } catch (err) {
@@ -508,9 +508,9 @@ const userCtrl = {
     },
     getTotalUser: async (req, res) => {
         try {
-            const users = await Users.find().select('-password')
+            const users = await Users.find().populate('followers following')
 
-            res.json({users});
+            res.json({ users });
 
         } catch (err) {
             return res.status(500).json({ msg: err.message })

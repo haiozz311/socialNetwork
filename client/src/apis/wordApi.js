@@ -7,6 +7,38 @@ const wordApi = {
     return axiosClient.post(`${URL}/api/contribute/add-word`, { ...wordInfor });
   },
 
+  updateWordByAdmin: (
+    mean,
+    type,
+    level,
+    specialty,
+    note,
+    topics,
+    picture,
+    examples,
+    synonyms,
+    antonyms,
+    word,
+    phonetic,
+    refresh_token, _id) => {
+    return axiosClient.patch(`${URL}/api/updateWord/${_id}`, {
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic
+    }, {
+      headers: { Authorization: refresh_token }
+    });
+  },
+
   getCheckWordExistence: (word, type) => {
     return axiosClient.get(`${URL}/api/exist`, { params: { word, type } });
   },
@@ -44,7 +76,11 @@ const wordApi = {
         headers: { Authorization: token }
       });
   },
-
+  deleteWord: (id, token) => {
+    return axiosClient.delete(`${URL}/api/deleteWord/${id}`, {
+      headers: { Authorization: token }
+    });
+  },
 };
 
 export default wordApi;

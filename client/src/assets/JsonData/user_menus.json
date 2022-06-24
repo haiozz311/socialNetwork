@@ -1,17 +1,7 @@
 [
-    {
-        "icon": "bx bx-user",
-        "content": "Profile",
-        "href": "/profile"
-    },
-    {
-        "icon": "bx bx-cog",
-        "content": "Settings",
-        "href": "/settings"
-    },
-    {
-        "icon": "bx bx-log-out-circle bx-rotate-180",
-        "content": "Logout",
-        "href": "/logout"
-    }
+  {
+    "icon": "bx bx-user",
+    "content": "Profile",
+    "href": "/profile"
+  }
 ]

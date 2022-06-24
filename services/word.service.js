@@ -13,6 +13,21 @@ exports.createNewWord = async (wordInfo) => {
   }
 };
 
+exports.updateOldWord = async (wordInfo) => {
+  console.log('updateOldWord', ...wordInfo);
+  try {
+    const newWord = await WordModel.findOneAndUpdate({ _id: wordInfo._id }, {
+      ...wordInfo
+    });
+    if (newWord) {
+      return true;
+    }
+    return false;
+  } catch (error) {
+    throw error;
+  }
+};
+
 exports.searchWord = async (word = '', limit = 20, select = '') => {
   try {
     const regex = new RegExp(`^${word}.*`, 'gi');

@@ -6,18 +6,14 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import Avatar from '@material-ui/core/Avatar';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import Table from 'components/DashBoard/table/Table';
 import useStyle from './style';
+import AvatarGroup from '@material-ui/lab/AvatarGroup';
 
-function ModalUser({ open, onClose, item, onRemove, onUpdate, isUpdate, handleConfirmUpdate, renderHead, token }) {
+
+function ModalUser({ open, onClose, item, onRemove, onUpdate, renderHead }) {
   const classes = useStyle();
-  const [state, setState] = useState({
-    userName: item.name,
-    coin: item.coin,
-    role: item.role,
-  });
-  console.log('state', state);
   const customerTableHead = [
     'name',
     'email',
@@ -25,41 +21,33 @@ function ModalUser({ open, onClose, item, onRemove, onUpdate, isUpdate, handleCo
     'coin',
     'role',
     'avatar',
-];
-  const handleChange = evt => {
-    const { name, value } = evt.target;
-    setState((prevState) => {
-      return {
-        ...prevState,
-        [name]: value,
-      };
-    });
-  };
+    'follower',
+    'following',
+  ];
 
   const renderBody = (item, index) => (
     <tr key={index}>
-        <td>{item.name}</td>
-        <td>{item.email}</td>
-        <td>{item.authType === 'gg' ? 'Gmail' : item.authType === 'fb' ? 'Facebook': 'Local'}</td>
-        <td>{item.coin}</td>
-        <td>{item.role === 0 ? 'User' : 'Admin'}</td>
-        <Avatar src={item.avatar} />
+      <td>{item.name}</td>
+      <td>{item.email}</td>
+      <td>{item.authType === 'gg' ? 'Gmail' : item.authType === 'fb' ? 'Facebook' : 'Local'}</td>
+      <td>{item.coin}</td>
+      <td>{item.role === 0 ? 'User' : 'Admin'}</td>
+      <td><Avatar src={item.avatar} /></td>
+      <td>
+        <AvatarGroup total={5}>
+          {item.followers && item?.followers?.map(item => (
+            <Avatar alt="Remy Sharp" src={item?.avatar} />
+          ))}
+        </AvatarGroup></td>
+      <td>
+        <AvatarGroup total={5}>
+          {item.following && item?.following?.map(item => (
+            <Avatar alt="Remy Sharp" src={item?.avatar} />
+          ))}
+        </AvatarGroup></td>
     </tr>
-);
+  );
 
-  const renderBodyUpdate = (item, index) => (
-  <tr key={index} onClick={() => {}}>
-        <td><input className={classes.borderInput} type="text" placeholder={`${state.userName}`} name="userName" value={state.userName} onChange={handleChange} /></td>
-        <td>{item.email}</td>
-        <td>{item.authType === 'gg' ? 'Gmail' : item.authType === 'fb' ? 'Facebook': 'Local'}</td>
-        <td><input type="number" className={`${classes.borderInput} ${classes.widthCoin}`} value={state.coin} name="coin" onChange={handleChange} /></td>
-        <td><select name="role" className={classes.borderInput} onChange={handleChange} value={state.role}>
-          <option value="0">User</option>
-          <option value="1">Admin</option>
-        </select></td>
-        <td><Avatar src={item.avatar} /></td>
-    </tr>
-);
   return (
     <Dialog
       classes={{
@@ -80,13 +68,10 @@ function ModalUser({ open, onClose, item, onRemove, onUpdate, isUpdate, handleCo
           headData={customerTableHead}
           renderHead={(item, index) => renderHead(item, index)}
           bodyData={[item]}
-          renderBody={(item, index) => !isUpdate ? renderBody(item, index) : renderBodyUpdate(item, index)}
-      />
+          renderBody={(item, index) => renderBody(item, index)}
+        />
       </DialogContent>
       <div className="d-flex jus-content-end">
-        {
-          !isUpdate ? (
-            <>
         <DialogActions className={classes.actions}>
           <Button
             onClick={onUpdate}
@@ -105,36 +90,6 @@ function ModalUser({ open, onClose, item, onRemove, onUpdate, isUpdate, handleCo
             Xóa
           </Button>
         </DialogActions>
-            </>
-          ) : <>
-          <DialogActions className={classes.actions}>
-          <Button
-            onClick={() => {
-              handleConfirmUpdate({id: item._id,
-                name: state.userName,
-                coin: state.coin,
-                role: state.role,
-                token: token
-              });
-            }}
-            color="primary"
-            size="small"
-            variant="contained">
-            Cập nhật thông tin
-          </Button>
-        </DialogActions>
-        <DialogActions className={classes.actions}>
-          <Button
-            // className="_btn _btn-primary"
-            onClick={onClose}
-            color="secondary"
-            size="small"
-            variant="outlined">
-            Đóng
-          </Button>
-        </DialogActions></>
-        }
-
       </div>
     </Dialog>
   );
@@ -145,11 +100,8 @@ ModalUser.propTypes = {
   open: PropTypes.bool,
   onRemove: PropTypes.func,
   onUpdate: PropTypes.func,
-  isUpdate: PropTypes.bool,
-  handleConfirmUpdate: PropTypes.func,
-  renderHead: PropTypes.any,
   renderBody: PropTypes.any,
-  token: PropTypes.any,
+  renderHead: PropTypes.any,
 };
 
 ModalUser.defaultProps = {

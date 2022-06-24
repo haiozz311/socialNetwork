@@ -19,7 +19,7 @@ export const createPost = createAsyncThunk(
       },
     );
     console.log({ res });
-      // Notify
+    // Notify
     if (res) {
       const msg = {
         id: res.data.newPost._id,
@@ -28,7 +28,7 @@ export const createPost = createAsyncThunk(
         url: `/post/${res.data.newPost._id}`,
         content,
         image: media[0].url
-    }
+      }
 
       const resNotify = await axiosClient.post(
         `${URL}/api/notify`,
@@ -41,10 +41,10 @@ export const createPost = createAsyncThunk(
       socket.emit('createNotify', {
         ...resNotify.data.notify,
         user: {
-            name: userInfor.name,
-            avatar: userInfor.avatar
+          name: userInfor.name,
+          avatar: userInfor.avatar
         }
-    })
+      })
       console.log({ resNotify });
     }
 
@@ -158,7 +158,7 @@ export const deleteDataAPI = async (url, token) => {
 
 export const deleteComment = createAsyncThunk(
   'post/deleteComment',
-  async ({ post, comment, refresh_token,socket }) => {
+  async ({ post, comment, refresh_token, socket }) => {
     const deleteArr = [
       ...post.comments.filter((cm) => cm.reply === comment._id),
       comment,
@@ -244,7 +244,7 @@ export const deletePost = createAsyncThunk(
     const res = await axiosClient.delete(`/api/post/${post._id}`, {
       headers: { Authorization: refresh_token },
     });
-    console.log({res});
+    console.log({ res });
     if (res) {
       console.log(res.data.newPost._doc);
       const msg = {
@@ -252,7 +252,7 @@ export const deletePost = createAsyncThunk(
         text: 'đã xóa bài viết này',
         recipients: res.data.newPost.user.followers,
         url: `/post/${post._id}`,
-    }
+      }
       console.log({ msg });
       const resNotify = await axiosClient.delete(
         `${URL}/api/notify/${msg.id}?url=${msg.url}`,
@@ -263,8 +263,33 @@ export const deletePost = createAsyncThunk(
       socket.emit('removeNotify', msg);
       console.log({ resNotify });
     }
+    return post;
+  },
+);
 
-
+export const deletePostbyAdmin = createAsyncThunk(
+  'post/deletePostByAdmin',
+  async ({ idPostRemove, post, refresh_token, socket }) => {
+    const res = await axiosClient.delete(`/api/postByAdmin/${idPostRemove}/${post._id}`,
+      {
+      headers: { Authorization: refresh_token },
+      });
+    if (res) {
+      const msg = {
+        id: post._id,
+        text: 'đã xóa bài viết này',
+        recipients: res.data.newPost.user.followers,
+        url: `/post/${post._id}`,
+      }
+      const resNotify = await axiosClient.delete(
+        `${URL}/api/notify/${msg.id}?url=${msg.url}`,
+        {
+          headers: { Authorization: refresh_token },
+        },
+      );
+      socket.emit('removeNotify', msg);
+    }
+    console.log('post', post);
     return post;
   },
 );
@@ -333,6 +358,12 @@ const postSlice = createSlice({
       state.posts = data;
     },
     [deletePost.fulfilled]: (state, action) => {
+      const data = state.posts.filter(
+        (item) => item._id !== action.payload._id,
+      );
+      state.posts = data;
+    },
+    [deletePostbyAdmin.fulfilled]: (state, action) => {
       const data = state.posts.filter(
         (item) => item._id !== action.payload._id,
       );

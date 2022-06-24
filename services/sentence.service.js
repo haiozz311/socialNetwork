@@ -38,7 +38,7 @@ exports.getSentenceList = async (page = 1, perPage = 20, topics = []) => {
     const list = await SentenceModel.find(query)
       .skip(skip)
       .limit(perPageInt)
-      .select('-_id -isChecked -topics');
+      // .select('-_id -isChecked -topics');
 
     return list;
   } catch (error) {

@@ -10,6 +10,10 @@ const blogApi = {
   getBlogHtml: (_id) => {
     return axiosClient.get(`${URL}/api/blog-html`, { params: { _id } });
   },
+
+  addBlog: () => {
+    return axiosClient.post(`${URL}/api/add-blog-html`);
+  },
 };
 
 export default blogApi;

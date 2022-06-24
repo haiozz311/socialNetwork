@@ -13,5 +13,11 @@ router.get(
   auth,
   wordController.getUserFavoriteList,
 );
+router.patch(
+  '/updateWord/:id', auth,
+  wordController.updateWord,
+);
+router.delete('/deleteWord/:id', auth, wordController.deleteWord)
+
 
 module.exports = router;

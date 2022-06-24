@@ -5,32 +5,27 @@
         "icon": "bx bx-category-alt"
     },
     {
-        "display_name": "Customers",
+        "display_name": "Người Dùng",
         "route": "/customers",
         "icon": "bx bx-user-pin"
     },
     {
-        "display_name": "Words",
+        "display_name": "Từ Vựng",
         "route": "/words",
         "icon": "bx bx-package"
     },
     {
-        "display_name": "Centences",
+        "display_name": "Câu",
         "route": "/centences",
         "icon": "bx bx-list-check"
     },
     {
-        "display_name": "Posts",
+        "display_name": "Bài Viết",
         "route": "/posts",
         "icon": "bx bx-bar-chart-alt"
     },
     {
-        "display_name": "Comments",
-        "route": "/comments",
-        "icon": "bx bx-list-ol"
-    },
-    {
-        "display_name": "HighScores",
+        "display_name": "Thứ Hạng",
         "route": "/highscores",
         "icon": "bx bx-gift"
     },

@@ -8,18 +8,20 @@ import wordApi from 'apis/wordApi';
 import InputCustom from 'components/UI/InputCustom';
 import SelectCustom from 'components/UI/SelectCustom';
 import TopicSelect from 'components/UI/TopicSelect';
-import UploadButton from 'components/UI/UploadButton';
+import CloudUploadIcon from '@material-ui/icons/CloudUpload';
 import { MAX, WORD_LEVELS, WORD_SPECIALTY, WORD_TYPES } from 'constant';
 import { debounce } from 'helper';
 import PropTypes from 'prop-types';
 import React, { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import * as yup from 'yup';
 import InformationTooltip from './InformationTooltip';
 import PhoneticInput from './PhoneticInput';
 import useStyle from './style';
+import axios from 'axios';
+
 
 let delayTimer = null;
 
@@ -81,6 +83,10 @@ const TagsWrapper = (props) => <Grid {...props} item xs={12} />;
 function WordContribution({ onSubmitForm, submitting }) {
   const classes = useStyle();
   const [resetFlag, setResetFlag] = useState(0);
+  const [imageWord, setImageWord] = useState(null);
+  console.log('imageWord', imageWord);
+  const { refresh_token } = useSelector((state) => state.token);
+
   const dispatch = useDispatch();
   const {
     register,
@@ -93,10 +99,10 @@ function WordContribution({ onSubmitForm, submitting }) {
   });
 
   const topics = useRef([]);
-  const picture = useRef(null);
 
   const onSubmit = (data) => {
-    onSubmitForm({ ...data, topics: topics.current, picture: picture.current });
+    console.log('data submit', { ...data, topics: topics.current, picture: imageWord });
+    onSubmitForm({ ...data, topics: topics.current, picture: imageWord });
   };
 
   const onResetForm = () => {
@@ -113,7 +119,6 @@ function WordContribution({ onSubmitForm, submitting }) {
       note: '',
     };
     topics.current = [];
-    picture.current = null;
     reset(initialValues);
     setResetFlag(Math.random() + 1);
   };
@@ -139,11 +144,34 @@ function WordContribution({ onSubmitForm, submitting }) {
               );
             }
           }
-        } catch (error) {}
+        } catch (error) { }
       },
       1000,
     );
   };
+
+  const changeWordImage = async (e) => {
+    e.preventDefault();
+    try {
+      const file = e.target.files[0];
+      let formData = new FormData();
+      formData.append('file', file);
+      const res = await axios.post('/api/uploadWordImage', formData, {
+        headers: { 'content-type': 'multipart/form-data', Authorization: refresh_token }
+      });
+      if (res.status = 200) {
+        dispatch(
+          setMessage({ message: 'Cập nhật ảnh cho từ vựng thành công !', type: 'success' }),
+        );
+        setImageWord(res?.data?.url);
+      }
+
+    } catch (err) {
+      dispatch(
+        setMessage({ message: 'Cập nhật ảnh thất bại', type: 'error' }),
+      );
+    }
+  }
 
   return (
     <div className={classes.root}>
@@ -151,7 +179,7 @@ function WordContribution({ onSubmitForm, submitting }) {
       <div className="dyno-break"></div>
 
       <form onSubmit={handleSubmit(onSubmit)} autoComplete="off">
-        <Grid className={classes.grid} container spacing={3}>
+        <Grid className={classes.grid} container spacing={3} mb-4>
           {/* new word */}
           <Grid item xs={12} md={6} lg={4}>
             <InputCustom
@@ -329,12 +357,27 @@ function WordContribution({ onSubmitForm, submitting }) {
 
           {/* picture */}
           <Grid item xs={12} md={6} lg={4}>
-            <UploadButton
-              title="Thêm ảnh minh hoạ"
-              className="w-100 h-100"
-              resetFlag={resetFlag}
-              onChange={(imgSrc) => (picture.current = imgSrc)}
-            />
+            <>
+              <input
+                className={classes.hidden}
+                accept="image/*"
+                id="button-file"
+                htmlFor="contained-button-file"
+                type="file"
+                onChange={changeWordImage}
+              />
+              <label htmlFor="button-file">
+                <Button
+                  style={{ marginLeft: 0 }}
+                  className={`${classes.btn} w-100 h-100`}
+                  variant="contained"
+                  color="primary"
+                  component="span"
+                  endIcon={<CloudUploadIcon />}>
+                   Ảnh minh hoạ
+                </Button>
+              </label>
+            </>
           </Grid>
 
           {/* word topics */}
@@ -381,7 +424,7 @@ WordContribution.propTypes = {
 };
 
 WordContribution.defaultProps = {
-  onSubmitForm: function () {},
+  onSubmitForm: function () { },
   submitting: false,
 };
 

@@ -8,6 +8,8 @@ import Words from 'pages/Words';
 import Centences from 'pages/Centences';
 import Posts from 'pages/Posts';
 import Profile from 'pages/Profile';
+import Highscores from 'pages/Highscores';
+import Blogs from 'pages/Blogs';
 
 const Routes = () => {
   return (
@@ -18,6 +20,8 @@ const Routes = () => {
       <Route path='/centences' component={Centences} />
       <Route path='/posts' component={Posts} />
       <Route path='/profile' component={Profile} />
+      <Route path='/highscores' component={Highscores} />
+      <Route path='/blogs' component={Blogs} />
     </Switch>
   );
 };

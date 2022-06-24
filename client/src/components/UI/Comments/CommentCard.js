@@ -59,9 +59,9 @@ const CommentCard = ({ children, comment, post, commentId }) => {
   return (
 
     <div >
-      <Link to={`/profile/${comment.user._id}`} className="d-flex mx-8">
-        <Avatar src={comment.user.avatar} />
-        <h4 className={`${classes.textName} ml-4`}>{comment.user.name}</h4>
+      <Link to={`/profile/${comment?.user?._id}`} className="d-flex mx-8">
+        <Avatar src={comment?.user?.avatar} />
+        <h4 className={`${classes.textName} ml-4`}>{comment?.user?.name}</h4>
       </Link>
       <div className={`${classes.textContent} my-4`}>
         <div className="d-flex jus-content-between align-i-center mr-8">

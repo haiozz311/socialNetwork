@@ -8,8 +8,10 @@ const {
   searchWord,
   getWordDetail,
   getFavoriteList,
+  updateOldWord
 } = require('../services/word.service');
 const Users = require('../models/userModel')
+const WordModel = require('../models/word.model');
 
 exports.postContributeWord = async (req, res, next) => {
   try {
@@ -24,16 +26,16 @@ exports.postContributeWord = async (req, res, next) => {
     }
 
     // upload description picture if available
-    let pictureUrl = null;
-    if (picture) {
-      pictureUrl = await uploadImage(picture, 'dynonary/words');
-    }
+    // let pictureUrl = null;
+    // if (picture) {
+    //   pictureUrl = await uploadImage(picture, 'dynonary/words');
+    // }
 
     // create the new word
     const isCreateSuccess = await createNewWord({
       word,
       type,
-      picture: pictureUrl,
+      picture,
       isChecked: false,
       ...rest,
     });
@@ -47,6 +49,54 @@ exports.postContributeWord = async (req, res, next) => {
     return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
   }
 };
+
+exports.updateWord = async (req, res, next) => {
+  try {
+    const {
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic } = req.body;
+    console.log('req.body', req.body);
+    const prevWord = await WordModel.findById(req.params.id).select('word');
+    if (prevWord.word !== word) {      
+      const isExist = await isExistWord(word, type);
+      if (isExist) {
+        return res
+          .status(409)
+          .json({ message: `Từ "${word} (${type})" đã tồn tại trong từ điển` });
+      }
+    }
+    await WordModel.findOneAndUpdate({ _id: req.params.id }, {
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic
+    })
+
+    res.json({ msg: "Cập nhật từ vựng thành công" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
+  }
+};
+
+
 
 exports.getCheckWordExistence = async (req, res) => {
   try {
@@ -71,7 +121,7 @@ exports.getWordPack = async (req, res) => {
       JSON.parse(packInfo),
       skip,
       perPageInt,
-      '-_id type word mean phonetic picture',
+      '_id type word mean phonetic picture level topics examples specialty synonyms antonyms note',
       sortType === 'asc' ? '1' : sortType === 'desc' ? '-1' : null,
       null,
     );
@@ -91,7 +141,7 @@ exports.getSearchWord = async (req, res) => {
       20,
       isCompact == 'true'
         ? '-_id word'
-        : '-_id type word mean phonetic picture',
+        : '_id type word mean phonetic picture level specialty note topics examples synonyms antonyms',
     );
     return res.status(200).json({ packList: list });
   } catch (error) {
@@ -110,6 +160,15 @@ exports.getWordDetails = async (req, res, next) => {
   } catch (error) {
     console.error('GET WORD DETAILS ERROR: ', error);
     return res.status(503).json({ message: 'Lỗi dịch vụ, thử lại sau' });
+  }
+};
+
+exports.deleteWord = async (req, res, next) => {
+  try {
+    await WordModel.findByIdAndDelete(req.params.id)
+    res.json({ msg: "Deleted Success!" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
   }
 };
 
@@ -148,5 +207,4 @@ exports.getUserFavoriteList = async (req, res, next) => {
     return res.status(500).json({ message: 'Lỗi dịch vụ, thử lại sau' });
   }
 };
-
 

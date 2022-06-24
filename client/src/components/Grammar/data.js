@@ -2,9 +2,10 @@ import blogApi from 'apis/blogApi';
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
+import PropTypes from 'prop-types';
 import Grammar from '.';
 
-function GrammarData() {
+function GrammarData({ isAdmin }) {
   const dispatch = useDispatch();
   const [list, setList] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +33,15 @@ function GrammarData() {
     };
   }, []);
 
-  return <Grammar loading={loading} list={list} />;
+  return <Grammar loading={loading} list={list} isAdmin={isAdmin} />;
 }
+
+GrammarData.propTypes = {
+  isAdmin: PropTypes.bool,
+};
+
+GrammarData.defaultProps = {
+  isAdmin: false,
+};
 
 export default GrammarData;

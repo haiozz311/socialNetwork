@@ -30,6 +30,7 @@ const IPA_CHARS = [
   'ʃ',
   'ŋ',
   'ʒ',
+  'k'
 ];
 
 function PhoneticKeyboard({ onClose, onInput }) {
