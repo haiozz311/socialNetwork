@@ -110,4 +110,10 @@ export default makeStyles(() => ({
       transform: 'scale(1.1)',
     },
   },
+
+  coverBtn: {
+    position: 'absolute',
+    top: 0,
+    right: 0,
+  }
 }));

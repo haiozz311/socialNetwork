@@ -67,7 +67,7 @@ exports.updateWord = async (req, res, next) => {
       phonetic } = req.body;
     console.log('req.body', req.body);
     const prevWord = await WordModel.findById(req.params.id).select('word');
-    if (prevWord.word !== word) {      
+    if (prevWord.word !== word) {
       const isExist = await isExistWord(word, type);
       if (isExist) {
         return res
@@ -89,6 +89,55 @@ exports.updateWord = async (req, res, next) => {
       word,
       phonetic
     })
+
+    res.json({ msg: "Cập nhật từ vựng thành công" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
+  }
+};
+
+exports.requestWord = async (req, res, next) => {
+  try {
+    const {
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic } = req.body;
+    const isExist = await isExistWord(word, type);
+    if (isExist) {
+      return res
+        .status(409)
+        .json({ message: `Từ "${word} (${type})" đã tồn tại trong từ điển` });
+    }
+    const newRequestWord = new WordModel({
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic
+    })
+    const users = await Users.findOneAndUpdate({ id: req.user.id })
+    await Users.findOneAndUpdate({ _id: req.user.id }, {
+      $push: { requestWord: newRequestWord._id }
+    }, { new: true })
+    console.log('users', users);
+    // const data = users.requestWord.push(newRequestWord);
+    // await users.save()
 
     res.json({ msg: "Cập nhật từ vựng thành công" })
   } catch (err) {

@@ -135,13 +135,13 @@ function ModalAddBlogs({ open, onClose, onRegister }) {
             </Button>
             <Button
               type="submit"
-              className={`${classes.btn} _btn _btn-primary`}
+              className={`${classes.btn} _btn _btn-primary ml-2`}
               // disabled={submitting}
               // endIcon={
               //   submitting ? <LoopIcon className="ani-spin" /> : <SaveIcon />
               // }
               variant="contained">
-              Thêm từ
+                Tạo
             </Button>
           </div>
         </form>

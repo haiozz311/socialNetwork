@@ -11,8 +11,8 @@ const blogApi = {
     return axiosClient.get(`${URL}/api/blog-html`, { params: { _id } });
   },
 
-  addBlog: () => {
-    return axiosClient.post(`${URL}/api/add-blog-html`);
+  addBlog: ({ title, desc, html }) => {
+    return axiosClient.post(`${URL}/api/add-blog-html`, { title, desc, html });
   },
 };
 

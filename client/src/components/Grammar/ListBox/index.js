@@ -1,9 +1,12 @@
 import Collapse from '@material-ui/core/Collapse';
 import ArrowUpIcon from '@material-ui/icons/ExpandLess';
 import Skeleton from '@material-ui/lab/Skeleton';
+import Button from '@material-ui/core/Button';
 import PropTypes from 'prop-types';
 import React, { useEffect, useState } from 'react';
 import useStyle from './style';
+import { useSelector } from 'react-redux';
+
 
 function GrammarListBox({
   number,
@@ -16,6 +19,7 @@ function GrammarListBox({
 }) {
   const classes = useStyle();
   const [showBlog, setShowBlog] = useState(false);
+  const { isAdmin } = useSelector((state) => state.userInfo);
 
   const onToggleBlog = () => {
     // If blog not exist -> get blog, else toggle blog
@@ -38,14 +42,12 @@ function GrammarListBox({
   return (
     <div className={loading ? 'disabled' : ''}>
       <div
-        className={`${classes.root} d-flex cur-pointer ${
-          showBlog ? 'active' : ''
-        }`}
+        className={`${classes.root} d-flex cur-pointer ${showBlog ? 'active' : ''
+          }`}
         onClick={onToggleBlog}>
         <div
-          className={`${classes.number} ${
-            showBlog ? 'active' : ''
-          } flex-center`}>
+          className={`${classes.number} ${showBlog ? 'active' : ''
+            } flex-center`}>
           {number}
         </div>
 
@@ -56,11 +58,39 @@ function GrammarListBox({
             <Skeleton animation="wave" className="w-100 h-100" />
           </div>
         ) : (
-          <div className={classes.content}>
-            <div className={classes.title}>{title}</div>
-            <div className={classes.desc}>{desc}</div>
-          </div>
+          <>
+            <div className={classes.content}>
+              <div className={classes.title}>{title}</div>
+              <div className={classes.desc}>{desc}</div>
+            </div>
+          </>
         )}
+        {/* {
+          isAdmin && (
+            <div className={classes.coverBtn}>
+              <Button
+                type="submit"
+                className={`${classes.btn} _btn-primary`}
+                // disabled={submitting}
+                // endIcon={
+                //   submitting ? <LoopIcon className="ani-spin" /> : <SaveIcon />
+                // }
+                variant="contained">
+                Cập nhật
+              </Button>
+              <Button
+                className={`${classes.btn} ${classes.btnReset}  ml-2`}
+                color="secondary"
+                // endIcon={<ResetIcon />}
+                variant="outlined"
+              // disabled={submitting}
+              // onClick={onResetForm}
+              >
+                Xóa
+              </Button>
+            </div>
+          )
+        } */}
       </div>
 
       <Collapse in={showBlog}>
@@ -91,7 +121,7 @@ GrammarListBox.defaultProps = {
   number: 0,
   loading: true,
   title: 'title',
-  onLoadBlog: function () {},
+  onLoadBlog: function () { },
 };
 
 export default GrammarListBox;

@@ -17,6 +17,10 @@ router.patch(
   '/updateWord/:id', auth,
   wordController.updateWord,
 );
+router.post(
+  '/requestWord/:id', auth,
+  wordController.requestWord,
+);
 router.delete('/deleteWord/:id', auth, wordController.deleteWord)
 
 

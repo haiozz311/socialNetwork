@@ -55,7 +55,7 @@ function ModalUpdateCentence({ open, item, onClose, onRegister, loading }) {
       maxWidth="md"
       open={open}>
       <div className={`${classes.title} flex-center-between`}>
-        <span>Cập nhật tài khoản</span>
+        <span>Cập nhật câu</span>
         <CloseIcon className="cur-pointer" onClick={onClose} />
       </div>
 

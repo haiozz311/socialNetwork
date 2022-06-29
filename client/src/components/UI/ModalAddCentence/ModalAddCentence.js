@@ -28,7 +28,7 @@ function ModalAddCentence({ open, onClose }) {
       maxWidth="md"
       open={open}>
       <div className={`${classes.title} flex-center-between`}>
-        <span>Tạo tài khoản</span>
+        <span>Tạo câu</span>
         <CloseIcon className="cur-pointer" onClick={onClose} />
       </div>
 

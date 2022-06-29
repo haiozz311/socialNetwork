@@ -57,7 +57,7 @@ const Words = () => {
 
   const [isAddUser, setIsAddUser] = useState(false);
   const [isUpdate, setIsUpdate] = useState(false);
-  const [sortType, setSortType] = useState(null);
+  const [sortType, setSortType] = useState('rand');
   const [submitting, setSubmitting] = useState(false);
 
   const settingWordPack = (info) => {
@@ -341,7 +341,7 @@ const Words = () => {
       <ConfirmBox // all props are required
         options={{
           icon: "https://img.icons8.com/clouds/100/000000/vector.png",
-          text: 'Are you sure you want to delete this element?', // alert text
+          text: 'Bạn có chắc chắn muốn xóa từ này không !', // alert text
           confirm: 'yes', // button text for cancel btn
           cancel: 'no', // button text for cancel btn
           btn: true // with or without buttons

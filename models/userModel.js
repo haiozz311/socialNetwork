@@ -52,7 +52,9 @@ const userSchema = new mongoose.Schema({
     story: { type: String, default: '', maxlength: 200 },
     followers: [{type: mongoose.Types.ObjectId, ref: 'Users'}],
     following: [{type: mongoose.Types.ObjectId, ref: 'Users'}],
-    saved: [{type: mongoose.Types.ObjectId, ref: 'Users'}]
+    saved: [{type: mongoose.Types.ObjectId, ref: 'Users'}],
+    saved: [{ type: mongoose.Types.ObjectId, ref: 'Users' }],
+    requestWord: [String],
 }, {
     timestamps: true
 })

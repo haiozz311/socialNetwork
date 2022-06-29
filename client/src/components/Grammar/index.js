@@ -11,6 +11,7 @@ import blogApi from 'apis/blogApi';
 import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import ModalAddBlogs from './../UI/ModalAddBlogs/ModalAddBlogs';
+import ModalUpdateBlog from './../UI/ModalUpdateBlog.js/ModalUpdateBlog';
 
 function Grammar({ list, loading, isAdmin }) {
   const classes = useStyle();
@@ -18,6 +19,8 @@ function Grammar({ list, loading, isAdmin }) {
   const [isAddUser, setIsAddUser] = useState(false);
   const preSearchList = useRef(list || []);
   const dispatch = useDispatch();
+  const [isUpdate, setIsUpdate] = useState(false);
+
 
   const onSearch = (keyword) => {
     if (keyword === '' && blogList.length !== preSearchList.current.length) {
@@ -49,24 +52,70 @@ function Grammar({ list, loading, isAdmin }) {
   const handleClose = () => {
     // setOpen(false);
     setIsAddUser(false);
-    // setIsUpdate(false);
+    setIsUpdate(false);
   };
 
   const handleAddBlogs = async data => {
+    try {
+      const { title, desc, html } = data;
+      const apiRes = await blogApi.addBlog({ title, desc, html });
+      if (apiRes) {
+        dispatch(setMessage({ message: 'Xóa câu thành công', type: 'success' }
+      ));
+      setTimeout(() => {
+        window.location.reload();
+      }, 300);
+      }
+    } catch (error) {
+      const message =
+        error?.response?.data?.message || 'Lấy tài liệu thất bại, thử lại !';
+      dispatch(setMessage({ message, type: 'error' }));
+    }
+  };
+
+  const handleUpdateWord = async (data) => {
+    console.log('handleUpdateWord');
+    // const { mean,
+    //   type,
+    //   level,
+    //   specialty,
+    //   note,
+    //   topics,
+    //   picture,
+    //   examples,
+    //   synonyms,
+    //   antonyms,
+    //   word,
+    //   phonetic } = data;
+    // const _id = item._id;
     // try {
-    //   const { title, desc, html } = data;
-    //   console.log('handleAddBlogs', title, desc, html)
-    //   const apiRes = await blogApi.addBlog({ title, desc, html });
-    //   console.log('apiRes', apiRes);
-    //   // if (apiRes.status === 200 && isSub) {
-    //   //   const { blogList = [] } = apiRes.data;
-    //   //   setLoading(false);
-    //   //   setList(blogList);
-    //   // }
-    // } catch (error) {
-    //   const message =
-    //     error?.response?.data?.message || 'Lấy tài liệu thất bại, thử lại !';
-    //   dispatch(setMessage({ message, type: 'error' }));
+    //   await wordApi.updateWordByAdmin(
+    //     mean,
+    //     type,
+    //     level,
+    //     specialty,
+    //     note,
+    //     topics,
+    //     picture,
+    //     examples,
+    //     synonyms,
+    //     antonyms,
+    //     word,
+    //     phonetic,
+    //     refresh_token,
+    //     _id
+    //   );
+    //   setOpen(false);
+    //   setIsUpdate(false);
+    //   // setRefresh(!refresh);
+    //   dispatch(
+    //     setMessage({ message: 'Cập nhật tự vựng thành công', type: 'success' }),
+    //   );
+    //   setTimeout(() => {
+    //     window.location.reload();
+    //   }, 300);
+    // } catch (err) {
+    //   dispatch(setMessage({ message: 'Cập nhật từ vựng thất bại', type: 'error' }));
     // }
   };
 
@@ -132,6 +181,15 @@ function Grammar({ list, loading, isAdmin }) {
           onClose={() => handleClose()}
           onRegister={handleAddBlogs}
         />
+        }
+        {
+          isUpdate && <ModalUpdateBlog
+            item={item}
+            open={isUpdate}
+            onClose={() => handleClose()}
+            onRegister={handleUpdateWord}
+            loading={loading}
+          />
         }
       </div>
     </div>
