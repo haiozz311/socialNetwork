@@ -95,7 +95,7 @@ const CommentCard = ({ children, comment, post, commentId }) => {
           <div className="d-flex jus-content-between align-i-center">
             <small>{moment(comment.createdAt).fromNow()}</small>
             <small className="px-8">
-              {comment.likes.length} likes
+              {comment.likes.length} Lượt thích
             </small>
             {
               onEdit
@@ -103,11 +103,11 @@ const CommentCard = ({ children, comment, post, commentId }) => {
                   <small className={`${classes.point}`}
                     onClick={handleUpdate}
                   >
-                    update
+                    Cập nhật
                   </small>
                   <small className={`${classes.point} px-8`}
                     onClick={() => setOnEdit(false)}>
-                    cancel
+                    Hủy
                   </small>
                 </>
 

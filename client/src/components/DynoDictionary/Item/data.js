@@ -14,7 +14,7 @@ function DynoDictionaryItemData(props) {
       setModal({ open: true, loading: true });
       const apiRes = await wordApi.getWordDetails(word);
       if (apiRes.status === 200) {
-        setModal({ open: true, loading: false, ...apiRes.data });
+        setModal({ open: true, loading: false, ...apiRes?.data });
       }
     } catch (error) {
       setModal({ open: false, loading: false });

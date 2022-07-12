@@ -37,6 +37,7 @@ function App() {
   const [loading, setLoading] = useState(false);
   const dispatch = useDispatch();
   const { isAuth, isAdmin } = useSelector((state) => state.userInfo);
+  console.log('isAdmin', isAdmin);
   const { call } = useSelector((state) => state.call);
   const { refresh_token } = useSelector((state) => state.token);
   const notify = useSelector((state) => state.notify);

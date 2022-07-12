@@ -101,7 +101,7 @@ const routes = [
   {
     path: ROUTES.GAMES.HOME,
     exact: true,
-    isProtect: false,
+    isProtect: true,
     component: () => <PlayGamesPage />,
   },
   {

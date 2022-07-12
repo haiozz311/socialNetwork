@@ -1,5 +1,6 @@
 const { addTopicsQuery } = require('../helper/word-pack.helper');
 const SentenceModel = require('../models/sentence.model');
+const SentenceRequest = require('../models/sentenceRequest');
 
 exports.createSentence = async (sentence, mean, note, topics) => {
   try {

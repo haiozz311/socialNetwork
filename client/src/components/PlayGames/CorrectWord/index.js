@@ -8,7 +8,7 @@ import PropTypes from 'prop-types';
 import React, { useEffect, useRef, useState } from 'react';
 import CorrectWordResult from '../Result';
 import useStyle from './style';
-
+// trộn câu trả lời
 function shuffleAnswers(word, phonetic, wrongList) {
   let mergeList = [...wrongList, { word, phonetic }];
   return mergeList.sort(() => Math.random() - 0.5);
@@ -42,6 +42,7 @@ function CorrectWord({ list }) {
     ),
     answerIndex: -1,
   });
+  console.log('state', state);
   const [isDone, setIsDone] = useState(false);
 
   const nQuestion = list.length;

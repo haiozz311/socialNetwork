@@ -64,14 +64,14 @@ function SearchInputCustom({ placeholder, showInput, prefixIcon }) {
           let navSearchList =
             NAV_SEARCH_DATA.filter(
               (i) =>
-                `${i.title} ${i.searchKey}`.indexOf(word.toLowerCase()) !== -1,
-            ).map((i) => ({ title: i.title, to: i.to })) || [];
+                `${i?.title} ${i?.searchKey}`.indexOf(word.toLowerCase()) !== -1,
+            ).map((i) => ({ title: i?.title, to: i.to })) || [];
 
           const apiRes = await wordApi.getSearchWord(word, true);
           if (apiRes.data?.packList) {
             navSearchList = [
               ...navSearchList,
-              ...apiRes.data.packList.map((i) => ({ title: i.word, to: null })),
+              ...apiRes.data.packList.map((i) => ({ title: i?.word, to: null })),
             ];
           }
 

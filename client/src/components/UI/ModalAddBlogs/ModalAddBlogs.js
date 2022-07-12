@@ -76,7 +76,7 @@ function ModalAddBlogs({ open, onClose, onRegister }) {
       maxWidth="md"
       open={open}>
       <div className={`${classes.title} flex-center-between`}>
-        <span>Tạo blogs</span>
+        <span>Tạo ngữ pháp</span>
         <CloseIcon className="cur-pointer" onClick={onClose} />
       </div>
 

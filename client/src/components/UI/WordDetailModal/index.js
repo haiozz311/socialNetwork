@@ -119,8 +119,8 @@ function WordDetailModal(props) {
               <b className={classes.label}>Chủ đề:</b>
 
               <div className={`${classes.topics} d-flex flex-wrap`}>
-                {sliceTopics(topics)||[].map((topic, index) => (
-                  <Tag key={index} title={topic.title} iconSrc={topic.icon} />
+                  {topics && sliceTopics(topics).map((topic, index) => (
+                  <Tag key={index} title={topic?.title} iconSrc={topic?.icon} />
                 ))}
               </div>
             </>

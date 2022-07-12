@@ -11,44 +11,49 @@ import Table from 'components/DashBoard/table/Table';
 import useStyle from './style';
 import { TOPICS } from 'constant/topics';
 import { WORD_SPECIALTY } from 'constant';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
-
 import Tag from 'components/UI/Tag';
 
 
-function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onOpenModalComment }) {
+function ModalWordRequest({ open, onClose, item, onRemove, onUpdate, renderHead }) {
   const classes = useStyle();
   const customerTableHead = [
-    'Nội Dung',
-    'Hình Ảnh',
-    'Người Thích Bài Viết',
-    'Lượt Bình Luận',
+    'Từ vựng',
+    'Phiên âm',
+    'Cấp bật từ',
+    'Loại từ',
+    'Hình ảnh',
+    'Nghĩa của từ',
+    'Chuyên ngành',
+    'Ví dụ',
+    'Từ đồng nghĩa',
+    'Từ trái nghĩa',
+    'chủ đề',
+    'chú thích',
   ];
+  function sliceTopics(topics) {
+    let res = [];
+    topics.forEach((topic) => {
+      res.push(TOPICS.find((i) => i.key === topic));
+    });
+    return res;
+  }
   const renderBody = (item, index) => (
     <tr key={index}>
-      <td>{item.content}</td>
-      <td className='d-flex'>
-        {
-          item.images.map(item =>
-            <Avatar variant="square" className='mx-2'>
-              <img style={{ width: '50px', marginRight: '10px' }} src={`https://res.cloudinary.com/dsvko7lfg/image/upload/${item.public_id}`} />
-            </Avatar>)
-        }
-      </td>
-      <td>
-        <AvatarGroup total={24}>
-          {item.likes && item.likes.map(item => (
-            <Avatar alt="Remy Sharp" src={item?.avatar} />
-          ))}
-        </AvatarGroup>
-      </td>
-      <td>
-        <AvatarGroup total={24}>
-          {item.comments && item.comments.map(item => (
-            <Avatar alt="Remy Sharp" src={item?.user?.avatar} />
-          ))}
-        </AvatarGroup>
-      </td>
+      <td>{item?.word}</td>
+      <td>{item?.phonetic}</td>
+      <td>{item?.level === '0' ? 'Chưa Xác Định' : item.level}</td>
+      <td>{item?.type ? item.type : 'Chưa Xác Định'}</td>
+      <td>{item?.picture ? <Avatar src={item.picture} /> : ''}</td>
+      <td>{item?.mean.length < 20 ? item.mean : item.mean.slice(0, 20) + '...'}</td>
+      <td>{WORD_SPECIALTY.find((i) => i.value === item.specialty)?.label ||
+        'Chưa Xác Định'}</td>
+      <td>{item?.examples}</td>
+      <td>{item?.synonyms ? item?.synonyms.join(', ') : ''}</td>
+      <td>{item?.antonyms ? item?.antonyms.join(', ') : ''}</td>
+      <td>{item.topics && sliceTopics(item.topics).map((topic, index) => (
+        <Tag key={index} title={topic.title} iconSrc={topic.icon} />
+      ))}</td>
+      <td>{item.note}</td>
     </tr>
   );
 
@@ -63,7 +68,7 @@ function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onO
       maxWidth="xl"
       open={open}>
       <div className={`${classes.title} flex-center-between`}>
-        <span>Chi tiết bài viết</span>
+        <span>Word</span>
         <CloseIcon className="cur-pointer" onClick={onClose} />
       </div>
 
@@ -78,20 +83,11 @@ function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onO
       <div className="d-flex jus-content-end">
         <DialogActions className={classes.actions}>
           <Button
-            onClick={onOpenModalComment}
-            color="primary"
-            size="small"
-            variant="contained">
-            Danh sách bình luận
-          </Button>
-        </DialogActions>
-        <DialogActions className={classes.actions}>
-          <Button
             onClick={onUpdate}
             color="primary"
             size="small"
             variant="contained">
-            Chỉnh sữa
+            Xác nhận
           </Button>
         </DialogActions>
         <DialogActions className={classes.actions}>
@@ -108,19 +104,18 @@ function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onO
   );
 }
 
-ModalComment.propTypes = {
+ModalWordRequest.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
   onRemove: PropTypes.func,
   onUpdate: PropTypes.func,
   renderHead: PropTypes.any,
   renderBody: PropTypes.any,
-  onOpenModalComment: PropTypes.func,
 };
 
-ModalComment.defaultProps = {
+ModalWordRequest.defaultProps = {
   onClose: function () { },
   open: false,
 };
 
-export default ModalComment;
+export default ModalWordRequest;

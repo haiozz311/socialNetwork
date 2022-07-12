@@ -20,8 +20,10 @@ const userInfoSlice = createSlice({
   reducers: {
 
     setDataUser(state, action) {
-      console.log('setDataUser', action);
-      const { authType, name, avatar, coin, favoriteList, email, role, createdAt, _id, followers, following } = action?.payload;
+      if (!action.payload) {
+        return;
+      }
+      const { authType = 'local', name, avatar, coin, favoriteList, email, role, createdAt, _id, followers, following } = action?.payload;
       if (!name || name === '') {
         state.isAuth = false;
         return;
@@ -71,6 +73,7 @@ const userInfoSlice = createSlice({
 
     setLogout(state, action) {
       state.isAuth = false;
+      state.isAdmin = false;
     },
 
     setLogin(state, action) {

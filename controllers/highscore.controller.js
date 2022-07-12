@@ -8,6 +8,7 @@ const Users = require('../models/userModel')
 exports.putUpdateHighScore = async (req, res, next) => {
   try {
     const { name, score } = req.body;
+    console.log('req.user.id', req.user.id);
     const user = await Users.findById(req.user.id).select('-password');
     console.log("user", user)
     const { _id } = user;

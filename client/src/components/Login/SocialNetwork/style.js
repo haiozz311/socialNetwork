@@ -5,7 +5,7 @@ export default makeStyles(() => ({
     width: '50%',
     display: 'flex',
     alignItems: 'center',
-    padding: '0.8rem 1.2rem',
+    padding: '0.45rem 1.2rem',
     margin: '0 0.8rem',
 
     border: 'solid 1px var(--border-color)',

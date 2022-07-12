@@ -83,7 +83,7 @@ function SettingInput({ open, onClose }) {
             disabled={loading}
             endIcon={loading && <LoopIcon className="ani-spin" />}
             variant="contained">
-            verify email
+            Xác nhận
           </Button>
         </div>
       </DialogContent>

@@ -76,15 +76,11 @@ const PostItem = ({ post, refresh_token, userInfo }) => {
                 handleUnLike={handleUnLike}
               />
             </IconButton>
-            {post.likes.length} likes
+            {post.likes.length} lượt thích
             <IconButton aria-label="ChatBubbleOutlineIcon">
               <ChatBubbleOutlineIcon />
             </IconButton>
-            {post.comments.length} comments
-            <IconButton aria-label="ChatBubbleOutlineIcon">
-              <SendIcon />
-            </IconButton>
-            <span>send</span>
+            {post.comments.length} bình luận
           </div>
           <div>
             <IconButton aria-label="BookmarkBorderIcon">

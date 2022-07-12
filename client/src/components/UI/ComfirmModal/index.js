@@ -47,9 +47,9 @@ export default function ComfirmModal({ post, open, onclose }) {
           </DialogContentText>
         </DialogContent>
         <DialogActions>
-          <Button onClick={onclose}>Disagree</Button>
+          <Button onClick={onclose}>Hủy</Button>
           <Button onClick={handleRemovePost} classNam="_btn _btn-primary" >
-            Agree
+            Xóa
           </Button>
         </DialogActions>
       </Dialog>

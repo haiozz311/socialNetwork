@@ -159,10 +159,13 @@ export const deleteDataAPI = async (url, token) => {
 export const deleteComment = createAsyncThunk(
   'post/deleteComment',
   async ({ post, comment, refresh_token, socket }) => {
+    console.log('post', post);
+    console.log('comment', comment);
     const deleteArr = [
-      ...post.comments.filter((cm) => cm.reply === comment._id),
+      ...post?.comments.filter((cm) => cm.reply === comment._id),
       comment,
     ];
+    console.log('deleteArr', deleteArr);
     const newPost = {
       ...post,
       comments: post.comments.filter(
@@ -174,21 +177,7 @@ export const deleteComment = createAsyncThunk(
     deleteArr.forEach((item) => {
       deleteDataAPI(`comment/${item._id}`, refresh_token);
     });
-    // const msg = {
-    //   id: item._id,
-    //   text: comment.reply ? 'mentioned you in a comment.' : 'has commented on your post.',
-    //   recipients: comment.reply ? [comment.tag._id] : [post.user._id],
-    //   url: `/post/${post._id}`,
-    // }
-
-    // dispatch(removeNotify({ msg, auth, socket }))
-
-    // const newComments = post.comments.map(cm => cm._id === comment._id ? { ...comment, content } : cm);
-    // const newPost = { ...post, comments: newComments };
-    // const res = await axiosClient.patch(`${URL}/api/comment/${comment._id}`, { content }, {
-    //   headers: { Authorization: refresh_token }
-    // });
-
+    console.log('done', newPost);
     return newPost;
   },
 );
@@ -355,6 +344,7 @@ const postSlice = createSlice({
       const data = state.posts.map((post) =>
         post._id === action.payload._id ? action.payload : post,
       );
+      console.log('my data', data);
       state.posts = data;
     },
     [deletePost.fulfilled]: (state, action) => {

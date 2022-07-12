@@ -1,23 +1,31 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import deleteIcon from 'assets/icons/message/delete.png';
 import phoneErr from 'assets/icons/message/phone-call-err.png';
 import { useSelector, useDispatch } from 'react-redux';
 import { deleteMessages } from 'redux/slices/messenger';
 import Times from './Times';
+import ConfirmBox from "react-dialog-confirm";
+import '../../../node_modules/react-dialog-confirm/build/index.css';
+
 
 const MsgDisplay = ({ user, msg }) => {
   const { refresh_token } = useSelector((state) => state.token);
   const message = useSelector((state) => state.messenger);
+  const [isOpen, setIsOpen] = useState(false);
+  const handleCancel = () => { setIsOpen(!isOpen) };
+
   const dispatch = useDispatch();
 
   const handleDeleteMessages = () => {
+
+  };
+  const handleCloseModal = () => { setIsOpen(!isOpen) };
+  const handleConfirm = async () => {
     if (!message.data) return;
     const data = message.data;
-    if (window.confirm('Do you want to delete?')) {
-      dispatch(deleteMessages({ msg, data, refresh_token }));
-    }
-  }
+    dispatch(deleteMessages({ msg, data, refresh_token }));
+  };
   return (
     <div className="display-message">
       <div className="cover-display">
@@ -64,6 +72,19 @@ const MsgDisplay = ({ user, msg }) => {
           </button>
         }
       </div>
+      <ConfirmBox // all props are required
+        options={{
+          icon: "https://img.icons8.com/clouds/100/000000/vector.png",
+          text: 'Bạn có chắc chắn muốn xóa không !', // alert text
+          confirm: 'yes', // button text for cancel btn
+          cancel: 'no', // button text for cancel btn
+          btn: true // with or without buttons
+        }}
+        isOpen={isOpen}
+        onClose={handleCloseModal}
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </div>
   );
 };

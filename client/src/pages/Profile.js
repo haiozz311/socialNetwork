@@ -2,26 +2,57 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import './styles/profile.scss';
-import Button from '@material-ui/core/Button';
-import Table from '../components/DashBoard/table/Table';
-import Avatar from '@material-ui/core/Avatar';
+import UserAccount from 'components/UserAccount';
+import accountApi from 'apis/accountApi';
+import { setMessage } from 'redux/slices/message.slice';
+
+
 
 const Profile = () => {
-  const [isUpdate, setIsUpdate] = useState(false);
   const userInfo = useSelector((state) => state.userInfo);
-    return (
-      <div className="profile">
-        <div className='imgBx'>
-          <img src={userInfo.avatar} alt="" />
-        </div>
-        <div className='content'>
-          <div className='details'>
-            <h2>{userInfo.name} <br /><span>{userInfo.email}</span> </h2>
-          </div>
-        </div>
+  const { refresh_token } = useSelector(state => state.token);
+  const [userData, setUserData] = useState([]);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    const getUserById = async () => {
+      const res = await accountApi.fetchUserById(userInfo._id, refresh_token);
+      setUserData(res.data.user);
+    };
+    getUserById();
+  }, [userInfo._id, userInfo.avatar]);
 
-        </div>
-    );
+  const handleUpdateProfile = async (name) => {
+    try {
+      const apiRes = await accountApi.putUpdateProfile(name, refresh_token);
+      if (apiRes.status === 200) {
+        dispatch(
+          setMessage({
+            type: 'success',
+            message: 'Cập nhật thông tin thành công',
+            duration: 500,
+          }),
+        );
+
+        setTimeout(() => {
+          location.reload();
+        }, 750);
+      }
+    } catch (error) {
+      const message =
+        error.response?.data?.message ||
+        'Chỉnh sửa thông tin thất bại, thử lại !';
+      dispatch(setMessage({ type: 'error', message }));
+    }
+  };
+  return (
+    <div className="profile">
+      <UserAccount
+        onUpdateProfile={handleUpdateProfile}
+        userData={userData}
+        id={userInfo._id}
+      />
+    </div>
+  );
 };
 
 export default Profile;

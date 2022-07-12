@@ -1,8 +1,9 @@
 // import accountApi from 'apis/accountApi';
-import ggIcon from 'assets/icons/gg-icon.png';
+// import ggIcon from 'assets/icons/gg-icon.png';
 import { UX } from 'constant';
-import React from 'react';
-import GoogleLogin from 'react-google-login';
+import React, { useEffect } from 'react';
+// import GoogleLogin from 'react-google-login';
+import jwt_decode from "jwt-decode";
 import { useDispatch } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import { setLogin } from 'redux/slices/userInfo.slice';
@@ -13,10 +14,10 @@ function LoginGoogle() {
   const classes = useStyle();
   const dispatch = useDispatch();
 
-
   const onLoginWithGoogle = async (response) => {
+    // let user = jwt_decode(response.credential);
     try {
-      const res = await axios.post('/user/google_login', { tokenId: response.tokenId });
+      const res = await axios.post('/user/google_login', { tokenId: response.credential });
       dispatch(setLogin());
       if (res.status === 200) {
         dispatch(
@@ -40,25 +41,21 @@ function LoginGoogle() {
         }),
       );
     }
-  };
+  }
+
+  useEffect(() => {
+    google.accounts.id.initialize({
+      client_id: '750897321524-8ne7bt9nu0rsi3lgkj3uirku0clasef2.apps.googleusercontent.com',
+      callback: onLoginWithGoogle
+    });
+    google.accounts.id.renderButton(
+      document.getElementById('signInDiv'),
+      { type: 'icon', size: 'large'}
+    );
+  }, []);
 
   return (
-    <GoogleLogin
-      clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-      autoLoad={false}
-      render={(renderProps) => (
-        <div
-          onClick={renderProps.onClick}
-          disabled={renderProps.disabled}
-          className={classes.socialBtn}>
-          <img className={classes.socialImg} src={ggIcon} alt="GG" />
-          <span className={classes.socialName}>Google</span>
-        </div>
-      )}
-      onSuccess={onLoginWithGoogle}
-      onFailure={onLoginWithGoogle}
-      cookiePolicy={'single_host_origin'}
-    />
+    <div id="signInDiv"></div>
   );
 }
 

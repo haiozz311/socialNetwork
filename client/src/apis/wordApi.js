@@ -3,8 +3,18 @@ import axiosClient from './axiosClient';
 const URL = process.env.REACT_APP_API_LOCAL_BASE_URL;
 
 const wordApi = {
-  postContributeWord: (wordInfor) => {
-    return axiosClient.post(`${URL}/api/contribute/add-word`, { ...wordInfor });
+  postRequestWord: (wordInfor, _id, refresh_token ) => {
+    return axiosClient.post(`${URL}/api/requestWord/${_id}`, { ...wordInfor }, {
+      headers: { Authorization: refresh_token }
+    });
+  },
+
+  postConfirmWord: (_id) => {
+    return axiosClient.post(`${URL}/api/confirmWord`, { _id });
+  },
+
+  deleteWordRequest: (_id) => {
+    return axiosClient.post(`${URL}/api/deleteWordRequest`, { _id });
   },
 
   updateWordByAdmin: (
@@ -41,6 +51,10 @@ const wordApi = {
 
   getCheckWordExistence: (word, type) => {
     return axiosClient.get(`${URL}/api/exist`, { params: { word, type } });
+  },
+
+  getTotalWordRequest: () => {
+    return axiosClient.get(`${URL}/api/getTotalWordRequest`);
   },
 
   getSearchUser: (name, token) => {

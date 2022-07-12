@@ -1,6 +1,6 @@
 import wordApi from 'apis/wordApi';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import WordContribution from './index';
 
@@ -22,6 +22,8 @@ const analysisExample = (exampleStr = '', word = '') => {
 function WordContributionData() {
   const [submitting, setSubmitting] = useState(false);
   const dispatch = useDispatch();
+  const { _id } = useSelector((state) => state.userInfo);
+  const { refresh_token } = useSelector((state) => state.token);
 
   const handleSubmit = async (data) => {
     try {
@@ -57,7 +59,7 @@ function WordContributionData() {
         phonetic: phonetic.replaceAll('/', ''),
       };
 
-      const apiRes = await wordApi.postContributeWord(dataSend);
+      const apiRes = await wordApi.postRequestWord(dataSend, _id, refresh_token);
 
       if (apiRes.status === 200) {
         dispatch(

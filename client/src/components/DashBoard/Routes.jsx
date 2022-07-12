@@ -10,6 +10,8 @@ import Posts from 'pages/Posts';
 import Profile from 'pages/Profile';
 import Highscores from 'pages/Highscores';
 import Blogs from 'pages/Blogs';
+import ConfirmWord from 'pages/ConfirmWord';
+import ConfirmSentence from 'pages/ConfirmSentence';
 
 const Routes = () => {
   return (
@@ -22,6 +24,8 @@ const Routes = () => {
       <Route path='/profile' component={Profile} />
       <Route path='/highscores' component={Highscores} />
       <Route path='/blogs' component={Blogs} />
+      <Route path='/confirm-word' component={ConfirmWord} />
+      <Route path='/confirm-sentence' component={ConfirmSentence} />
     </Switch>
   );
 };

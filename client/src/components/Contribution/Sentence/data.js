@@ -1,26 +1,27 @@
 import sentenceApi from 'apis/sentenceApi';
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { setMessage } from 'redux/slices/message.slice';
 import SentenceContribution from './index';
 
 function SentenceContributionData() {
   const [submitting, setSubmitting] = useState(false);
   const dispatch = useDispatch();
-
+  const { _id } = useSelector((state) => state.userInfo);
+  const { refresh_token } = useSelector((state) => state.token);
   const handleSubmit = async (formData) => {
-    console.log('submit form',formData) ;
     const { sentence, mean, note, topics } = formData;
     try {
       setSubmitting(true);
 
-      const apiRes = await sentenceApi.postContributeSentence(
+      const apiRes = await sentenceApi.postRequestSentence(
         sentence,
         mean,
         note,
         topics,
+        _id,
+        refresh_token
       );
-      console.log({ apiRes });
       if (apiRes.status === 200) {
         dispatch(
           setMessage({

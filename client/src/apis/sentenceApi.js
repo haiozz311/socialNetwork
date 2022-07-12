@@ -12,6 +12,24 @@ const sentenceApi = {
     });
   },
 
+  getTotalSentencceRequest: () => {
+    return axiosClient.get(`${URL}/api/getTotalSentenceRequest`);
+  },
+
+  deleteSentenceRequest: (_id) => {
+    return axiosClient.post(`${URL}/api/deleteSentenceRequest`, { _id });
+  },
+
+  postConfirmSentence: (_id) => {
+    return axiosClient.post(`${URL}/api/confirmSentence`, { _id });
+  },
+
+  postRequestSentence: (sentence, mean, note, topics, _id, refresh_token) => {
+    return axiosClient.post(`${URL}/api/requestSentence/${_id}`, { sentence, mean, note, topics }, {
+      headers: { Authorization: refresh_token }
+    });
+  },
+
   updateSentenceByAdmin: (
     mean, sentence, note, topics,
     refresh_token, _id) => {

@@ -195,7 +195,7 @@ const userCtrl = {
     logout: async (req, res) => {
         try {
             res.clearCookie('refreshtoken', { path: '/user/refresh_token' })
-            return res.json({ msg: "Logged out." })
+            return res.json({ msg: "Đăng xuất thành công!" })
         } catch (err) {
             return res.status(500).json({ msg: err.message })
         }
@@ -249,12 +249,12 @@ const userCtrl = {
     googleLogin: async (req, res) => {
         try {
             const { tokenId } = req.body
-            console.log(tokenId)
+            console.log("tokenId", tokenId);
             console.log("client", client)
             const verify = await client.verifyIdToken({ idToken: tokenId, audience: process.env.MAILING_SERVICE_CLIENT_ID })
-            console.log({ verify })
+            console.log("verify", verify);
 
-            const { email_verified, email, name, picture } = verify.payload
+            const { email_verified, email, name, picture } = verify?.payload
 
             const password = email + process.env.GOOGLE_SECRET
 
@@ -489,7 +489,7 @@ const userCtrl = {
             const user = await Users.findById(req.user.id).select('-password');
             const newArr = [...user.following, user._id]
             console.log({ newArr })
-            const num = req.query.num || 10
+            const num = req.query.num || 2
             const users = await Users.aggregate([
                 { $match: { _id: { $nin: newArr } } },
                 { $sample: { size: Number(num) } },

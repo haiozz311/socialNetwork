@@ -42,6 +42,7 @@ function AddUser({ open, item, onClose, onRegister, loading }) {
   } = useForm({
     resolver: yupResolver(schema),
   });
+  console.log('role', item.role);
   return (
     <Dialog
       classes={{
@@ -116,6 +117,8 @@ function AddUser({ open, item, onClose, onRegister, loading }) {
             label="Quyền truy cập (*)"
             options={ROLE_TYPES}
             error={Boolean(errors.role)}
+            defaultValue={item?.role}
+            tabindex={item?.role}
             inputProps={{
               name: 'role',
               ...register('role'),

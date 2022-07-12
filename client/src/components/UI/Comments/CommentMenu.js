@@ -14,8 +14,8 @@ const CommentMenu = ({ post, comment, setOnEdit }) => {
 
           <div className="dropdown-menu" aria-labelledby="moreLink">
             {
-              post.user._id === userInfo._id // my post
-                ? comment.user._id === userInfo._id
+              post?.user?._id === userInfo?._id // my post
+                ? comment?.user?._id === userInfo?._id
                   ? <MenuItemComment post={post} myComment={!myComment} setOnEdit={setOnEdit} comment={comment} /> // my comment
                   : <MenuItemComment post={post} myComment={myComment} setOnEdit={setOnEdit} comment={comment} />
                 : comment.user._id === userInfo._id && <MenuItemComment post={post} myComment={myComment} setOnEdit={setOnEdit} comment={comment} /> // # my post

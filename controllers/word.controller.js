@@ -2,6 +2,7 @@ const {
   isExistWord,
   uploadImage,
   getWordPack,
+  isExistWordRequest
 } = require('../services/common.service');
 const {
   createNewWord,
@@ -12,6 +13,7 @@ const {
 } = require('../services/word.service');
 const Users = require('../models/userModel')
 const WordModel = require('../models/word.model');
+const WordRequest = require('../models/wordRequest');
 
 exports.postContributeWord = async (req, res, next) => {
   try {
@@ -112,12 +114,46 @@ exports.requestWord = async (req, res, next) => {
       word,
       phonetic } = req.body;
     const isExist = await isExistWord(word, type);
-    if (isExist) {
+    const isExistRequest = await isExistWordRequest(word, type);
+    if (isExist || isExistRequest) {
       return res
         .status(409)
         .json({ message: `Từ "${word} (${type})" đã tồn tại trong từ điển` });
     }
-    const newRequestWord = new WordModel({
+    const newRequestWord = new WordRequest({
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic,
+      user: req.user.id,
+    })
+
+    await newRequestWord.save()
+    await Users.findOneAndUpdate({ _id: req.user.id }, {
+      $push: { requestWord: newRequestWord._id }
+    }, { new: true })
+
+    res.json({ msg: "Cập nhật từ vựng thành công" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
+  }
+};
+
+
+exports.confirmWord = async (req, res, next) => {
+  try {
+    const {
+      _id } = req.body;
+    const newWord = await WordRequest.findById(_id);
+    const {
       mean,
       type,
       level,
@@ -130,21 +166,32 @@ exports.requestWord = async (req, res, next) => {
       antonyms,
       word,
       phonetic
-    })
-    const users = await Users.findOneAndUpdate({ id: req.user.id })
-    await Users.findOneAndUpdate({ _id: req.user.id }, {
-      $push: { requestWord: newRequestWord._id }
-    }, { new: true })
-    console.log('users', users);
-    // const data = users.requestWord.push(newRequestWord);
-    // await users.save()
+    } = newWord;
+    console.log('newWord', newWord);
+    const isCreateSuccess = await createNewWord({
+      mean,
+      type,
+      level,
+      specialty,
+      note,
+      topics,
+      picture,
+      examples,
+      synonyms,
+      antonyms,
+      word,
+      phonetic
+    });
+    await WordRequest.findByIdAndDelete(_id);
+    if (isCreateSuccess) {
+      return res.status(200).json({ message: 'Xác nhận thành công' });
+    }
 
     res.json({ msg: "Cập nhật từ vựng thành công" })
   } catch (err) {
     return res.status(500).json({ msg: err.message })
   }
 };
-
 
 
 exports.getCheckWordExistence = async (req, res) => {
@@ -216,6 +263,31 @@ exports.deleteWord = async (req, res, next) => {
   try {
     await WordModel.findByIdAndDelete(req.params.id)
     res.json({ msg: "Deleted Success!" })
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
+  }
+};
+
+exports.getWordRequest = async (req, res, next) => {
+  try {
+    const words = await WordRequest.find().populate("user")
+
+    res.json({ words });
+
+  } catch (err) {
+    return res.status(500).json({ msg: err.message })
+  }
+};
+
+exports.deleteWordRequest = async (req, res, next) => {
+  try {
+    const {
+      _id } = req.body;
+    console.log('_id', _id);
+    await WordRequest.findByIdAndDelete(_id);
+
+    res.json({ message: 'xóa từ vựng đóng góp thành công' });
+
   } catch (err) {
     return res.status(500).json({ msg: err.message })
   }

@@ -10,9 +10,24 @@ router.post(
 router.get('/total', sentenceController.getTotalSentences);
 
 router.get('/list', sentenceController.getSentenceList);
+router.get('/getTotalSentenceRequest', sentenceController.getSentenceRequest)
+
 router.patch(
   '/updateSentence/:id', auth,
   sentenceController.updateSentence,
+);
+router.post(
+  '/deleteSentenceRequest',
+  sentenceController.deleteSentenceRequest,
+);
+router.post(
+  '/confirmSentence',
+  sentenceController.confirmSentence,
+);
+
+router.post(
+  '/requestSentence/:id', auth,
+  sentenceController.postSentenceRequest,
 );
 
 router.delete('/deleteSentence/:id', auth, sentenceController.deleteSentencce)

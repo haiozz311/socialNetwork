@@ -17,6 +17,8 @@ import { setMessage } from 'redux/slices/message.slice';
 import ConfirmBox from "react-dialog-confirm";
 import { deletePostbyAdmin } from 'redux/slices/post.slice';
 import '../../node_modules/react-dialog-confirm/build/index.css';
+import ModalCommentList from 'components/UI/ModalCommentList/ModalCommentList';
+import { deleteComment } from 'redux/slices/post.slice';
 
 
 const perPage = 622;
@@ -27,6 +29,7 @@ const Posts = () => {
   console.log('item', item);
   const [list, setList] = useState([]);
   const [open, setOpen] = useState(false);
+  const [isComment, setIsComment] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [topicList, setTopicList] = useState([]);
   const [isUpdate, setIsUpdate] = useState(false);
@@ -38,7 +41,7 @@ const Posts = () => {
   const dispatch = useDispatch();
 
   const handleConfirm = async () => {
-    dispatch(deletePostbyAdmin({ idPostRemove: item?.user?._id ,post: item, refresh_token, socket }));
+    dispatch(deletePostbyAdmin({ idPostRemove: item?.user?._id, post: item, refresh_token, socket }));
     dispatch(
       setMessage({ type: 'success', message: 'Xóa bài viết thành công' }),
     );
@@ -140,7 +143,18 @@ const Posts = () => {
     } catch (error) {
       console.log('error', error);
     }
+  };
 
+  const handleOpenCommentModal = () => {
+    setOpen(false);
+    setIsComment(true);
+  };
+
+  const handleCloseComment = () => {
+    setIsComment(false);
+  };
+  const handleRemove = data => {
+    dispatch(deleteComment({ post: item, comment: data, refresh_token, socket }));
   };
   return (
     <div>
@@ -173,6 +187,7 @@ const Posts = () => {
         onRemove={() => handleRemoveItem()}
         onUpdate={() => handleUpdate()}
         renderHead={renderHead}
+        onOpenModalComment={handleOpenCommentModal}
       />}
       {
         isUpdate && <ModalUpdatePost
@@ -182,6 +197,15 @@ const Posts = () => {
           onRegister={handleUpdatePost}
           loading={loading}
         />
+      }
+      {
+        isComment && <ModalCommentList
+          open={isComment}
+          item={item?.comments}
+          onClose={() => handleCloseComment()}
+          onRemove={handleRemove}
+          onUpdate={() => handleUpdate()}
+          renderHead={renderHead} />
       }
       <ConfirmBox // all props are required
         options={{

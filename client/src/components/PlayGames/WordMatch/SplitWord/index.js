@@ -66,6 +66,7 @@ function SplitWord({ word, mean, onCorrect, onWrong, resetFlag }) {
   })();
 
   const handleSelectCharacter = (index) => {
+    console.log('handleSelectCharacter', index);
     const newUserSplit = [
       ...userSplit,
       { index, ch: originSplit.current[index] },
@@ -78,6 +79,7 @@ function SplitWord({ word, mean, onCorrect, onWrong, resetFlag }) {
   };
 
   const handleReturnCharacter = (index) => {
+    console.log('handleReturnCharacter', index);
     if (isCheck) {
       setIsCheck(false);
     }

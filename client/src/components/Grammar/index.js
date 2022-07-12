@@ -135,7 +135,7 @@ function Grammar({ list, loading, isAdmin }) {
                   // disabled={submitting}
                   onClick={handleAddWord}
                 >
-                  Tạo blogs
+                  Tạo ngữ pháp
                 </Button>
               )
             }

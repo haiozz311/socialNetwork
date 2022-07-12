@@ -13,7 +13,8 @@ function UserAccountData() {
   const profile = useSelector(state => state.profile);
 
   const dispatch = useDispatch();
-  const { id } = useParams();;
+  const { id } = useParams();
+  console.log('id', id);
   // const [id, setid] = useState(id);
   const dataUserInfor = useSelector((state) => state.userInfo);
   const [userData, setUserData] = useState([]);
@@ -34,10 +35,8 @@ function UserAccountData() {
   useEffect(() => {
     if (dataUserInfor._id === id) {
       setUserData(dataUserInfor);
-      console.log("mydata1", dataUserInfor);
     } else {
       const newData = profile.users.find(user => user._id === id);
-      console.log("mydata2",newData);
       if (newData) {
         setUserData(newData);
       }

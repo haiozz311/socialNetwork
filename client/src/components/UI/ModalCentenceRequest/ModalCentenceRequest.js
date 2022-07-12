@@ -6,49 +6,36 @@ import DialogContent from '@material-ui/core/DialogContent';
 import CloseIcon from '@material-ui/icons/Close';
 import Avatar from '@material-ui/core/Avatar';
 import PropTypes from 'prop-types';
-import React, { useState } from 'react';
+import React from 'react';
 import Table from 'components/DashBoard/table/Table';
 import useStyle from './style';
 import { TOPICS } from 'constant/topics';
-import { WORD_SPECIALTY } from 'constant';
-import AvatarGroup from '@material-ui/lab/AvatarGroup';
-
 import Tag from 'components/UI/Tag';
 
-
-function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onOpenModalComment }) {
+function ModalCentenceRequest({ open, onClose, item, onRemove, onUpdate, renderHead }) {
   const classes = useStyle();
+  function sliceTopics(topics) {
+    let res = [];
+    topics.forEach((topic) => {
+      res.push(TOPICS.find((i) => i.key === topic));
+    });
+    return res;
+  }
   const customerTableHead = [
-    'Nội Dung',
-    'Hình Ảnh',
-    'Người Thích Bài Viết',
-    'Lượt Bình Luận',
+    'câu',
+    'ý nghĩa',
+    'chú thích',
+    'Chủ đề',
   ];
+
   const renderBody = (item, index) => (
     <tr key={index}>
-      <td>{item.content}</td>
-      <td className='d-flex'>
-        {
-          item.images.map(item =>
-            <Avatar variant="square" className='mx-2'>
-              <img style={{ width: '50px', marginRight: '10px' }} src={`https://res.cloudinary.com/dsvko7lfg/image/upload/${item.public_id}`} />
-            </Avatar>)
-        }
-      </td>
-      <td>
-        <AvatarGroup total={24}>
-          {item.likes && item.likes.map(item => (
-            <Avatar alt="Remy Sharp" src={item?.avatar} />
-          ))}
-        </AvatarGroup>
-      </td>
-      <td>
-        <AvatarGroup total={24}>
-          {item.comments && item.comments.map(item => (
-            <Avatar alt="Remy Sharp" src={item?.user?.avatar} />
-          ))}
-        </AvatarGroup>
-      </td>
+      <td>{item.sentence}</td>
+      <td>{item.mean}</td>
+      <td>{item.note}</td>
+      <td>{item.topics && sliceTopics(item.topics).map((topic, index) => (
+        <Tag key={index} title={topic.title} iconSrc={topic.icon} />
+      ))}</td>
     </tr>
   );
 
@@ -60,10 +47,10 @@ function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onO
       onClose={onClose}
       aria-labelledby="setting dialog"
       disableBackdropClick={true}
-      maxWidth="xl"
+      maxWidth="md"
       open={open}>
       <div className={`${classes.title} flex-center-between`}>
-        <span>Chi tiết bài viết</span>
+        <span>Thông tin cá nhân</span>
         <CloseIcon className="cur-pointer" onClick={onClose} />
       </div>
 
@@ -78,20 +65,11 @@ function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onO
       <div className="d-flex jus-content-end">
         <DialogActions className={classes.actions}>
           <Button
-            onClick={onOpenModalComment}
-            color="primary"
-            size="small"
-            variant="contained">
-            Danh sách bình luận
-          </Button>
-        </DialogActions>
-        <DialogActions className={classes.actions}>
-          <Button
             onClick={onUpdate}
             color="primary"
             size="small"
             variant="contained">
-            Chỉnh sữa
+            Xác nhận
           </Button>
         </DialogActions>
         <DialogActions className={classes.actions}>
@@ -108,19 +86,18 @@ function ModalComment({ open, onClose, item, onRemove, onUpdate, renderHead, onO
   );
 }
 
-ModalComment.propTypes = {
+ModalCentenceRequest.propTypes = {
   onClose: PropTypes.func,
   open: PropTypes.bool,
   onRemove: PropTypes.func,
   onUpdate: PropTypes.func,
-  renderHead: PropTypes.any,
   renderBody: PropTypes.any,
-  onOpenModalComment: PropTypes.func,
+  renderHead: PropTypes.any,
 };
 
-ModalComment.defaultProps = {
+ModalCentenceRequest.defaultProps = {
   onClose: function () { },
   open: false,
 };
 
-export default ModalComment;
+export default ModalCentenceRequest;

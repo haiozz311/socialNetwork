@@ -36,12 +36,12 @@ const InputComment = ({ children, post, onReply, setOnReply }) => {
   return (
     <form className="d-flex align-i-center" onSubmit={handleSubmit} >
       {children}
-      <input className={`${classes.comment_input}`} type="text" placeholder="Add your comments..."
+      <input className={`${classes.comment_input}`} type="text" placeholder="Bình luận ..."
         value={content} onChange={e => setContent(e.target.value)} />
 
       {/* <Icons setContent={setContent} content={content} /> */}
       <button type="submit" className={`${classes.btnSubmit}`}>
-        Post
+        Đăng bình luận
       </button>
     </form>
   );

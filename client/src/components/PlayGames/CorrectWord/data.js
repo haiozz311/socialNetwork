@@ -15,6 +15,7 @@ const MAX_LEN_WORD_PACK = 500;
 function CorrectWordData() {
   // 0 - choose word pack, 1 - get pack, 2 - done
   const [state, setState] = useState(0);
+  console.log('state', state);
   const [wordPack, setWordPack] = useState([]);
   const dispatch = useDispatch();
   const history = useHistory();

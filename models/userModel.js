@@ -55,6 +55,7 @@ const userSchema = new mongoose.Schema({
     saved: [{type: mongoose.Types.ObjectId, ref: 'Users'}],
     saved: [{ type: mongoose.Types.ObjectId, ref: 'Users' }],
     requestWord: [String],
+    requestSentence: [String],
 }, {
     timestamps: true
 })

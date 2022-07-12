@@ -33,13 +33,9 @@ function SettingMenu({ anchorEl, onClose }) {
         );
         setTimeout(() => {
           window.location.href = '/';
-        }, 2000);
+        }, 0);
       }
-      setTimeout(() => {
-        window.location.href = '/';
-      }, 2000);
     } catch (err) {
-      window.location.href = '/';
     }
   };
   const handleClickProfile = () => {

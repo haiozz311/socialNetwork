@@ -12,7 +12,7 @@ function LeaderBoardData({ color, title, nameId, unit, tooltip }) {
 
     (async function () {
       try {
-        const apiRes = await highscoreApi.getLeaderboardByAdmin(nameId);
+        const apiRes = await highscoreApi.getLeaderboard(nameId);
         if (apiRes.status === 200) {
           const { list = [] } = apiRes.data;
           setLoading(false);

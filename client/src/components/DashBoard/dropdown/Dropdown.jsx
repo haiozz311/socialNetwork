@@ -36,7 +36,7 @@ const Dropdown = props => {
                     props.customToggle ? props.customToggle() : ''
                 }
             </button>
-            <div ref={dropdown_content_el} className="dropdown__content">
+            {/* <div ref={dropdown_content_el} className="dropdown__content">
                 {
                     props.contentData && props.renderItems ? props.contentData.map((item, index) => props.renderItems(item, index)) : ''
                 }
@@ -47,7 +47,7 @@ const Dropdown = props => {
                         </div>
                     ) : ''
                 }
-            </div>
+            </div> */}
         </div>
     );
 };

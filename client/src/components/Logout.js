@@ -9,7 +9,6 @@ function Logout() {
   const history = useHistory();
   const dispatch = useDispatch();
   const { isAuth } = useSelector((state) => state.userInfo);
-
   useEffect(() => {
     if (!isAuth) {
       history.goBack();
@@ -19,16 +18,17 @@ function Logout() {
     (async function () {
       try {
         const apiRes = await accountApi.postLogout();
+        await accountApi.userLogout();
         if (apiRes.status === 200) {
-          dispatch(
-            setMessage({ type: 'success', message: 'Đăng xuất thành công' }),
-          );
+          // dispatch(
+          //   setMessage({ type: 'success', message: 'Đăng xuất thành công' }),
+          // );
           window.location.href = history.location.pathname;
         }
       } catch (error) {
-        dispatch(
-          setMessage({ type: 'error', message: 'Đăng xuất thất bại, thử lại' }),
-        );
+        // dispatch(
+        //   setMessage({ type: 'error', message: 'Đăng xuất thất bại, thử lại' }),
+        // );
         history.goBack();
       }
     })();

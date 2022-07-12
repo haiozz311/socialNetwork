@@ -30,14 +30,14 @@ const CommentDisplay = ({ comment, post, replyCm }) => {
               ? <div className="p-2 border-top"
                 style={{ cursor: 'pointer', color: 'crimson' }}
                 onClick={() => setNext(next + 10)}>
-                See more comments...
+                Xem thêm
               </div>
 
               : replyCm.length > 1 &&
               <div className="p-2 border-top"
                 style={{ cursor: 'pointer', color: 'crimson' }}
                 onClick={() => setNext(2)}>
-                Hide comments...
+                ẩn
               </div>
           }
         </div>

@@ -22,28 +22,35 @@ const WRONG_SCORE = 5;
 const SCORE_PER_SEC = 5;
 
 function generateAnswerList(list = [], word = '') {
+  console.log('generateAnswerList');
   const index = list.findIndex(
     (i) => i?.word.toLowerCase() === word.toLowerCase(),
   );
+  console.log('list', list);
+  console.log('index', index);
   let seedList = [...list.slice(0, index), ...list.slice(index + 1)];
-  seedList = seedList.sort(() => Math.random() - 0.5).slice(0, 8);
-  seedList.push(list[index]);
+  console.log('seedList', seedList);
 
+  seedList = seedList.sort(() => Math.random() - 0.5).slice(0, 8);
+  console.log('sort seedList', seedList);
+  seedList.push(list[index]);
+  console.log('last result', list[index]);
   return seedList.sort(() => Math.random() - 0.5);
 }
 
 function TimeBar({ correctFlag, wrongFlag, onSaveTime, onTimeout }) {
   const classes = useStyle();
   const [restTime, setRestTime] = useState(TOTAL_TIME);
+  console.log('restTime', restTime);
   const percent = Math.round((restTime / TOTAL_TIME) * 100);
   const minute = ~~(restTime / 60_000);
   const second = `0${~~(restTime / 1_000) % 60}`.slice(-2);
-
   useEffect(() => {
     onSaveTime(restTime);
 
     const intervalId = setInterval(() => {
       const newRestTime = restTime - RESET_TIME;
+      console.log('newRestTime', newRestTime);
       if (newRestTime <= 0) {
         onTimeout();
         clearInterval(intervalId);
@@ -164,6 +171,7 @@ function FastGame({ list }) {
 
   const onDone = () => {
     setScore(score + ~~(restTime / 1000) * SCORE_PER_SEC);
+    console.log('point', score + ~~(restTime / 1000) * SCORE_PER_SEC);
     setIsDone(true);
   };
   // ~~ 2.35 => 2

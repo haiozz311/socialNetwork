@@ -99,9 +99,9 @@ function LoginLocalForm(props) {
         )}
       </div>
 
-      <Link className={classes.forgotPw} to={ROUTES.FORGOT_PASSWORD}>
+      <div className={classes.forgotPw}>
         Quên mật khẩu ?
-      </Link>
+      </div>
 
       <Button
         className="_btn _btn-primary"

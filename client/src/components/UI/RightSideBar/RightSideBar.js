@@ -18,23 +18,28 @@ const RightSideBar = () => {
   }, [refresh_token]);
   return (
     <div className='suggestion-cover'>
-        <div className='suggestion'>
-          <h3>Suggestion For You</h3>
-          <AutorenewIcon onClick={()=>{
-            dispatch(getSuggestions({ refresh_token }));
-          }} />
-        </div>
-        {
-          suggestion.users.map(item => (
-            <div key={item._id} className='user-item'>
-              <div className="d-flex align-i-center">
-                <Avatar src={item.avatar} />
-                <h4 className="ml-8">{item.name}</h4>
-              </div>
-              <Link to={`/profile/${item._id}`}>Take it</Link>
+      {
+        suggestion?.users?.length > 0 && (
+          <div className='suggestion'>
+            <h3>Suggestion For You</h3>
+            <AutorenewIcon style={{ cursor: 'pointer' }} onClick={() => {
+              dispatch(getSuggestions({ refresh_token }));
+            }} />
+          </div>
+        )
+      }
+
+      {
+        suggestion.users.map(item => (
+          <div key={item._id} className='user-item'>
+            <div className="d-flex align-i-center">
+              <Avatar src={item.avatar} />
+              <h4 className="ml-8">{item.name}</h4>
             </div>
-          ))
-        }
+            <Link to={`/profile/${item._id}`}>Take it</Link>
+          </div>
+        ))
+      }
     </div>
   );
 };

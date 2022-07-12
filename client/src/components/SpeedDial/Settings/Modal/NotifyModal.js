@@ -37,6 +37,7 @@ export default function NotifyModal() {
 
   const { data } = useSelector((state) => state.notify);
   const { refresh_token } = useSelector((state) => state.token);
+  const [isRead, setIsRead] = useState(0);
 
   const [dataNotify, setdataNotify] = useState([]);
 
@@ -55,6 +56,8 @@ export default function NotifyModal() {
 
   useEffect(() => {
     setdataNotify(data);
+    const dataRead = data.filter(item => item.isRead === false);
+    setIsRead(dataRead.length);
   }, [data]);
 
   const [state, setState] = React.useState({
@@ -104,7 +107,7 @@ export default function NotifyModal() {
                     <ListItemIcon><Avatar src={notify?.user?.avatar} /> </ListItemIcon>
                     <ListItemText primary={notify?.user?.name + ' ' + notify.text} />
                   </ListItem>
-                  <small className="text-muted d-flex jus-content-around px-2">
+                  <small className="text-muted d-flex jus-content-around px-2" style={{fontSize: '14px'}}>
                     {moment(notify.createdAt).fromNow()}
                     {
                       notify.isRead && <p>đã xem</p>
@@ -132,7 +135,7 @@ export default function NotifyModal() {
         <React.Fragment key={anchor}>
           <div className="notify" onClick={toggleDrawer(anchor, true)}>
             <NotificationsNoneIcon />
-            {dataNotify.length > 0 && <p className="notify-number">{dataNotify.length}</p>}
+            {isRead.length > 0 && <p className="notify-number">{isRead}</p>}
           </div>
           {/* <Button onClick={toggleDrawer(anchor, true)}>{anchor}</Button> */}
           <Drawer anchor={anchor} open={state[anchor]} onClose={toggleDrawer(anchor, false)}>

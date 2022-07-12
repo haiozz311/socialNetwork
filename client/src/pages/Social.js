@@ -39,7 +39,9 @@ function Social() {
     <div className="social">
       <Grid container className="container">
         <Grid item xs={8}>
-          <Status />
+          {
+            posts.length > 0 && <Status />
+          }
           <Post />
         </Grid>
         <Grid item xs={4}>

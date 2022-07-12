@@ -25,7 +25,7 @@ const Status = () => {
       </div>
       <button className='btn-create'
         onClick={() => setModalStatus(true)}>
-        Post it!
+        Đăng bài
       </button>
 
       {

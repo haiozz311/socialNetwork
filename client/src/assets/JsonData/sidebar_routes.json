@@ -1,37 +1,47 @@
 [
-    {
-        "display_name": "Dashboard",
-        "route": "/",
-        "icon": "bx bx-category-alt"
-    },
-    {
-        "display_name": "Người Dùng",
-        "route": "/customers",
-        "icon": "bx bx-user-pin"
-    },
-    {
-        "display_name": "Từ Vựng",
-        "route": "/words",
-        "icon": "bx bx-package"
-    },
-    {
-        "display_name": "Câu",
-        "route": "/centences",
-        "icon": "bx bx-list-check"
-    },
-    {
-        "display_name": "Bài Viết",
-        "route": "/posts",
-        "icon": "bx bx-bar-chart-alt"
-    },
-    {
-        "display_name": "Thứ Hạng",
-        "route": "/highscores",
-        "icon": "bx bx-gift"
-    },
-    {
-        "display_name": "Blogs",
-        "route": "/blogs",
-        "icon": "bx bx-store-alt"
-    }
+  {
+    "display_name": "Dashboard",
+    "route": "/",
+    "icon": "bx bx-category-alt"
+  },
+  {
+    "display_name": "Người Dùng",
+    "route": "/customers",
+    "icon": "bx bx-user-pin"
+  },
+  {
+    "display_name": "Từ Vựng",
+    "route": "/words",
+    "icon": "bx bx-package"
+  },
+  {
+    "display_name": "Câu",
+    "route": "/centences",
+    "icon": "bx bx-list-check"
+  },
+  {
+    "display_name": "Bài Viết",
+    "route": "/posts",
+    "icon": "bx bx-bar-chart-alt"
+  },
+  {
+    "display_name": "Thứ Hạng",
+    "route": "/highscores",
+    "icon": "bx bx-gift"
+  },
+  {
+    "display_name": "Ngữ pháp",
+    "route": "/blogs",
+    "icon": "bx bx-store-alt"
+  },
+  {
+    "display_name": "Xác nhận từ vựng đóng góp",
+    "route": "/confirm-word",
+    "icon": "bx bx-check"
+  },
+  {
+    "display_name": "Xác nhận câu đóng góp",
+    "route": "/confirm-sentence",
+    "icon": "bx bx-check-double"
+  }
 ]
